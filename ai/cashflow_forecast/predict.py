@@ -46,7 +46,7 @@ def export(model: str) -> list[dict]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--model", default="lstm", choices=["seasonal_naive", "lightgbm", "lstm", "gru"])
+    parser.add_argument("--model", default="lstm", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"])
     args = parser.parse_args()
 
     forecasts = export(args.model)

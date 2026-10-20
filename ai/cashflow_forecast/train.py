@@ -398,6 +398,18 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
     return predict_blocks(model, arrays, window)
 
 
+def train_ensemble() -> pd.DataFrame:
+    """Plain average of the saved LSTM and GRU forecasts (equal weights, nothing
+    fitted). Adopted because its Validation WAPE beat both single models; the
+    rule was fixed before looking at Test."""
+    keys = ["store", "date", "split"]
+    lstm = pd.read_parquet(PREDICTIONS_DIR / "lstm.parquet")[keys + ["forecast"]]
+    gru = pd.read_parquet(PREDICTIONS_DIR / "gru.parquet")[keys + ["forecast"]]
+    merged = lstm.merge(gru, on=keys, suffixes=("_lstm", "_gru"), validate="one_to_one")
+    merged["forecast"] = (merged["forecast_lstm"] + merged["forecast_gru"]) / 2
+    return merged
+
+
 def val_wape(df: pd.DataFrame, preds: pd.DataFrame) -> float:
     m = preds[preds["split"] == "val"][["store", "date", "forecast"]].merge(
         df[["store", "date", "sales", "is_eval_day"]], on=["store", "date"]
@@ -443,7 +455,9 @@ def tune(df: pd.DataFrame, cell: str, args: argparse.Namespace) -> pd.DataFrame:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--model", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "all"], default="all")
+    parser.add_argument(
+        "--model", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble", "all"], default="all"
+    )
     parser.add_argument("--window", type=int, default=56, choices=[28, 56])
     parser.add_argument("--hidden", type=int, default=64, choices=[64, 128])
     parser.add_argument("--layers", type=int, default=1, choices=[1, 2])
@@ -462,13 +476,15 @@ def main() -> None:
         for cell in cells:
             tune(df, cell, args)
         return
-    names = ["seasonal_naive", "lightgbm", "lstm", "gru"] if args.model == "all" else [args.model]
+    names = ["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"] if args.model == "all" else [args.model]
     for name in names:
         print(f"\n=== {name} ===")
         if name == "seasonal_naive":
             preds = train_seasonal_naive(df)
         elif name == "lightgbm":
             preds = train_lightgbm(df)
+        elif name == "ensemble":
+            preds = train_ensemble()
         else:
             preds = train_rnn(
                 df, name, args.window, args.hidden, args.layers, args.dropout,

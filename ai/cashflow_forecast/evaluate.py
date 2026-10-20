@@ -16,7 +16,7 @@ from ai.cashflow_forecast.preprocess import PROCESSED_PATH, ROOT
 
 PREDICTIONS_DIR = ROOT / "models" / "predictions"
 RESULTS_PATH = ROOT / "models" / "results.csv"
-MODEL_ORDER = ["seasonal_naive", "lightgbm", "lstm", "gru"]
+MODEL_ORDER = ["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"]
 
 
 def wape(y: np.ndarray, y_hat: np.ndarray) -> float:
