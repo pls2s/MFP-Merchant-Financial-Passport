@@ -120,7 +120,7 @@ def lgbm_features(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     return df, features
 
 
-def train_lightgbm(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> pd.DataFrame:
+def train_lightgbm(df: pd.DataFrame, ds: Dataset = ROSSMANN, seed: int = SEED, out_dir=None) -> pd.DataFrame:
     import lightgbm as lgb
 
     feat_df, features = lgbm_features(df)
@@ -140,7 +140,7 @@ def train_lightgbm(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> pd.DataFrame:
         "bagging_fraction": 0.8,
         "bagging_freq": 1,
         "metric": "None",
-        "seed": SEED,
+        "seed": seed,
         "verbose": -1,
     }
     dtrain = lgb.Dataset(train[features], train["sales_log"], categorical_feature=["store"])
@@ -154,7 +154,7 @@ def train_lightgbm(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> pd.DataFrame:
         callbacks=[lgb.early_stopping(100), lgb.log_evaluation(100)],
     )
 
-    out_dir = ds.models_dir / "lightgbm"
+    out_dir = out_dir or ds.models_dir / "lightgbm"
     out_dir.mkdir(parents=True, exist_ok=True)
     booster.save_model(str(out_dir / "model.txt"), num_iteration=booster.best_iteration)
 
@@ -174,7 +174,6 @@ KNOWN_COLS = [
     *[f"{c}_{side}" for c in NEIGHBOUR_COLS for side in ("prev", "next")],
     *DOW_COLS, "dom_scaled", "month_sin", "month_cos", "woy_scaled",
 ]
-PAST_COLS = ["sales_in", "eval_flag", *KNOWN_COLS]
 
 
 def standardize(x: pd.Series) -> pd.Series:
@@ -183,8 +182,9 @@ def standardize(x: pd.Series) -> pd.Series:
     return (x - x.mean()) / std if std > 0 else x * 0
 
 
-def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> dict:
-    """Dense (stores, days, features) arrays. Relies on preprocess's contiguous calendar."""
+def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN, neighbours: bool = True) -> dict:
+    """Dense (stores, days, features) arrays. Relies on preprocess's contiguous calendar.
+    `neighbours=False` drops the previous/next-day features (ablation)."""
     df = df.sort_values(["store", "date"]).reset_index(drop=True)
     stores = np.sort(df["store"].unique())
     dates = pd.date_range(ds.train_start, ds.test_end, freq="D")
@@ -215,6 +215,8 @@ def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> dict:
     def cube(cols):
         return f[cols].to_numpy("float32").reshape(n_s, n_d, len(cols))
 
+    known_cols = KNOWN_COLS if neighbours else [c for c in KNOWN_COLS if not c.endswith(("_prev", "_next"))]
+
     per_store = df.groupby("store").first()
     static = np.column_stack([
         np.eye(per_store["store_type"].max() + 1)[per_store["store_type"]],
@@ -227,8 +229,8 @@ def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> dict:
         "dataset": ds,
         "stores": stores,
         "dates": dates,
-        "past": cube(PAST_COLS),
-        "known": cube(KNOWN_COLS),
+        "past": cube(["sales_in", "eval_flag", *known_cols]),
+        "known": cube(known_cols),  # "open" stays first: forecasts are multiplied by it
         "target": df["sales_scaled"].fillna(0).to_numpy("float32").reshape(n_s, n_d),
         "eval": df["is_eval_day"].to_numpy("float32").reshape(n_s, n_d),
         "missing": df["is_missing"].to_numpy("int32").reshape(n_s, n_d),
@@ -264,8 +266,11 @@ def gather(arrays: dict, s_idx: np.ndarray, o_idx: np.ndarray, window: int):
     past = arrays["past"][s, past_t]
 
     sales_in, eval_in = past[..., 0], past[..., 1]
-    level = sales_in.sum(axis=1) / np.maximum(eval_in.sum(axis=1), 1)
-    level = np.where(level > 0, level, 1.0).astype("float32")  # scaled units
+    if arrays.get("window_norm", True):
+        level = sales_in.sum(axis=1) / np.maximum(eval_in.sum(axis=1), 1)
+        level = np.where(level > 0, level, 1.0).astype("float32")  # scaled units
+    else:  # ablation: store-mean scaling only
+        level = np.ones(len(s_idx), "float32")
     past[..., 0] = sales_in / level[:, None]
 
     horizon_pos = np.broadcast_to(np.arange(1, HORIZON + 1, dtype="float32") / HORIZON, fut_t.shape)
@@ -276,13 +281,16 @@ def gather(arrays: dict, s_idx: np.ndarray, o_idx: np.ndarray, window: int):
         "static": np.column_stack([arrays["static"][s_idx], np.log(level)]),
     }
     level_sales = level * arrays["store_mean"][s_idx]
-    weight = arrays["eval"][s, fut_t] * level_sales[:, None]
+    if arrays.get("weighted_loss", True):
+        weight = arrays["eval"][s, fut_t] * level_sales[:, None]
+    else:  # ablation: every store-day counts equally in relative terms
+        weight = arrays["eval"][s, fut_t]
     y = np.stack([arrays["target"][s, fut_t] / level[:, None], weight], axis=-1)
     return inputs, y, level_sales
 
 
 def build_model(cell: str, n_stores: int, n_past: int, n_future: int, n_static: int,
-                window: int, hidden: int, layers: int, dropout: float):
+                window: int, hidden: int, layers: int, dropout: float, embedding: bool = True):
     import keras
     from keras import layers as L
 
@@ -295,7 +303,11 @@ def build_model(cell: str, n_stores: int, n_past: int, n_future: int, n_static: 
     x = past
     for i in range(layers):
         x = rnn(hidden, return_sequences=i < layers - 1, dropout=dropout)(x)
-    emb = L.Flatten()(L.Embedding(n_stores, 16)(store))
+    # embedding=False (ablation) keeps the input but freezes it at zero.
+    emb_layer = L.Embedding(n_stores, 16) if embedding else L.Embedding(
+        n_stores, 16, embeddings_initializer="zeros", trainable=False
+    )
+    emb = L.Flatten()(emb_layer(store))
     context = L.Dense(hidden, activation="relu")(L.Concatenate()([x, emb, static]))
     context = L.Dropout(dropout)(context)
     # Shared per-day head: context + that day's known features → scaled sales.
@@ -337,11 +349,15 @@ def predict_blocks(model, arrays: dict, window: int) -> pd.DataFrame:
 
 def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int, dropout: float,
               epochs: int, samples_per_epoch: int, batch_size: int, patience: int,
-              out_dir=None, ds: Dataset = ROSSMANN) -> pd.DataFrame:
+              out_dir=None, ds: Dataset = ROSSMANN, seed: int = SEED, options: dict | None = None) -> pd.DataFrame:
+    """`options` switches off parts of the model for ablation: neighbours,
+    window_norm, weighted_loss, embedding (all True by default)."""
     import keras
 
-    keras.utils.set_random_seed(SEED)
-    arrays = sequence_arrays(df, ds)
+    opts = {"neighbours": True, "window_norm": True, "weighted_loss": True, "embedding": True, **(options or {})}
+    keras.utils.set_random_seed(seed)
+    arrays = sequence_arrays(df, ds, neighbours=opts["neighbours"])
+    arrays.update(window_norm=opts["window_norm"], weighted_loss=opts["weighted_loss"])
     pairs = train_origins(arrays, window)
     samples_per_epoch = min(samples_per_epoch, len(pairs))  # small datasets
     print(f"{cell.upper()}: {len(pairs):,} training windows, {samples_per_epoch:,} sampled per epoch")
@@ -349,7 +365,7 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
     class Windows(keras.utils.PyDataset):
         def __init__(self):
             super().__init__()
-            self.rng = np.random.default_rng(SEED)
+            self.rng = np.random.default_rng(seed)
             self.on_epoch_end()
 
         def on_epoch_end(self):
@@ -364,8 +380,8 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
             return inputs, y
 
     model = build_model(
-        cell, len(arrays["stores"]), len(PAST_COLS), len(KNOWN_COLS) + 1, arrays["static"].shape[1] + 1,
-        window, hidden, layers, dropout,
+        cell, len(arrays["stores"]), arrays["past"].shape[-1], arrays["known"].shape[-1] + 1,
+        arrays["static"].shape[1] + 1, window, hidden, layers, dropout, opts["embedding"],
     )
     model.compile(optimizer=keras.optimizers.Adam(1e-3), loss=weighted_abs_error)
 
@@ -394,7 +410,7 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
     out_dir.mkdir(parents=True, exist_ok=True)
     model.save(out_dir / "model.keras")
     (out_dir / "config.json").write_text(json.dumps(
-        {"window": window, "hidden": hidden, "layers": layers, "dropout": dropout, "seed": SEED}, indent=2
+        {"window": window, "hidden": hidden, "layers": layers, "dropout": dropout, "seed": seed, **opts}, indent=2
     ))
     return predict_blocks(model, arrays, window)
 

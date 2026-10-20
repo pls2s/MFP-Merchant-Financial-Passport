@@ -38,3 +38,5 @@ models/forecasts/*
 !models/forecasts/ensemble.json
 models/favorita/*
 !models/favorita/results.csv
+models/experiments/*
+!models/experiments/*.csv
