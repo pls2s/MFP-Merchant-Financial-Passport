@@ -1,0 +1,12 @@
+# Workstream 1 — forecasting. Python 3.11.
+pandas>=2.2,<3
+numpy>=1.26,<2.2
+pyarrow>=16
+scikit-learn>=1.5
+lightgbm>=4.3
+tensorflow>=2.16,<2.19
+matplotlib>=3.8
+jupyter
+kaggle
+openpyxl
+pytest
