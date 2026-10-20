@@ -23,3 +23,6 @@ frontend/dist/
 .DS_Store
 .vscode/
 .idea/
+
+# Derived from competition data — regenerate with preprocess.py
+data/processed/*.parquet
