@@ -30,3 +30,9 @@ data/processed/*.parquet
 # Regenerable training outputs
 models/tuning/
 models/logs/
+models/lstm/
+models/gru/
+models/lightgbm/
+models/predictions/
+models/forecasts/*
+!models/forecasts/ensemble.json
