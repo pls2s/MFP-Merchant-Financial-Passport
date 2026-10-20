@@ -3,6 +3,7 @@
 Usage:
     python -m ai.cashflow_forecast.train --model all
     python -m ai.cashflow_forecast.train --model lstm --window 56 --hidden 64 --layers 1
+    python -m ai.cashflow_forecast.train --dataset favorita --model lightgbm
 
 Every model forecasts the same 14-day blocks: three rolling origins cover the
 42-day Validation period and three cover the 42-day Test period. At each origin
@@ -11,6 +12,7 @@ known-in-advance features (Open, Promo, holidays, calendar) for the horizon.
 
 Writes  models/predictions/<model>.parquet   (store, date, split, forecast)
         models/<model>/                      (trained artifacts)
+        Datasets other than Rossmann write under models/<dataset>/.
 """
 
 import argparse
@@ -19,25 +21,15 @@ import json
 import numpy as np
 import pandas as pd
 
-from ai.cashflow_forecast.evaluate import PREDICTIONS_DIR, wape
-from ai.cashflow_forecast.preprocess import (
-    PROCESSED_PATH,
-    ROOT,
-    SEED,
-    TEST_END,
-    TRAIN_END,
-    TRAIN_START,
-    VAL_END,
-)
+from ai.cashflow_forecast.evaluate import wape
+from ai.cashflow_forecast.preprocess import DATASETS, HORIZON, ROSSMANN, SEED, Dataset
 
-MODELS_DIR = ROOT / "models"
-HORIZON = 14
-VAL_ORIGINS = [TRAIN_END + pd.Timedelta(days=HORIZON * k) for k in range(3)]
-TEST_ORIGINS = [VAL_END + pd.Timedelta(days=HORIZON * k) for k in range(3)]
+VAL_ORIGINS = ROSSMANN.val_origins
+TEST_ORIGINS = ROSSMANN.test_origins
 
 
-def load() -> pd.DataFrame:
-    return pd.read_parquet(PROCESSED_PATH)
+def load(ds: Dataset = ROSSMANN) -> pd.DataFrame:
+    return pd.read_parquet(ds.processed_path)
 
 
 def horizon_frame(df: pd.DataFrame, origin: pd.Timestamp, split: str) -> pd.DataFrame:
@@ -49,13 +41,14 @@ def horizon_frame(df: pd.DataFrame, origin: pd.Timestamp, split: str) -> pd.Data
     return part
 
 
-def save_predictions(name: str, preds: pd.DataFrame) -> None:
-    PREDICTIONS_DIR.mkdir(parents=True, exist_ok=True)
+def save_predictions(name: str, preds: pd.DataFrame, ds: Dataset = ROSSMANN) -> None:
+    ds.predictions_dir.mkdir(parents=True, exist_ok=True)
     preds = preds[["store", "date", "split", "forecast"]].copy()
     preds["forecast"] = preds["forecast"].clip(lower=0).astype("float32")
     preds["model"] = name
-    preds.to_parquet(PREDICTIONS_DIR / f"{name}.parquet", index=False)
-    print(f"Saved {len(preds):,} predictions → {PREDICTIONS_DIR / f'{name}.parquet'}")
+    path = ds.predictions_dir / f"{name}.parquet"
+    preds.to_parquet(path, index=False)
+    print(f"Saved {len(preds):,} predictions → {path}")
 
 
 def report(df: pd.DataFrame, preds: pd.DataFrame) -> None:
@@ -70,11 +63,11 @@ def report(df: pd.DataFrame, preds: pd.DataFrame) -> None:
 # --- Seasonal naive ----------------------------------------------------------
 
 
-def train_seasonal_naive(df: pd.DataFrame) -> pd.DataFrame:
+def train_seasonal_naive(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> pd.DataFrame:
     """Same weekday last week. If that day was closed, use the latest open day
     with the same weekday before the origin."""
     preds = []
-    for split, origins in (("val", VAL_ORIGINS), ("test", TEST_ORIGINS)):
+    for split, origins in (("val", ds.val_origins), ("test", ds.test_origins)):
         for origin in origins:
             history = df[(df["date"] <= origin) & (df["is_eval_day"] == 1)]
             last = (
@@ -127,7 +120,7 @@ def lgbm_features(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     return df, features
 
 
-def train_lightgbm(df: pd.DataFrame) -> pd.DataFrame:
+def train_lightgbm(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> pd.DataFrame:
     import lightgbm as lgb
 
     feat_df, features = lgbm_features(df)
@@ -161,7 +154,7 @@ def train_lightgbm(df: pd.DataFrame) -> pd.DataFrame:
         callbacks=[lgb.early_stopping(100), lgb.log_evaluation(100)],
     )
 
-    out_dir = MODELS_DIR / "lightgbm"
+    out_dir = ds.models_dir / "lightgbm"
     out_dir.mkdir(parents=True, exist_ok=True)
     booster.save_model(str(out_dir / "model.txt"), num_iteration=booster.best_iteration)
 
@@ -184,11 +177,17 @@ KNOWN_COLS = [
 PAST_COLS = ["sales_in", "eval_flag", *KNOWN_COLS]
 
 
-def sequence_arrays(df: pd.DataFrame) -> dict:
+def standardize(x: pd.Series) -> pd.Series:
+    """Zero-mean, unit-variance; a constant column (e.g. missing in a dataset) becomes 0."""
+    std = x.std()
+    return (x - x.mean()) / std if std > 0 else x * 0
+
+
+def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> dict:
     """Dense (stores, days, features) arrays. Relies on preprocess's contiguous calendar."""
     df = df.sort_values(["store", "date"]).reset_index(drop=True)
     stores = np.sort(df["store"].unique())
-    dates = pd.date_range(TRAIN_START, TEST_END, freq="D")
+    dates = pd.date_range(ds.train_start, ds.test_end, freq="D")
     n_s, n_d = len(stores), len(dates)
     assert len(df) == n_s * n_d
 
@@ -218,14 +217,14 @@ def sequence_arrays(df: pd.DataFrame) -> dict:
 
     per_store = df.groupby("store").first()
     static = np.column_stack([
-        np.eye(4)[per_store["store_type"]],
-        np.eye(3)[per_store["assortment"]],
-        (per_store["competition_distance_log"] - per_store["competition_distance_log"].mean())
-        / per_store["competition_distance_log"].std(),
+        np.eye(per_store["store_type"].max() + 1)[per_store["store_type"]],
+        np.eye(per_store["assortment"].max() + 1)[per_store["assortment"]],
+        standardize(per_store["competition_distance_log"]),
         np.log(per_store["store_mean_sales"]) - np.log(per_store["store_mean_sales"]).mean(),
     ]).astype("float32")
 
     return {
+        "dataset": ds,
         "stores": stores,
         "dates": dates,
         "past": cube(PAST_COLS),
@@ -241,7 +240,7 @@ def sequence_arrays(df: pd.DataFrame) -> dict:
 def train_origins(arrays: dict, window: int) -> np.ndarray:
     """(store_idx, origin_idx) pairs whose input + horizon lie in Train with no missing days."""
     dates = arrays["dates"]
-    last_origin = dates.get_loc(TRAIN_END) - HORIZON
+    last_origin = dates.get_loc(arrays["dataset"].train_end) - HORIZON
     origins = np.arange(window - 1, last_origin + 1)
     miss_cum = np.concatenate(
         [np.zeros((arrays["missing"].shape[0], 1), "int32"), arrays["missing"].cumsum(axis=1)], axis=1
@@ -318,7 +317,8 @@ def weighted_abs_error(y_true, y_pred):
 def predict_blocks(model, arrays: dict, window: int) -> pd.DataFrame:
     rows = []
     n_s = len(arrays["stores"])
-    for split, origins in (("val", VAL_ORIGINS), ("test", TEST_ORIGINS)):
+    ds = arrays["dataset"]
+    for split, origins in (("val", ds.val_origins), ("test", ds.test_origins)):
         for origin in origins:
             o = arrays["dates"].get_loc(origin)
             s_idx = np.arange(n_s)
@@ -337,12 +337,13 @@ def predict_blocks(model, arrays: dict, window: int) -> pd.DataFrame:
 
 def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int, dropout: float,
               epochs: int, samples_per_epoch: int, batch_size: int, patience: int,
-              out_dir=None) -> pd.DataFrame:
+              out_dir=None, ds: Dataset = ROSSMANN) -> pd.DataFrame:
     import keras
 
     keras.utils.set_random_seed(SEED)
-    arrays = sequence_arrays(df)
+    arrays = sequence_arrays(df, ds)
     pairs = train_origins(arrays, window)
+    samples_per_epoch = min(samples_per_epoch, len(pairs))  # small datasets
     print(f"{cell.upper()}: {len(pairs):,} training windows, {samples_per_epoch:,} sampled per epoch")
 
     class Windows(keras.utils.PyDataset):
@@ -389,7 +390,7 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
         verbose=2,
     )
 
-    out_dir = out_dir or MODELS_DIR / cell
+    out_dir = out_dir or ds.models_dir / cell
     out_dir.mkdir(parents=True, exist_ok=True)
     model.save(out_dir / "model.keras")
     (out_dir / "config.json").write_text(json.dumps(
@@ -398,13 +399,13 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
     return predict_blocks(model, arrays, window)
 
 
-def train_ensemble() -> pd.DataFrame:
+def train_ensemble(ds: Dataset = ROSSMANN) -> pd.DataFrame:
     """Plain average of the saved LSTM and GRU forecasts (equal weights, nothing
     fitted). Adopted because its Validation WAPE beat both single models; the
     rule was fixed before looking at Test."""
     keys = ["store", "date", "split"]
-    lstm = pd.read_parquet(PREDICTIONS_DIR / "lstm.parquet")[keys + ["forecast"]]
-    gru = pd.read_parquet(PREDICTIONS_DIR / "gru.parquet")[keys + ["forecast"]]
+    lstm = pd.read_parquet(ds.predictions_dir / "lstm.parquet")[keys + ["forecast"]]
+    gru = pd.read_parquet(ds.predictions_dir / "gru.parquet")[keys + ["forecast"]]
     merged = lstm.merge(gru, on=keys, suffixes=("_lstm", "_gru"), validate="one_to_one")
     merged["forecast"] = (merged["forecast_lstm"] + merged["forecast_gru"]) / 2
     return merged
@@ -418,7 +419,7 @@ def val_wape(df: pd.DataFrame, preds: pd.DataFrame) -> float:
     return wape(m["sales"].to_numpy(), m["forecast"].to_numpy())
 
 
-def tune(df: pd.DataFrame, cell: str, args: argparse.Namespace) -> pd.DataFrame:
+def tune(df: pd.DataFrame, cell: str, args: argparse.Namespace, ds: Dataset = ROSSMANN) -> pd.DataFrame:
     """Grid over the CLAUDE.md budget. Chooses by Validation WAPE only — Test
     results are never printed or recorded here, so they cannot steer the choice."""
     import shutil
@@ -429,10 +430,10 @@ def tune(df: pd.DataFrame, cell: str, args: argparse.Namespace) -> pd.DataFrame:
             for layers in (1, 2):
                 name = f"{cell}_w{window}_h{hidden}_l{layers}"
                 print(f"\n=== tune {name} ===")
-                out_dir = MODELS_DIR / "tuning" / name
+                out_dir = ds.models_dir / "tuning" / name
                 preds = train_rnn(
                     df, cell, window, hidden, layers, args.dropout,
-                    args.epochs, args.samples_per_epoch, args.batch_size, args.patience, out_dir,
+                    args.epochs, args.samples_per_epoch, args.batch_size, args.patience, out_dir, ds,
                 )
                 preds.to_parquet(out_dir / "predictions.parquet", index=False)
                 score = val_wape(df, preds)
@@ -442,19 +443,20 @@ def tune(df: pd.DataFrame, cell: str, args: argparse.Namespace) -> pd.DataFrame:
                     best = (score, out_dir, preds)
 
     table = pd.DataFrame(rows).sort_values("val_wape")
-    table.to_csv(MODELS_DIR / f"tuning_{cell}.csv", index=False)
+    table.to_csv(ds.models_dir / f"tuning_{cell}.csv", index=False)
     print(table.to_string(index=False))
 
     _, best_dir, best_preds = best
-    print(f"Best by val WAPE: {best_dir.name} → models/{cell}/")
-    shutil.copytree(best_dir, MODELS_DIR / cell, dirs_exist_ok=True)
-    (MODELS_DIR / cell / "predictions.parquet").unlink()
-    save_predictions(cell, best_preds)
+    print(f"Best by val WAPE: {best_dir.name} → {ds.models_dir / cell}")
+    shutil.copytree(best_dir, ds.models_dir / cell, dirs_exist_ok=True)
+    (ds.models_dir / cell / "predictions.parquet").unlink()
+    save_predictions(cell, best_preds, ds)
     return table
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--dataset", choices=list(DATASETS), default="rossmann")
     parser.add_argument(
         "--model", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble", "all"], default="all"
     )
@@ -469,29 +471,30 @@ def main() -> None:
     parser.add_argument("--tune", action="store_true", help="grid-search LSTM/GRU, choose by val WAPE")
     args = parser.parse_args()
 
-    df = load()
+    ds = DATASETS[args.dataset]
+    df = load(ds)
     if args.tune:
         cells = ["lstm", "gru"] if args.model == "all" else [args.model]
         assert set(cells) <= {"lstm", "gru"}, "--tune applies to lstm and gru only"
         for cell in cells:
-            tune(df, cell, args)
+            tune(df, cell, args, ds)
         return
     names = ["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"] if args.model == "all" else [args.model]
     for name in names:
         print(f"\n=== {name} ===")
         if name == "seasonal_naive":
-            preds = train_seasonal_naive(df)
+            preds = train_seasonal_naive(df, ds)
         elif name == "lightgbm":
-            preds = train_lightgbm(df)
+            preds = train_lightgbm(df, ds)
         elif name == "ensemble":
-            preds = train_ensemble()
+            preds = train_ensemble(ds)
         else:
             preds = train_rnn(
                 df, name, args.window, args.hidden, args.layers, args.dropout,
-                args.epochs, args.samples_per_epoch, args.batch_size, args.patience,
+                args.epochs, args.samples_per_epoch, args.batch_size, args.patience, ds=ds,
             )
         report(df, preds)
-        save_predictions(name, preds)
+        save_predictions(name, preds, ds)
 
 
 if __name__ == "__main__":

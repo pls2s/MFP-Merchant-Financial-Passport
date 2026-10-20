@@ -20,8 +20,8 @@ import numpy as np
 import pandas as pd
 
 from ai.cashflow_forecast.evaluate import PREDICTIONS_DIR, score
-from ai.cashflow_forecast.preprocess import PROCESSED_PATH, ROOT
-from ai.cashflow_forecast.train import HORIZON, TEST_ORIGINS, VAL_ORIGINS
+from ai.cashflow_forecast.preprocess import HORIZON, PROCESSED_PATH, ROOT
+from ai.cashflow_forecast.train import TEST_ORIGINS, VAL_ORIGINS
 
 FORECASTS_DIR = ROOT / "models" / "forecasts"
 MODEL_VERSION = "v1"

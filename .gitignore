@@ -36,3 +36,5 @@ models/lightgbm/
 models/predictions/
 models/forecasts/*
 !models/forecasts/ensemble.json
+models/favorita/*
+!models/favorita/results.csv
