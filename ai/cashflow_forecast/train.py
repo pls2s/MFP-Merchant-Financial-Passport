@@ -336,7 +336,8 @@ def predict_blocks(model, arrays: dict, window: int) -> pd.DataFrame:
 
 
 def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int, dropout: float,
-              epochs: int, samples_per_epoch: int, batch_size: int, patience: int) -> pd.DataFrame:
+              epochs: int, samples_per_epoch: int, batch_size: int, patience: int,
+              out_dir=None) -> pd.DataFrame:
     import keras
 
     keras.utils.set_random_seed(SEED)
@@ -388,13 +389,56 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
         verbose=2,
     )
 
-    out_dir = MODELS_DIR / cell
+    out_dir = out_dir or MODELS_DIR / cell
     out_dir.mkdir(parents=True, exist_ok=True)
     model.save(out_dir / "model.keras")
     (out_dir / "config.json").write_text(json.dumps(
         {"window": window, "hidden": hidden, "layers": layers, "dropout": dropout, "seed": SEED}, indent=2
     ))
     return predict_blocks(model, arrays, window)
+
+
+def val_wape(df: pd.DataFrame, preds: pd.DataFrame) -> float:
+    m = preds[preds["split"] == "val"][["store", "date", "forecast"]].merge(
+        df[["store", "date", "sales", "is_eval_day"]], on=["store", "date"]
+    )
+    m = m[m["is_eval_day"] == 1]
+    return wape(m["sales"].to_numpy(), m["forecast"].to_numpy())
+
+
+def tune(df: pd.DataFrame, cell: str, args: argparse.Namespace) -> pd.DataFrame:
+    """Grid over the CLAUDE.md budget. Chooses by Validation WAPE only — Test
+    results are never printed or recorded here, so they cannot steer the choice."""
+    import shutil
+
+    rows, best = [], None
+    for window in (28, 56):
+        for hidden in (64, 128):
+            for layers in (1, 2):
+                name = f"{cell}_w{window}_h{hidden}_l{layers}"
+                print(f"\n=== tune {name} ===")
+                out_dir = MODELS_DIR / "tuning" / name
+                preds = train_rnn(
+                    df, cell, window, hidden, layers, args.dropout,
+                    args.epochs, args.samples_per_epoch, args.batch_size, args.patience, out_dir,
+                )
+                preds.to_parquet(out_dir / "predictions.parquet", index=False)
+                score = val_wape(df, preds)
+                print(f"  {name} val WAPE: {score:.4f}")
+                rows.append({"config": name, "window": window, "hidden": hidden, "layers": layers, "val_wape": score})
+                if best is None or score < best[0]:
+                    best = (score, out_dir, preds)
+
+    table = pd.DataFrame(rows).sort_values("val_wape")
+    table.to_csv(MODELS_DIR / f"tuning_{cell}.csv", index=False)
+    print(table.to_string(index=False))
+
+    _, best_dir, best_preds = best
+    print(f"Best by val WAPE: {best_dir.name} → models/{cell}/")
+    shutil.copytree(best_dir, MODELS_DIR / cell, dirs_exist_ok=True)
+    (MODELS_DIR / cell / "predictions.parquet").unlink()
+    save_predictions(cell, best_preds)
+    return table
 
 
 def main() -> None:
@@ -408,9 +452,16 @@ def main() -> None:
     parser.add_argument("--samples-per-epoch", type=int, default=200_000)
     parser.add_argument("--batch-size", type=int, default=512)
     parser.add_argument("--patience", type=int, default=4)
+    parser.add_argument("--tune", action="store_true", help="grid-search LSTM/GRU, choose by val WAPE")
     args = parser.parse_args()
 
     df = load()
+    if args.tune:
+        cells = ["lstm", "gru"] if args.model == "all" else [args.model]
+        assert set(cells) <= {"lstm", "gru"}, "--tune applies to lstm and gru only"
+        for cell in cells:
+            tune(df, cell, args)
+        return
     names = ["seasonal_naive", "lightgbm", "lstm", "gru"] if args.model == "all" else [args.model]
     for name in names:
         print(f"\n=== {name} ===")
