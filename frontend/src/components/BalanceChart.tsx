@@ -10,8 +10,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { money, monthStarts, thaiDate, thaiDateShort, thaiMonthShort, thaiWeekday } from "../format";
+import { money, monthStarts, pillRows, thaiDate, thaiDateShort, thaiMonthShort, thaiWeekday } from "../format";
 import type { CashBalance, Gap } from "../types";
+import { GapPill } from "./GapMarker";
 
 const RANGES = [
   { key: "6w", label: "6 สัปดาห์", days: 42 },
@@ -74,6 +75,8 @@ export function BalanceChart({ balance, asOf, gaps }: { balance: CashBalance; as
   const pastGaps = balance.past_gaps.filter((g) => g.date >= (rows[0]?.date ?? ""));
   const lowest = rows.filter((r) => r.isForecast).reduce((a, b) => (b.balance < a.balance ? b : a));
   const long = range === "all";
+  const dates = rows.map((r) => r.date);
+  const pills = pillRows(gaps.map((g) => g.date), dates, long ? 25 : 8);
 
   return (
     <div>
@@ -99,14 +102,19 @@ export function BalanceChart({ balance, asOf, gaps }: { balance: CashBalance; as
               ticks={long ? monthStarts(rows.map((r) => r.date)) : undefined}
               axisLine={{ stroke: "var(--border)" }} tickLine={false} minTickGap={long ? 8 : 24} />
             <YAxis tickFormatter={(v: number) => money(v)} tick={{ fill: "var(--text-2)", fontSize: 12 }}
-              axisLine={false} tickLine={false} width={64} />
+              axisLine={false} tickLine={false} width={64}
+              domain={[(min: number) => Math.floor(Math.min(min, 0) / 5000) * 5000,
+                (max: number) => Math.ceil((max * (gaps.length ? 1.3 : 1.05)) / 5000) * 5000]} />
             <Tooltip content={<BalanceTooltip />} />
             <Bar dataKey="expenses" fill="var(--series-expense)" fillOpacity={0.55} radius={[3, 3, 0, 0]} maxBarSize={14} isAnimationActive={false} />
             <ReferenceLine y={0} stroke="var(--bad)" strokeWidth={1.5} />
             {pastGaps.map((g) => (
               <ReferenceLine key={`past-${g.date}`} x={g.date} stroke="var(--warn)" strokeWidth={1.5} strokeDasharray="4 3" />
             ))}
-            {gaps.map((g) => <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={1.5} />)}
+            {gaps.map((g, i) => (
+              <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={1.5} strokeDasharray="3 3"
+                label={{ content: <GapPill gap={g} row={pills[i]} flip={dates.indexOf(g.date) > dates.length * 0.5} /> }} />
+            ))}
             <ReferenceLine x={asOf} stroke="var(--text-3)" strokeDasharray="3 3"
               label={{ value: "วันนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
             <Line dataKey="past" stroke="var(--series-balance)" strokeWidth={long ? 1.5 : 2} dot={NegativeDot} isAnimationActive={false} />

@@ -69,3 +69,13 @@ export function change(x: number): string {
   const v = Math.round(x * 100);
   return v === 0 ? "0%" : `${v > 0 ? "+" : "−"}${Math.abs(v)}%`;
 }
+
+/** Stagger rows for callouts that are closer than `minGap` slots apart. */
+export function pillRows(dates: string[], allDates: string[], minGap: number): number[] {
+  const rows: number[] = [];
+  dates.forEach((d, i) => {
+    const prev = i > 0 ? allDates.indexOf(dates[i - 1]) : -Infinity;
+    rows.push(allDates.indexOf(d) - prev < minGap ? (rows[i - 1] ?? 0) + 1 : 0);
+  });
+  return rows;
+}

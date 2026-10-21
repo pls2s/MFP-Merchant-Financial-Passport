@@ -15,11 +15,12 @@ import {
   YAxis,
 } from "recharts";
 import {
-  addDays, change, daysInMonth, money, monthStarts, thaiDate, thaiDateShort, thaiMonthShort,
+  addDays, change, daysInMonth, money, monthStarts, pillRows, thaiDate, thaiDateShort, thaiMonthShort,
   thaiWeekday, thaiYearMonth, thaiYearMonthLong,
 } from "../format";
 import type { Forecast, Gap, LongForecast, ModelResult, SalesHistory, SeasonalOutlook } from "../types";
 import { Accuracy } from "./Accuracy";
+import { GapPill } from "./GapMarker";
 
 /**
  * Sales chart, simple by default. Daily views draw one bar per day so every day is its own slot
@@ -191,6 +192,10 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
   const holidays = details ? rows.filter((r) => r.holiday).map((r) => r.date) : [];
   const inRange = (d: string) => d >= rows[0].date && d <= rows[rows.length - 1].date;
   const monthAxis = range === "3m";
+  const dates = rows.map((r) => r.date);
+  const shown = gaps.filter((g) => inRange(g.date));
+  const gapDays = new Set(shown.map((g) => g.date));
+  const pills = pillRows(shown.map((g) => g.date), dates, range === "3m" ? 25 : 8);
 
   return (
     <>
@@ -199,7 +204,7 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
         <span><i className="swatch bar" style={{ background: "var(--series-forecast)", opacity: 0.6 }} />{range === "3m" ? "คาดการณ์ 3 เดือน" : "คาดการณ์ 14 วัน"}</span>
         <span><i className="swatch band" />ช่วงที่น่าจะเป็น</span>
         <span className="muted">ช่องว่าง = ร้านปิด</span>
-        {gaps.length > 0 && <span><i className="swatch" style={{ background: "var(--bad)" }} />วันที่เงินอาจไม่พอ</span>}
+        {gaps.length > 0 && <span><i className="swatch bar" style={{ background: "var(--bad)" }} />วันที่เงินอาจไม่พอ</span>}
         {details && <>
           <span><i className="swatch promo" />วันโปรโมชัน</span>
           {pastGaps.length > 0 && <span><i className="swatch dashed past-gap" />วันที่เงินเคยไม่พอ</span>}
@@ -211,6 +216,7 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
           <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }} barCategoryGap="22%">
+            {/* top headroom so the warning pills do not sit on the bars */}
             <CartesianGrid stroke="var(--border)" vertical={false} />
             {assumed.map(([a, b]) => (
               <ReferenceArea key={`as-${a}`} x1={a} x2={b} fill="var(--text-3)" fillOpacity={0.08} stroke="none" ifOverflow="hidden" />
@@ -224,18 +230,27 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
               tick={{ fill: "var(--text-2)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false}
               minTickGap={monthAxis ? 8 : 24} />
             <YAxis tickFormatter={(v: number) => money(v)} tick={{ fill: "var(--text-2)", fontSize: 12 }}
-              axisLine={false} tickLine={false} width={64} />
+              axisLine={false} tickLine={false} width={64}
+              domain={[0, (max: number) => Math.ceil((max * (shown.length ? 1.3 : 1.05)) / 1000) * 1000]} />
             <Tooltip content={<DayTooltip />} cursor={{ fill: "var(--surface-2)" }} />
             <Area dataKey="band" stroke="none" fill="var(--series-band)" fillOpacity={0.22} connectNulls isAnimationActive={false} />
             {/* actual (past) and forecast (future) never share a day, so stacking keeps one centred bar per slot. */}
             <Bar dataKey="actual" stackId="day" fill="var(--series-actual)" fillOpacity={0.8} radius={[2, 2, 0, 0]} maxBarSize={18} isAnimationActive={false} />
-            <Bar dataKey="forecast" stackId="day" fill="var(--series-forecast)" fillOpacity={0.6} radius={[2, 2, 0, 0]} maxBarSize={18} isAnimationActive={false} />
+            <Bar dataKey="forecast" stackId="day" radius={[2, 2, 0, 0]} maxBarSize={18} isAnimationActive={false}>
+              {rows.map((r) => (
+                <Cell key={r.date} fill={gapDays.has(r.date) ? "var(--bad)" : "var(--series-forecast)"}
+                  fillOpacity={gapDays.has(r.date) ? 0.9 : 0.6} />
+              ))}
+            </Bar>
             {/* Details: what actually happened (or synthetic sales) as a short tick over that day's forecast bar. */}
             <Scatter dataKey="laterActual" shape={<DayTick color="var(--series-actual)" />} isAnimationActive={false} />
             <Scatter dataKey="simulated" shape={<DayTick color="var(--text-3)" />} isAnimationActive={false} />
             <ReferenceLine x={asOf} stroke="var(--text-3)" strokeDasharray="3 3"
               label={{ value: "วันนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
-            {gaps.filter((g) => inRange(g.date)).map((g) => <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={2} />)}
+            {shown.map((g, i) => (
+              <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={1.5} strokeDasharray="3 3"
+                label={{ content: <GapPill gap={g} row={pills[i]} flip={dates.indexOf(g.date) > dates.length * 0.5} /> }} />
+            ))}
             {details && pastGaps.filter((g) => inRange(g.date)).map((g) => (
               <ReferenceLine key={`past-${g.date}`} x={g.date} stroke="var(--warn)" strokeWidth={2} strokeDasharray="4 3" />
             ))}
