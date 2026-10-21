@@ -32,10 +32,13 @@ EXPENSES_END = "2015-07-31"
 AS_OF = TEST_ORIGINS[-1]        # 2015-07-17
 MIN_BUFFER = 0.0
 
-# Demo stores get one large extra supplier invoice inside the projection so the demo always has
-# an alert. Due DEMO_GAP_DAYS after AS_OF, sized to leave a shortfall of DEMO_SHORTFALL_DAYS of sales.
+# Demo stores: a thin cash reserve plus one large supplier order inside the projection, so the
+# demo always has an alert. The order (DEMO_ORDER_DAYS of normal purchases) is due DEMO_GAP_DAYS
+# after AS_OF; the opening balance is lowered just enough to leave a shortfall of
+# DEMO_SHORTFALL_DAYS of sales that day.
 DEMO_STORES = (1, 25, 817)
 DEMO_GAP_DAYS = 5               # → 2015-07-22
+DEMO_ORDER_DAYS = 21
 DEMO_SHORTFALL_DAYS = 2
 DEMO_LABEL = "ค่าสินค้า supplier (สั่งล็อตใหญ่)"
 
@@ -59,18 +62,27 @@ def sales_series() -> dict[int, pd.DataFrame]:
     return series
 
 
-def add_demo_invoices(expenses: pd.DataFrame, series: dict, balances: pd.Series, daily: pd.Series) -> pd.DataFrame:
+def add_demo_scenarios(expenses: pd.DataFrame, series: dict, balances: pd.Series, daily: pd.Series,
+                       params: ExpenseParams) -> tuple[pd.DataFrame, pd.Series]:
+    """Add the large order to each demo store and lower its opening balance to force the gap."""
     due = AS_OF + pd.Timedelta(days=DEMO_GAP_DAYS)
-    extra = []
+    balances = balances.copy()
+    orders = []
     for store in DEMO_STORES:
-        bal = simulate_balance(series[store], expenses[expenses["store"] == store], balances[store])
-        balance_that_day = float(bal.loc[bal["date"] == due, "balance"].iloc[0])
-        shortfall = round(DEMO_SHORTFALL_DAYS * daily[store], -2)
-        extra.append({
+        order = {
             "store": store, "due_date": due, "type": "supplier_invoice", "label": DEMO_LABEL,
-            "amount": round(max(balance_that_day, 0) + shortfall, -2), "scenario": "demo_gap", "is_synthetic": True,
-        })
-    return pd.concat([expenses, pd.DataFrame(extra)], ignore_index=True).sort_values(["store", "due_date", "type"])
+            "amount": round(DEMO_ORDER_DAYS * params.supplier_share * daily[store], -2),
+            "scenario": "demo_gap", "is_synthetic": True,
+        }
+        with_order = pd.concat([expenses[expenses["store"] == store], pd.DataFrame([order])])
+        bal = simulate_balance(series[store], with_order[with_order["due_date"] >= series[store]["date"].min()],
+                               balances[store])
+        balance_that_day = float(bal.loc[bal["date"] == due, "balance"].iloc[0])
+        target = -round(DEMO_SHORTFALL_DAYS * daily[store], -2)
+        balances[store] = round(max(balances[store] - (balance_that_day - target), 0.0), 2)
+        orders.append(order)
+    expenses = pd.concat([expenses, pd.DataFrame(orders)], ignore_index=True)
+    return expenses.sort_values(["store", "due_date", "type"]), balances
 
 
 def build(params: ExpenseParams = ExpenseParams()) -> tuple[pd.DataFrame, list[dict]]:
@@ -79,7 +91,8 @@ def build(params: ExpenseParams = ExpenseParams()) -> tuple[pd.DataFrame, list[d
     expenses = generate(stores, EXPENSES_START, EXPENSES_END, params)
     balances = opening_balance(expenses, params)
     series = sales_series()
-    expenses = add_demo_invoices(expenses, series, balances, daily).reset_index(drop=True)
+    expenses, balances = add_demo_scenarios(expenses, series, balances, daily, params)
+    expenses = expenses.reset_index(drop=True)
 
     sim_start = min(s["date"].min() for s in series.values())
     window = expenses[expenses["due_date"] >= sim_start]

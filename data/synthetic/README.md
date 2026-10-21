@@ -46,9 +46,13 @@ Gaps are reported only in the forecast window, with a minimum buffer of **0**.
 
 ## Demo stores with a deliberate gap
 
-Stores **1, 25 and 817** each get one extra supplier invoice ("ค่าสินค้า supplier (สั่งล็อตใหญ่)",
-`scenario: "demo_gap"`) due on **2015-07-22**. Its amount is the projected balance that day plus
-2 days of average sales, rounded to 100, so the demo always shows an alert with a date and an amount.
+Stores **1, 25 and 817** represent a store with a thin cash reserve that places a large order:
+
+- one extra supplier invoice ("ค่าสินค้า supplier (สั่งล็อตใหญ่)", `scenario: "demo_gap"`) due on
+  **2015-07-22**, worth 21 days of normal purchases (21 × 60% × average daily sales, rounded to 100)
+- the opening balance lowered just enough that the balance on 2015-07-22 is −2 days of average sales
+
+So the demo always shows an alert with a date and an amount.
 
 Without these, 4 of the other 1,112 stores (0.4%) have a gap in the forecast window.
 
