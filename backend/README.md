@@ -38,7 +38,7 @@ Demo "today" is **2015-07-17**: actual sales up to that date, forecast for 2015-
 | GET | `/api/v1/merchants/{id}/cash-balance` | Daily simulated balance (`sales`, synthetic `expenses`, `balance`, `is_forecast`) from 2015-06-20 |
 | GET | `/api/v1/merchants/{id}/cash-flow-gaps?min_buffer=` | `cash-flow-gaps` contract, re-computed with the given minimum buffer (default 0) |
 | GET | `/api/v1/merchants/{id}/credit-signal` | `credit-signal` contract, always `status: "experimental"` |
-| POST | `/api/v1/merchants/{id}/copilot` | Body `{"question": "..."}` (optional) → plain-Thai explanation |
+| POST | `/api/v1/merchants/{id}/copilot` | Body `{"question": "...", "history": [{"role": "user"|"assistant", "content": "..."}]}` (both optional) → Thai chat answer |
 | GET | `/api/v1/model-results` | WAPE / MAE / RMSE of every model on val and test (Model results screen) |
 
 Unknown merchant → `404`.
@@ -67,6 +67,11 @@ The contract in `CLAUDE.md` does not fix these shapes, so they are defined here:
   "is_synthetic_expense": true
 }
 ```
+
+The copilot sees facts computed by `ai/copilot/facts.py`: sales patterns (best weekday, promo uplift,
+12-week trend), the day-by-day forecast, upcoming synthetic expenses, projected balance, forecast accuracy,
+the credit signal with its rank, and three what-if scenarios (sales ±10%, delaying the largest upcoming
+expense by 7 days) re-simulated with the WS2 gap finder. Send earlier turns as `history` for follow-ups.
 
 `source` is `"template"` when there is no API key, the API fails or times out (20 s), or the LLM
 answer used a number not in the computed facts or loan wording (after one retry). Show `disclaimer`

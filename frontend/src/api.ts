@@ -1,6 +1,7 @@
 // All API calls go through this file. VITE_USE_MOCK=true reads src/mocks/ instead of the backend.
 import type {
   CashBalance,
+  ChatMessage,
   CashFlowGaps,
   CopilotResponse,
   CreditSignal,
@@ -59,7 +60,7 @@ export const api = {
   creditSignal: (id: number): Promise<CreditSignal> =>
     USE_MOCK ? mock(`credit-signal-${id}`) : request(`/api/v1/merchants/${id}/credit-signal`),
 
-  copilot: async (id: number, question: string | null): Promise<CopilotResponse> => {
+  copilot: async (id: number, question: string | null, history: ChatMessage[] = []): Promise<CopilotResponse> => {
     if (USE_MOCK) {
       await new Promise((r) => setTimeout(r, 800)); // feel of a real call
       return mock(`copilot-${id}`);
@@ -67,7 +68,7 @@ export const api = {
     return request(`/api/v1/merchants/${id}/copilot`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question }),
+      body: JSON.stringify({ question, history }),
     });
   },
 

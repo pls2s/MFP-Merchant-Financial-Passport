@@ -86,7 +86,8 @@ def credit_signal(merchant_id: int):
 @app.post("/api/v1/merchants/{merchant_id}/copilot", response_model=schemas.CopilotResponse)
 def copilot(merchant_id: int, body: schemas.CopilotRequest | None = None):
     _require(merchant_id)
-    return store.copilot(merchant_id, body.question if body else None)
+    body = body or schemas.CopilotRequest()
+    return store.copilot(merchant_id, body.question, [m.model_dump() for m in body.history])
 
 
 @app.get("/api/v1/model-results", response_model=list[schemas.ModelResult])

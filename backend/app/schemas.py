@@ -138,8 +138,15 @@ class CreditSignal(BaseModel):
 # --- POST /api/v1/merchants/{id}/copilot (optional) ----------------------------
 
 
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(max_length=4000)
+
+
 class CopilotRequest(BaseModel):
     question: str | None = Field(default=None, max_length=500)
+    history: list[ChatMessage] = Field(default_factory=list, max_length=20,
+                                       description="Earlier turns of this conversation, oldest first")
 
 
 class CopilotResponse(BaseModel):

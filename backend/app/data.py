@@ -9,6 +9,7 @@ import pandas as pd
 from ai.cashflow_forecast.preprocess import ROSSMANN
 from ai.cashflow_forecast.predict import HISTORY_PATH
 from ai.copilot.explain import explain, load_dotenv
+from ai.copilot.facts import MerchantContext, score_rank
 from ai.credit_signal.build import CREDIT_PATH
 from ai.gap_detection.build import AS_OF, DEMO_STORES, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, sales_series
 from ai.gap_detection.gaps import cash_flow_gaps, simulate_balance
@@ -102,8 +103,12 @@ class DataStore:
             projection_start=AS_OF + pd.Timedelta(days=1), min_buffer=min_buffer,
         )
 
-    def copilot(self, merchant_id: int, question: str | None) -> dict:
-        return explain(
-            merchant_id, self.forecasts[merchant_id], self.cash_flow_gaps(merchant_id), self.credit[merchant_id],
-            AS_OF.strftime("%Y-%m-%d"), question,
+    def copilot(self, merchant_id: int, question: str | None, history: list[dict]) -> dict:
+        ctx = MerchantContext(
+            merchant_id=merchant_id, as_of=AS_OF, forecast=self.forecasts[merchant_id],
+            gaps=self.cash_flow_gaps(merchant_id), credit=self.credit[merchant_id],
+            history=self.history[merchant_id], sales=self.sales[merchant_id],
+            expenses=self._store_expenses(merchant_id),
+            score_rank=score_rank(self.credit[merchant_id]["score"], [c["score"] for c in self.credit.values()]),
         )
+        return explain(ctx, question, history)

@@ -103,8 +103,14 @@ export interface CreditSignal {
 }
 
 // POST /api/v1/merchants/{id}/copilot  body: CopilotRequest
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 export interface CopilotRequest {
   question?: string | null; // max 500 chars
+  history?: ChatMessage[]; // earlier turns, oldest first (max 20)
 }
 
 export interface CopilotResponse {
