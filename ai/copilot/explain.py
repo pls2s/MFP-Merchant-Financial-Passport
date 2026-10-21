@@ -49,6 +49,14 @@ def money(x: float) -> str:
     return f"{x:,.0f}"
 
 
+ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+
+def thai_dates(text: str) -> str:
+    """Rewrite ISO dates inside a sentence so every fact uses the same date format."""
+    return ISO_DATE.sub(lambda m: thai_date(m.group()), text)
+
+
 def build_facts(forecast: dict, gaps: dict, credit: dict, as_of: str) -> dict:
     """Every figure the copilot may mention, already formatted."""
     future = [p for p in forecast["points"] if p["date"] > as_of]
@@ -56,6 +64,7 @@ def build_facts(forecast: dict, gaps: dict, credit: dict, as_of: str) -> dict:
         "วันที่ข้อมูลล่าสุด": thai_date(as_of),
         "จำนวนวันที่พยากรณ์": str(len(future)),
         "ยอดขายที่คาดการณ์รวม": money(sum(p["forecast"] for p in future)),
+        "จำนวนวันที่เงินสดอาจไม่พอ": str(len(gaps["gaps"])),
         "ช่วงเงินสดอาจไม่พอ": [
             {
                 "วันที่": thai_date(g["date"]),
@@ -66,7 +75,7 @@ def build_facts(forecast: dict, gaps: dict, credit: dict, as_of: str) -> dict:
         ],
         "คะแนนสัญญาณการเงิน (ทดลอง)": f"{credit['score']}/100",
         "จุดแข็ง": credit["positive_factors"],
-        "จุดที่ควรระวัง": [r for r in credit["risk_indicators"] if not r.startswith("เงินสดอาจไม่พอ")],
+        "จุดที่ควรระวัง": [thai_dates(r) for r in credit["risk_indicators"] if not r.startswith("เงินสดอาจไม่พอ")],
     }
 
 
@@ -146,6 +155,8 @@ def explain(merchant_id: int, forecast: dict, gaps: dict, credit: dict, as_of: s
         reason = validate(llm_answer, facts)
         if reason is None:
             answer, source = llm_answer, "llm"
+            if "ข้อมูลจำลอง" not in answer:  # the model sometimes drops rule 4
+                answer = f"{answer}\n{DISCLAIMER}"
     except (RuntimeError, requests.RequestException, KeyError, IndexError, ValueError) as e:
         reason = f"llm unavailable: {e}"
     return {

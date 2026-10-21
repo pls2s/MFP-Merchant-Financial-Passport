@@ -24,7 +24,9 @@ def facts():
 def test_facts_only_future_and_thai_dates(facts):
     assert facts["จำนวนวันที่พยากรณ์"] == "2"
     assert facts["ยอดขายที่คาดการณ์รวม"] == "3,500"
+    assert facts["จำนวนวันที่เงินสดอาจไม่พอ"] == "1"
     assert facts["ช่วงเงินสดอาจไม่พอ"][0]["วันที่"] == "22 ก.ค. 2558"
+    assert not any("2015-" in r for r in facts["จุดที่ควรระวัง"])
 
 
 def test_template_has_date_amount_disclaimer_and_passes_validation(facts):
@@ -57,6 +59,7 @@ def test_valid_llm_answer_is_used(monkeypatch):
     monkeypatch.setattr(cp, "call_llm", lambda facts, q: "วันที่ 22 ก.ค. 2558 เงินอาจขาดประมาณ 7,900")
     result = cp.explain(1, FORECAST, GAPS, CREDIT, AS_OF)
     assert result["source"] == "llm" and result["fallback_reason"] is None
+    assert result["answer"].endswith(cp.DISCLAIMER)  # appended when the model leaves it out
 
 
 def test_hallucinated_llm_answer_falls_back(monkeypatch):
