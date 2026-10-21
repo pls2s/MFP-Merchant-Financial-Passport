@@ -5,6 +5,7 @@ Usage:
 
 Reads   data/processed/rossmann.parquet, models/predictions/<model>.parquet
 Writes  models/forecasts/<model>.json   (list of contract objects, one per store)
+        models/forecasts/sales_history.parquet   (daily sales + known-in-advance flags, last year)
 
 The backend loads this file at startup; the model is never run live.
 
@@ -24,6 +25,8 @@ from ai.cashflow_forecast.preprocess import HORIZON, PROCESSED_PATH, ROOT
 from ai.cashflow_forecast.train import TEST_ORIGINS, VAL_ORIGINS
 
 FORECASTS_DIR = ROOT / "models" / "forecasts"
+HISTORY_PATH = FORECASTS_DIR / "sales_history.parquet"
+HISTORY_DAYS = 365  # shown before the Test period so the dashboard has real context
 MODEL_VERSION = "v1"
 INTERVAL = 0.8
 
@@ -95,6 +98,18 @@ def export(model: str) -> list[dict]:
     return out
 
 
+def export_history() -> pd.DataFrame:
+    """Actual daily sales for the year before the Test period through its end, with the
+    known-in-advance flags that explain spikes (promo, holidays, open). Missing store-days stay null."""
+    cols = ["store", "date", "sales", "open", "promo", "state_holiday", "school_holiday", "is_missing"]
+    df = pd.read_parquet(PROCESSED_PATH, columns=cols)
+    start = TEST_ORIGINS[0] - pd.Timedelta(days=HISTORY_DAYS - 1)
+    df = df[df["date"] >= start].copy()
+    df["sales"] = df["sales"].where(df["is_missing"] == 0).astype("float32")
+    df["holiday"] = (df["state_holiday"] > 0).astype("int8")
+    return df.drop(columns=["state_holiday", "is_missing"]).sort_values(["store", "date"]).reset_index(drop=True)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--model", default="ensemble", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"])
@@ -105,6 +120,10 @@ def main() -> None:
     path = FORECASTS_DIR / f"{args.model}.json"
     path.write_text(json.dumps(forecasts, ensure_ascii=False))
     print(f"Saved {len(forecasts)} stores → {path}")
+
+    history = export_history()
+    history.to_parquet(HISTORY_PATH, index=False)
+    print(f"Saved {len(history):,} days of sales history → {HISTORY_PATH}")
 
 
 if __name__ == "__main__":

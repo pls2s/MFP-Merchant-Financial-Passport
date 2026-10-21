@@ -19,6 +19,10 @@
   --series-forecast: #1f6feb;
   --series-band: #1f6feb;
   --series-lgbm: #eb6834;
+  --series-predicted: #eb6834;
+  --series-promo: #1baf7a;
+  --series-balance: #6250d6;
+  --series-expense: #b25e00;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 2px 8px rgb(0 0 0 / 0.04);
   --radius: 12px;
   font-family: "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -49,6 +53,10 @@
     --series-actual: #f1f0ed;
     --series-forecast: #5b9bff;
     --series-band: #5b9bff;
+    --series-predicted: #f0884f;
+    --series-promo: #3ccf94;
+    --series-balance: #9085e9;
+    --series-expense: #f0a24a;
     --shadow: none;
   }
 }
@@ -190,7 +198,19 @@ tr.highlight td { background: var(--accent-soft); font-weight: 600; }
 .swatch { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
 .swatch.dashed { background: repeating-linear-gradient(90deg, var(--series-forecast) 0 5px, transparent 5px 8px); }
 .swatch.band { height: 10px; background: var(--series-band); opacity: 0.18; }
+.chart-toolbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.chart-note { margin: 6px 0 8px; }
+.tooltip-tags { margin-top: 4px; font-size: 0.78rem; color: var(--series-promo); font-weight: 600; }
+.swatch.promo { height: 10px; background: var(--series-promo); opacity: 0.3; }
+.swatch.bar { width: 10px; height: 10px; background: var(--series-expense); opacity: 0.6; border-radius: 2px; }
+.swatch.dashed.balance { background: repeating-linear-gradient(90deg, var(--series-balance) 0 5px, transparent 5px 8px); }
 .chart-tooltip { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; box-shadow: var(--shadow); }
+
+/* Forecast accuracy */
+.accuracy { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.accuracy-head { display: grid; gap: 2px; margin-bottom: 12px; }
+.accuracy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.accuracy-value { font-size: 1.3rem; font-weight: 700; margin-top: 2px; }
 
 /* Offers */
 .offer { border: 1px dashed var(--border); border-radius: 10px; padding: 14px 16px; }
@@ -201,7 +221,7 @@ tr.highlight td { background: var(--accent-soft); font-weight: 600; }
   .mode { margin-left: 0; width: 100%; }
   .copilot-form { flex-direction: column; }
   main { padding: 16px; }
-  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .grid-3, .grid-2, .accuracy-grid { grid-template-columns: 1fr; }
   .meter { grid-template-columns: 7.5rem 1fr 2.4rem; }
   .stat-value { font-size: 1.45rem; }
 }

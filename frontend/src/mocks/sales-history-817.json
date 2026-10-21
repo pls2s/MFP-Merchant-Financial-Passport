@@ -1,0 +1,3038 @@
+{
+  "merchant_id": 817,
+  "as_of": "2015-07-17",
+  "points": [
+    {
+      "date": "2014-07-18",
+      "sales": 21686.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-19",
+      "sales": 12756.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-07-20",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-07-21",
+      "sales": 19986.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-22",
+      "sales": 19750.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-23",
+      "sales": 18791.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-24",
+      "sales": 18185.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-25",
+      "sales": 17778.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-26",
+      "sales": 13336.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-07-27",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-07-28",
+      "sales": 26056.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-29",
+      "sales": 22881.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-30",
+      "sales": 22648.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-07-31",
+      "sales": 22816.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-01",
+      "sales": 20597.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-02",
+      "sales": 14220.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-03",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-04",
+      "sales": 24243.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-05",
+      "sales": 22498.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-06",
+      "sales": 21409.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-07",
+      "sales": 20471.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-08",
+      "sales": 19131.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-09",
+      "sales": 13726.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-10",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-11",
+      "sales": 20486.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-12",
+      "sales": 19419.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-13",
+      "sales": 19142.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-14",
+      "sales": 19304.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-15",
+      "sales": 18434.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-16",
+      "sales": 13299.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-17",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-18",
+      "sales": 25826.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-19",
+      "sales": 23675.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-20",
+      "sales": 22668.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-21",
+      "sales": 20262.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-22",
+      "sales": 19461.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-08-23",
+      "sales": 13111.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-24",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-25",
+      "sales": 21612.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-26",
+      "sales": 20619.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-27",
+      "sales": 18389.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-28",
+      "sales": 18852.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-29",
+      "sales": 20236.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-30",
+      "sales": 14620.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-08-31",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-01",
+      "sales": 26015.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-02",
+      "sales": 25228.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-03",
+      "sales": 22965.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-04",
+      "sales": 23351.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-05",
+      "sales": 21395.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-06",
+      "sales": 13357.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-07",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-08",
+      "sales": 20656.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-09",
+      "sales": 20284.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-10",
+      "sales": 18587.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-11",
+      "sales": 19077.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-12",
+      "sales": 18707.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-13",
+      "sales": 14235.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-14",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-15",
+      "sales": 24312.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-16",
+      "sales": 22275.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-17",
+      "sales": 21559.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-18",
+      "sales": 21386.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-19",
+      "sales": 20232.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-20",
+      "sales": 13246.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-21",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-22",
+      "sales": 19741.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-23",
+      "sales": 19233.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-24",
+      "sales": 18836.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-25",
+      "sales": 17667.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-26",
+      "sales": 17677.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-27",
+      "sales": 16081.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-28",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-29",
+      "sales": 24719.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-09-30",
+      "sales": 24663.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-01",
+      "sales": 23659.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-02",
+      "sales": 23266.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-03",
+      "sales": 0.0,
+      "open": false,
+      "promo": true,
+      "holiday": true,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-04",
+      "sales": 16269.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-05",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-06",
+      "sales": 23936.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-07",
+      "sales": 24070.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-08",
+      "sales": 22940.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-09",
+      "sales": 22773.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-10",
+      "sales": 21864.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-11",
+      "sales": 15195.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-12",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-13",
+      "sales": 23570.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-14",
+      "sales": 23052.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-15",
+      "sales": 19318.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-16",
+      "sales": 21429.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-17",
+      "sales": 20446.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-18",
+      "sales": 12553.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-19",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-20",
+      "sales": 25650.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-21",
+      "sales": 23980.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-22",
+      "sales": 21740.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-23",
+      "sales": 22501.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-24",
+      "sales": 20658.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-25",
+      "sales": 13860.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-26",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-10-27",
+      "sales": 21645.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-28",
+      "sales": 20367.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-29",
+      "sales": 20086.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-30",
+      "sales": 19997.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-10-31",
+      "sales": 20416.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-11-01",
+      "sales": 12478.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-02",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-03",
+      "sales": 25829.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-04",
+      "sales": 24777.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-05",
+      "sales": 24580.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-06",
+      "sales": 19114.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-07",
+      "sales": 19266.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-08",
+      "sales": 14951.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-09",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-10",
+      "sales": 24904.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-11",
+      "sales": 24478.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-12",
+      "sales": 22975.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-13",
+      "sales": 22366.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-14",
+      "sales": 22721.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-15",
+      "sales": 14471.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-16",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-17",
+      "sales": 21752.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-18",
+      "sales": 21042.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-19",
+      "sales": 19679.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-20",
+      "sales": 20875.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-21",
+      "sales": 19448.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-22",
+      "sales": 13989.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-23",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-24",
+      "sales": 25842.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-25",
+      "sales": 25953.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-26",
+      "sales": 25341.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-27",
+      "sales": 26013.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-28",
+      "sales": 26943.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-29",
+      "sales": 17596.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-11-30",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-01",
+      "sales": 30638.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-02",
+      "sales": 30530.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-03",
+      "sales": 27687.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-04",
+      "sales": 27174.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-05",
+      "sales": 30569.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-06",
+      "sales": 16959.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-07",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-08",
+      "sales": 24199.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-09",
+      "sales": 22830.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-10",
+      "sales": 20893.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-11",
+      "sales": 22119.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-12",
+      "sales": 22474.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-13",
+      "sales": 18394.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-14",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-15",
+      "sales": 33684.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-16",
+      "sales": 31609.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-17",
+      "sales": 29816.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-18",
+      "sales": 28661.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-19",
+      "sales": 27120.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-20",
+      "sales": 18132.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-21",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-22",
+      "sales": 28666.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-12-23",
+      "sales": 26157.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-12-24",
+      "sales": 6052.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-12-25",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": true,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-12-26",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": true,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-12-27",
+      "sales": 14928.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-28",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2014-12-29",
+      "sales": 20363.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-12-30",
+      "sales": 19825.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2014-12-31",
+      "sales": 6979.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-01-01",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": true,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-01-02",
+      "sales": 18370.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-01-03",
+      "sales": 14621.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-04",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-05",
+      "sales": 24867.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-06",
+      "sales": 23307.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-07",
+      "sales": 20704.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-08",
+      "sales": 19052.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-09",
+      "sales": 18174.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-10",
+      "sales": 10310.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-11",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-12",
+      "sales": 23898.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-13",
+      "sales": 21924.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-14",
+      "sales": 21206.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-15",
+      "sales": 20851.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-16",
+      "sales": 20263.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-17",
+      "sales": 13200.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-18",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-19",
+      "sales": 18913.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-20",
+      "sales": 18484.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-21",
+      "sales": 16981.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-22",
+      "sales": 18117.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-23",
+      "sales": 17185.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-24",
+      "sales": 11985.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-25",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-26",
+      "sales": 21887.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-27",
+      "sales": 22552.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-28",
+      "sales": 21931.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-29",
+      "sales": 22102.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-30",
+      "sales": 20883.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-01-31",
+      "sales": 13026.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-01",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-02",
+      "sales": 24894.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-02-03",
+      "sales": 22139.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-02-04",
+      "sales": 20452.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-02-05",
+      "sales": 20977.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-02-06",
+      "sales": 19151.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-02-07",
+      "sales": 12608.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-08",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-09",
+      "sales": 20634.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-10",
+      "sales": 20233.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-11",
+      "sales": 19231.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-12",
+      "sales": 19574.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-13",
+      "sales": 18708.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-14",
+      "sales": 14495.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-15",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-16",
+      "sales": 23566.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-17",
+      "sales": 22111.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-18",
+      "sales": 19701.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-19",
+      "sales": 20422.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-20",
+      "sales": 19850.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-21",
+      "sales": 12273.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-22",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-23",
+      "sales": 17605.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-24",
+      "sales": 18209.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-25",
+      "sales": 17369.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-26",
+      "sales": 17333.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-27",
+      "sales": 18179.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-02-28",
+      "sales": 13587.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-01",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-02",
+      "sales": 24530.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-03",
+      "sales": 24297.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-04",
+      "sales": 21293.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-05",
+      "sales": 21282.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-06",
+      "sales": 20649.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-07",
+      "sales": 13079.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-08",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-09",
+      "sales": 17311.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-10",
+      "sales": 18356.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-11",
+      "sales": 18039.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-12",
+      "sales": 18611.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-13",
+      "sales": 16904.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-14",
+      "sales": 13062.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-15",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-16",
+      "sales": 23672.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-17",
+      "sales": 21524.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-18",
+      "sales": 20383.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-19",
+      "sales": 21487.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-20",
+      "sales": 19842.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-21",
+      "sales": 11543.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-22",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-23",
+      "sales": 19616.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-24",
+      "sales": 18084.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-25",
+      "sales": 18033.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-26",
+      "sales": 19145.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-27",
+      "sales": 18171.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-28",
+      "sales": 14921.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-29",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-03-30",
+      "sales": 26301.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-03-31",
+      "sales": 24361.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-01",
+      "sales": 27057.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-02",
+      "sales": 26833.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-03",
+      "sales": 0.0,
+      "open": false,
+      "promo": true,
+      "holiday": true,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-04",
+      "sales": 17202.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-05",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-06",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": true,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-07",
+      "sales": 20980.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-08",
+      "sales": 19265.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-09",
+      "sales": 19580.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-10",
+      "sales": 17770.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-04-11",
+      "sales": 12578.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-12",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-13",
+      "sales": 26072.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-14",
+      "sales": 23663.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-15",
+      "sales": 21998.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-16",
+      "sales": 22631.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-17",
+      "sales": 21524.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-18",
+      "sales": 13319.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-19",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-20",
+      "sales": 21277.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-21",
+      "sales": 19156.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-22",
+      "sales": 16265.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-23",
+      "sales": 17520.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-24",
+      "sales": 19292.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-25",
+      "sales": 12166.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-26",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-27",
+      "sales": 25498.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-28",
+      "sales": 25161.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-29",
+      "sales": 24525.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-04-30",
+      "sales": 25979.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-01",
+      "sales": 0.0,
+      "open": false,
+      "promo": true,
+      "holiday": true,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-02",
+      "sales": 17160.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-03",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-04",
+      "sales": 28072.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-05",
+      "sales": 21962.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-06",
+      "sales": 21646.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-07",
+      "sales": 21387.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-08",
+      "sales": 20153.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-09",
+      "sales": 11984.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-10",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-11",
+      "sales": 22361.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-12",
+      "sales": 21100.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-13",
+      "sales": 22672.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-14",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": true,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-15",
+      "sales": 20642.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-05-16",
+      "sales": 13821.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-17",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-18",
+      "sales": 26705.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-19",
+      "sales": 25232.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-20",
+      "sales": 20748.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-21",
+      "sales": 22520.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-22",
+      "sales": 22397.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-23",
+      "sales": 14827.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-24",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-25",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": true,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-26",
+      "sales": 22840.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-05-27",
+      "sales": 21900.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-28",
+      "sales": 19957.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-29",
+      "sales": 20771.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-30",
+      "sales": 13920.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-05-31",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-01",
+      "sales": 29475.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-02",
+      "sales": 26627.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-03",
+      "sales": 26953.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-04",
+      "sales": 25051.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-05",
+      "sales": 22762.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-06",
+      "sales": 13590.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-07",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-08",
+      "sales": 22076.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-09",
+      "sales": 20205.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-10",
+      "sales": 21379.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-11",
+      "sales": 21053.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-12",
+      "sales": 19520.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-13",
+      "sales": 11943.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-14",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-15",
+      "sales": 28545.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-16",
+      "sales": 25085.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-17",
+      "sales": 24332.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-18",
+      "sales": 23337.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-19",
+      "sales": 22946.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-20",
+      "sales": 14658.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-21",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-22",
+      "sales": 21859.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-23",
+      "sales": 19446.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-24",
+      "sales": 21898.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-25",
+      "sales": 19451.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-26",
+      "sales": 19273.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-27",
+      "sales": 13108.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-28",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-29",
+      "sales": 28456.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-06-30",
+      "sales": 27140.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-01",
+      "sales": 24957.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-02",
+      "sales": 24384.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-03",
+      "sales": 22937.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-04",
+      "sales": 13001.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-05",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-06",
+      "sales": 22403.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-07",
+      "sales": 20064.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-08",
+      "sales": 21079.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-09",
+      "sales": 21279.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-10",
+      "sales": 20231.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-11",
+      "sales": 13111.0,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-12",
+      "sales": 0.0,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-13",
+      "sales": 27178.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-14",
+      "sales": 25460.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-15",
+      "sales": 24210.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-16",
+      "sales": 23899.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-17",
+      "sales": 21685.0,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-18",
+      "sales": null,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-19",
+      "sales": null,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-20",
+      "sales": null,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-21",
+      "sales": null,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-22",
+      "sales": null,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-23",
+      "sales": null,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-24",
+      "sales": null,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-25",
+      "sales": null,
+      "open": true,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-26",
+      "sales": null,
+      "open": false,
+      "promo": false,
+      "holiday": false,
+      "school_holiday": false
+    },
+    {
+      "date": "2015-07-27",
+      "sales": null,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-28",
+      "sales": null,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-29",
+      "sales": null,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-30",
+      "sales": null,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    },
+    {
+      "date": "2015-07-31",
+      "sales": null,
+      "open": true,
+      "promo": true,
+      "holiday": false,
+      "school_holiday": true
+    }
+  ]
+}

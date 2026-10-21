@@ -48,6 +48,42 @@ class Forecast(BaseModel):
     metrics: ForecastMetrics
 
 
+# --- GET /api/v1/merchants/{id}/sales-history (dashboard extension) -----------
+
+
+class HistoryPoint(BaseModel):
+    date: IsoDate
+    sales: float | None = Field(description="Actual sales; null when missing or after the demo date")
+    open: bool
+    promo: bool
+    holiday: bool
+    school_holiday: bool
+
+
+class SalesHistory(BaseModel):
+    merchant_id: int
+    as_of: IsoDate
+    points: list[HistoryPoint]
+
+
+# --- GET /api/v1/merchants/{id}/cash-balance (dashboard extension) ------------
+
+
+class BalancePoint(BaseModel):
+    date: IsoDate
+    sales: float
+    expenses: float
+    balance: float
+    is_forecast: bool
+
+
+class CashBalance(BaseModel):
+    merchant_id: int
+    opening_balance: float
+    points: list[BalancePoint]
+    is_synthetic_expense: Literal[True] = True
+
+
 # --- GET /api/v1/merchants/{id}/cash-flow-gaps ---------------------------------
 
 

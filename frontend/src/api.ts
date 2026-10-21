@@ -1,11 +1,13 @@
 // All API calls go through this file. VITE_USE_MOCK=true reads src/mocks/ instead of the backend.
 import type {
+  CashBalance,
   CashFlowGaps,
   CopilotResponse,
   CreditSignal,
   Forecast,
   Merchant,
   ModelResult,
+  SalesHistory,
 } from "./types";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -41,6 +43,13 @@ export const api = {
 
   forecast: (id: number): Promise<Forecast> =>
     USE_MOCK ? mock(`forecast-${id}`) : request(`/api/v1/merchants/${id}/forecast`),
+
+  /** One year of actual sales + promo/holiday flags; the chart slices it per range. */
+  salesHistory: (id: number): Promise<SalesHistory> =>
+    USE_MOCK ? mock(`sales-history-${id}`) : request(`/api/v1/merchants/${id}/sales-history?days=365`),
+
+  cashBalance: (id: number): Promise<CashBalance> =>
+    USE_MOCK ? mock(`cash-balance-${id}`) : request(`/api/v1/merchants/${id}/cash-balance`),
 
   cashFlowGaps: (id: number, minBuffer = 0): Promise<CashFlowGaps> =>
     USE_MOCK

@@ -59,6 +59,18 @@ def forecast(merchant_id: int):
     return store.forecasts[merchant_id]
 
 
+@app.get("/api/v1/merchants/{merchant_id}/sales-history", response_model=schemas.SalesHistory)
+def sales_history(merchant_id: int, days: int = Query(default=90, ge=7, le=365)):
+    _require(merchant_id)
+    return store.sales_history(merchant_id, days)
+
+
+@app.get("/api/v1/merchants/{merchant_id}/cash-balance", response_model=schemas.CashBalance)
+def cash_balance(merchant_id: int):
+    _require(merchant_id)
+    return store.cash_balance(merchant_id)
+
+
 @app.get("/api/v1/merchants/{merchant_id}/cash-flow-gaps", response_model=schemas.CashFlowGaps)
 def cash_flow_gaps(merchant_id: int, min_buffer: float = Query(default=0.0, ge=0)):
     _require(merchant_id)

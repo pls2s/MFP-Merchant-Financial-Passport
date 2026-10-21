@@ -20,7 +20,7 @@ Data files it loads (all committed):
 
 | File | From |
 | --- | --- |
-| `models/forecasts/ensemble.json` | WS1 `python -m ai.cashflow_forecast.predict --model ensemble` |
+| `models/forecasts/ensemble.json`, `sales_history.parquet` | WS1 `python -m ai.cashflow_forecast.predict --model ensemble` |
 | `models/results.csv` | WS1 `python -m ai.cashflow_forecast.evaluate` |
 | `data/synthetic/expenses.parquet`, `cash_flow_gaps.json` | WS2 `python -m ai.gap_detection.build` |
 | `data/synthetic/credit_signal.json` | WS2 `python -m ai.credit_signal.build` |
@@ -34,6 +34,8 @@ Demo "today" is **2015-07-17**: actual sales up to that date, forecast for 2015-
 | GET | `/health` | `status`, number of merchants, `as_of` |
 | GET | `/api/v1/merchants?q=` | Store list for the picker; `q` filters by id or name |
 | GET | `/api/v1/merchants/{id}/forecast` | `forecast` contract (42 days of the Test period, `lower`/`upper` = 80% interval) |
+| GET | `/api/v1/merchants/{id}/sales-history?days=` | Actual daily sales (7–365 days up to `as_of`) plus promo / holiday / open flags through 2015-07-31; sales after `as_of` are `null` |
+| GET | `/api/v1/merchants/{id}/cash-balance` | Daily simulated balance (`sales`, synthetic `expenses`, `balance`, `is_forecast`) from 2015-06-20 |
 | GET | `/api/v1/merchants/{id}/cash-flow-gaps?min_buffer=` | `cash-flow-gaps` contract, re-computed with the given minimum buffer (default 0) |
 | GET | `/api/v1/merchants/{id}/credit-signal` | `credit-signal` contract, always `status: "experimental"` |
 | POST | `/api/v1/merchants/{id}/copilot` | Body `{"question": "..."}` (optional) → plain-Thai explanation |

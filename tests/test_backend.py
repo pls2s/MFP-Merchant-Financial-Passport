@@ -77,3 +77,26 @@ def test_cors_allows_vite_dev_server(client):
     resp = client.options("/api/v1/merchants", headers={
         "Origin": "http://localhost:5173", "Access-Control-Request-Method": "GET"})
     assert resp.headers.get("access-control-allow-origin") == "http://localhost:5173"
+
+
+def test_sales_history_hides_future_sales_but_keeps_flags(client):
+    body = client.get("/api/v1/merchants/1/sales-history", params={"days": 365}).json()
+    pts = body["points"]
+    assert body["as_of"] == "2015-07-17"
+    assert pts[0]["date"] == "2014-07-18" and pts[-1]["date"] == "2015-07-31"
+    past = [p for p in pts if p["date"] <= "2015-07-17"]
+    future = [p for p in pts if p["date"] > "2015-07-17"]
+    assert all(p["sales"] is None for p in future) and any(p["promo"] for p in future)
+    assert all(p["sales"] == 0 for p in past if not p["open"])
+    assert client.get("/api/v1/merchants/1/sales-history", params={"days": 1000}).status_code == 422
+
+
+def test_cash_balance_matches_gaps(client):
+    bal = client.get("/api/v1/merchants/1/cash-balance").json()
+    gaps = client.get("/api/v1/merchants/1/cash-flow-gaps").json()
+    assert bal["is_synthetic_expense"] is True
+    by_date = {p["date"]: p for p in bal["points"]}
+    first = gaps["gaps"][0]
+    assert by_date[first["date"]]["balance"] == first["balance_after"]
+    assert by_date[first["date"]]["is_forecast"] is True
+    assert by_date["2015-07-17"]["is_forecast"] is False

@@ -31,6 +31,8 @@ def main() -> None:
         for m in MERCHANTS:
             base = f"/api/v1/merchants/{m}"
             files[f"forecast-{m}.json"] = client.get(f"{base}/forecast").json()
+            files[f"sales-history-{m}.json"] = client.get(f"{base}/sales-history", params={"days": 365}).json()
+            files[f"cash-balance-{m}.json"] = client.get(f"{base}/cash-balance").json()
             files[f"cash-flow-gaps-{m}.json"] = client.get(f"{base}/cash-flow-gaps").json()
             files[f"credit-signal-{m}.json"] = client.get(f"{base}/credit-signal").json()
             files[f"copilot-{m}.json"] = client.post(f"{base}/copilot", json={"question": None}).json()

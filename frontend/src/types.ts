@@ -31,6 +31,38 @@ export interface Forecast {
   metrics: { wape: number; mae: number; rmse: number };
 }
 
+// GET /api/v1/merchants/{id}/sales-history?days=  (dashboard extension, max 365)
+export interface HistoryPoint {
+  date: IsoDate;
+  sales: number | null; // actual; null when missing or after as_of
+  open: boolean;
+  promo: boolean;
+  holiday: boolean;
+  school_holiday: boolean;
+}
+
+export interface SalesHistory {
+  merchant_id: number;
+  as_of: IsoDate;
+  points: HistoryPoint[]; // through 2015-07-31 (flags are known in advance)
+}
+
+// GET /api/v1/merchants/{id}/cash-balance  (dashboard extension)
+export interface BalancePoint {
+  date: IsoDate;
+  sales: number; // actual up to as_of, forecast after
+  expenses: number; // synthetic
+  balance: number; // synthetic
+  is_forecast: boolean;
+}
+
+export interface CashBalance {
+  merchant_id: number;
+  opening_balance: number;
+  points: BalancePoint[];
+  is_synthetic_expense: true;
+}
+
 // GET /api/v1/merchants/{id}/cash-flow-gaps?min_buffer=
 export interface Contributor {
   type: "supplier_invoice" | "rent" | "payroll" | "utilities" | string;

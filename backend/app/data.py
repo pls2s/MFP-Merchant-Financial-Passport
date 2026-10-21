@@ -7,10 +7,11 @@ from dataclasses import dataclass
 import pandas as pd
 
 from ai.cashflow_forecast.preprocess import ROSSMANN
+from ai.cashflow_forecast.predict import HISTORY_PATH
 from ai.copilot.explain import explain, load_dotenv
 from ai.credit_signal.build import CREDIT_PATH
 from ai.gap_detection.build import AS_OF, DEMO_STORES, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, sales_series
-from ai.gap_detection.gaps import cash_flow_gaps
+from ai.gap_detection.gaps import cash_flow_gaps, simulate_balance
 
 RESULTS_PATH = ROSSMANN.models_dir / "results.csv"
 
@@ -27,6 +28,7 @@ class DataStore:
     sales: dict[int, pd.DataFrame]
     expenses: pd.DataFrame
     results: pd.DataFrame
+    history: dict[int, pd.DataFrame]
 
     @classmethod
     def load(cls) -> "DataStore":
@@ -38,6 +40,7 @@ class DataStore:
             sales=sales_series(),
             expenses=pd.read_parquet(EXPENSES_PATH),
             results=pd.read_csv(RESULTS_PATH),
+            history={int(s): df.drop(columns="store") for s, df in pd.read_parquet(HISTORY_PATH).groupby("store")},
         )
 
     def merchants(self) -> list[dict]:
@@ -53,12 +56,49 @@ class DataStore:
             for m in sorted(self.forecasts)
         ]
 
+    def sales_history(self, merchant_id: int, days: int) -> dict:
+        """Last `days` of actual sales up to AS_OF plus the forecast window; sales after AS_OF are hidden
+        (the forecast endpoint carries them for evaluation), the known-in-advance flags are not."""
+        h = self.history[merchant_id]
+        h = h[h["date"] > AS_OF - pd.Timedelta(days=days)]
+        return {
+            "merchant_id": merchant_id,
+            "as_of": AS_OF.strftime("%Y-%m-%d"),
+            "points": [
+                {
+                    "date": r.date.strftime("%Y-%m-%d"),
+                    "sales": None if r.date > AS_OF or pd.isna(r.sales) else round(float(r.sales), 2),
+                    "open": bool(r.open), "promo": bool(r.promo),
+                    "holiday": bool(r.holiday), "school_holiday": bool(r.school_holiday),
+                }
+                for r in h.itertuples()
+            ],
+        }
+
+    def _store_expenses(self, merchant_id: int) -> pd.DataFrame:
+        start = self.sales[merchant_id]["date"].min()
+        return self.expenses[(self.expenses["store"] == merchant_id) & (self.expenses["due_date"] >= start)]
+
+    def cash_balance(self, merchant_id: int) -> dict:
+        sales = self.sales[merchant_id]
+        bal = simulate_balance(sales, self._store_expenses(merchant_id), self.gaps[merchant_id]["opening_balance"])
+        return {
+            "merchant_id": merchant_id,
+            "opening_balance": self.gaps[merchant_id]["opening_balance"],
+            "points": [
+                {"date": r.date.strftime("%Y-%m-%d"), "sales": round(float(r.sales), 2),
+                 "expenses": round(float(r.expenses), 2), "balance": round(float(r.balance), 2),
+                 "is_forecast": bool(f)}
+                for r, f in zip(bal.itertuples(), sales["is_forecast"])
+            ],
+            "is_synthetic_expense": True,
+        }
+
     def cash_flow_gaps(self, merchant_id: int, min_buffer: float = 0.0) -> dict:
         """Re-run the WS2 gap finder so the minimum buffer can be changed per request."""
-        sales = self.sales[merchant_id]
-        expenses = self.expenses[(self.expenses["store"] == merchant_id) & (self.expenses["due_date"] >= sales["date"].min())]
         return cash_flow_gaps(
-            merchant_id, sales, expenses, self.gaps[merchant_id]["opening_balance"],
+            merchant_id, self.sales[merchant_id], self._store_expenses(merchant_id),
+            self.gaps[merchant_id]["opening_balance"],
             projection_start=AS_OF + pd.Timedelta(days=1), min_buffer=min_buffer,
         )
 
