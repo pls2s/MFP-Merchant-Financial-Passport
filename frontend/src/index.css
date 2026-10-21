@@ -211,7 +211,15 @@ tr.highlight td { background: var(--accent-soft); font-weight: 600; }
 .swatch { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
 .swatch.dashed { background: repeating-linear-gradient(90deg, var(--series-forecast) 0 5px, transparent 5px 8px); }
 .swatch.band { height: 10px; background: var(--series-band); opacity: 0.18; }
-.chart-toolbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.chart-toolbar { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 10px; }
+.btn.chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.chart-summary { display: grid; gap: 6px; padding: 12px 14px; margin-bottom: 12px; background: var(--surface-2); border-radius: 10px; font-size: 1rem; line-height: 1.6; }
+.summary-warn { color: var(--bad); }
+.trend { font-weight: 600; white-space: nowrap; }
+.trend.up { color: var(--good); }
+.trend.down { color: var(--bad); }
+.trend.flat { color: var(--text-2); }
+.accuracy-intro { margin: 0 0 6px; }
 .chart-note { margin: 6px 0 8px; }
 .tooltip-tags { margin-top: 4px; font-size: 0.78rem; color: var(--series-promo); font-weight: 600; }
 .swatch.promo { height: 10px; background: var(--series-promo); opacity: 0.3; }
