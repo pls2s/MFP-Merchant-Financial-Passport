@@ -12,7 +12,7 @@ AS_OF = pd.Timestamp("2015-07-17")
 @pytest.fixture
 def ctx():
     """A small synthetic store: 1 year of history, 14-day forecast, one big invoice causing a gap."""
-    dates = pd.date_range(AS_OF - pd.Timedelta(days=364), AS_OF + pd.Timedelta(days=14))
+    dates = pd.date_range(AS_OF - pd.Timedelta(days=420), AS_OF + pd.Timedelta(days=14))
     is_open = (dates.dayofweek != 6).astype(int)
     promo = ((dates.day % 14) < 5).astype(int)
     sales = np.where(is_open, 1000.0 * (1 + 0.3 * promo), 0.0)
@@ -53,6 +53,8 @@ def test_facts_cover_sales_forecast_expenses_scenarios(facts):
     assert sales["วันที่มีโปรโมชันขายได้มากกว่าวันปกติ"] == "+30%"
     days = facts["การพยากรณ์ยอดขาย (โมเดล LSTM+GRU)"]["ยอดขายคาดการณ์รายวัน"]
     assert len(days) == 14 and any("ร้านปิด" in d for d in days) and any("โปรโมชัน" in d for d in days)
+    weeks = facts["การพยากรณ์ยอดขาย (โมเดล LSTM+GRU)"]["ยอดขายคาดการณ์รายสัปดาห์"]
+    assert len(weeks) == 2 and weeks[0].startswith("18 ก.ค. 2558 ถึง 24 ก.ค. 2558")
     upcoming = facts["รายจ่ายที่จะครบกำหนดใน 14 วันข้างหน้า (ข้อมูลจำลอง)"]["รายการ"]
     assert upcoming[0].startswith("22 ก.ค. 2558") and len(upcoming) == 2  # rent on 1 Jul is in the past
     scenarios = facts["สถานการณ์สมมติ (ระบบคำนวณให้แล้ว)"]
@@ -79,6 +81,8 @@ def test_score_rank_ties_share_rank():
     ("โปรโมชันช่วยไหม", "โปรโมชัน"),
     ("ทำไมคะแนนได้เท่านี้", "องค์ประกอบ"),
     ("ควรกู้เงินไหม", "ไม่ให้คำแนะนำด้านสินเชื่อ"),
+    ("เดือนหน้ายอดขายจะเป็นยังไง", "พยากรณ์ได้แค่"),
+    ("สัปดาห์หน้ายอดขายเป็นยังไง", "ยอดขายคาดการณ์รายสัปดาห์"),
 ])
 def test_template_answers_by_topic_and_passes_validation(facts, question, expected):
     text = cp.template_answer(facts, question)
@@ -145,3 +149,22 @@ def test_api_error_falls_back(ctx, monkeypatch):
         raise requests.ConnectionError("down")
     monkeypatch.setattr(cp, "call_llm", boom)
     assert cp.explain(ctx)["source"] == "template"
+
+
+def test_next_month_outlook_is_labelled_and_uses_last_year(facts):
+    fc = facts["การพยากรณ์ยอดขาย (โมเดล LSTM+GRU)"]
+    assert "14 วัน" in fc["ช่วงที่โมเดลพยากรณ์"] and "18 ก.ค. 2558" in fc["ช่วงที่โมเดลพยากรณ์"]
+    outlook = facts["ภาพรวมเดือนหน้าแบบคร่าว ๆ (จากข้อมูลปีก่อน ไม่ใช่ผลโมเดล)"]
+    assert outlook["เดือน"] == "ส.ค. 2558" and "ไม่ใช่ผลโมเดล" in outlook["หมายเหตุ"]
+    assert "ยอดขายจริง ส.ค. 2557 (ปีก่อน)" in outlook
+    # The synthetic store has no trend, so the rough estimate stays close to last year's month.
+    last_year = float(outlook["ยอดขายจริง ส.ค. 2557 (ปีก่อน)"].replace(",", ""))
+    estimate = float(outlook["ประมาณการคร่าว ๆ (ยอดปีก่อน × อัตราเปลี่ยนแปลง)"].replace(",", ""))
+    assert abs(estimate / last_year - 1) < 0.05
+
+
+def test_next_month_outlook_needs_full_last_year(ctx):
+    ctx.history = ctx.history[ctx.history["date"] > AS_OF - pd.Timedelta(days=364)]
+    outlook = build_facts(ctx)["ภาพรวมเดือนหน้าแบบคร่าว ๆ (จากข้อมูลปีก่อน ไม่ใช่ผลโมเดล)"]
+    assert outlook["สถานะ"].startswith("ข้อมูลปีก่อนไม่ครบ")
+    assert cp.validate(cp.template_answer(build_facts(ctx), "เดือนหน้าเป็นยังไง"), build_facts(ctx)) is None

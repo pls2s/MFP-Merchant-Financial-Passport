@@ -43,7 +43,7 @@ def money(x: float) -> str:
 
 
 def pct(x: float) -> str:
-    return f"{x * 100:+.0f}%" if x else "0%"
+    return "0%" if round(x * 100) == 0 else f"{x * 100:+.0f}%"
 
 
 @dataclass
@@ -103,7 +103,13 @@ def _forecast_facts(ctx: MerchantContext) -> dict:
     past = [p for p in ctx.forecast["points"]
             if pd.Timestamp(p["date"]) <= ctx.as_of and (p.get("actual") or 0) > 0 and p["forecast"] > 0]
     facts = {
+        "ช่วงที่โมเดลพยากรณ์": (f"14 วัน: {thai_date(future[0]['date'])} ถึง {thai_date(future[-1]['date'])} "
+                               "(โมเดลไม่ได้พยากรณ์ไกลกว่านี้)") if future else "ไม่มี",
         "ยอดขายคาดการณ์รวม 14 วันข้างหน้า": money(sum(p["forecast"] for p in future)),
+        "ยอดขายคาดการณ์รายสัปดาห์": [
+            f"{thai_date(week[0]['date'])} ถึง {thai_date(week[-1]['date'])}: {money(sum(p['forecast'] for p in week))}"
+            for week in (future[i:i + 7] for i in range(0, len(future), 7)) if week
+        ],
         "ยอดขายคาดการณ์รายวัน": days,
     }
     if past:
@@ -113,6 +119,31 @@ def _forecast_facts(ctx: MerchantContext) -> dict:
             f"คลาดเคลื่อนเฉลี่ย {err * 100:.1f}% และทายคลาดไม่เกิน 10% ได้ {within} จาก {len(past)} วัน"
         )
     return facts
+
+
+def _next_month_outlook(ctx: MerchantContext) -> dict:
+    """Rough outlook for the month after as_of, outside the 14-day model horizon:
+    same month last year × year-over-year change of the last 28 days. Not a model forecast."""
+    h = ctx.history.set_index("date")["sales"]
+    nxt = (ctx.as_of + pd.offsets.MonthBegin(1)).normalize()
+    month_name = f"{THAI_MONTHS[nxt.month - 1]} {nxt.year + 543}"
+    note = "ไม่ใช่ผลโมเดล โมเดลพยากรณ์ได้แค่ 14 วันข้างหน้า"
+    last_year = h[(h.index >= nxt - pd.DateOffset(years=1)) & (h.index < nxt + pd.offsets.MonthBegin(1) - pd.DateOffset(years=1))]
+    recent = h[(h.index > ctx.as_of - pd.Timedelta(days=28)) & (h.index <= ctx.as_of)]
+    # 364 days back keeps the same weekdays.
+    same_period = h[(h.index > ctx.as_of - pd.Timedelta(days=28 + 364)) & (h.index <= ctx.as_of - pd.Timedelta(days=364))]
+    complete = (len(last_year) >= 28 and len(same_period) == 28 and len(recent) == 28
+                and not last_year.isna().any() and not same_period.isna().any() and same_period.sum() > 0)
+    if not complete:
+        return {"เดือน": month_name, "สถานะ": "ข้อมูลปีก่อนไม่ครบ ประมาณการไม่ได้", "หมายเหตุ": note}
+    yoy = recent.sum() / same_period.sum() - 1
+    return {
+        "เดือน": month_name,
+        f"ยอดขายจริง {THAI_MONTHS[nxt.month - 1]} {nxt.year + 542} (ปีก่อน)": money(last_year.sum()),
+        "ยอดขาย 28 วันล่าสุดเทียบช่วงเดียวกันปีก่อน": pct(yoy),
+        "ประมาณการคร่าว ๆ (ยอดปีก่อน × อัตราเปลี่ยนแปลง)": money(last_year.sum() * (1 + yoy)),
+        "หมายเหตุ": note,
+    }
 
 
 def _balance_summary(sales: pd.DataFrame, expenses: pd.DataFrame, opening: float, as_of: pd.Timestamp) -> dict:
@@ -173,6 +204,7 @@ def build_facts(ctx: MerchantContext) -> dict:
         "วันนี้ (ข้อมูลล่าสุด)": thai_day(ctx.as_of),
         "ยอดขายที่ผ่านมา (ข้อมูลจริง)": _sales_patterns(ctx),
         "การพยากรณ์ยอดขาย (โมเดล LSTM+GRU)": _forecast_facts(ctx),
+        "ภาพรวมเดือนหน้าแบบคร่าว ๆ (จากข้อมูลปีก่อน ไม่ใช่ผลโมเดล)": _next_month_outlook(ctx),
         "รายจ่ายที่จะครบกำหนดใน 14 วันข้างหน้า (ข้อมูลจำลอง)": {
             "รายการ": [f"{thai_date(r.due_date)}: {r.label} {money(r.amount)}" for r in upcoming.itertuples()],
             "รวม": money(upcoming["amount"].sum()),
