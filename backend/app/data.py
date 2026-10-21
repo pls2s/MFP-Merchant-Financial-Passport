@@ -15,7 +15,8 @@ from ai.credit_signal.build import CREDIT_PATH
 from ai.gap_detection.build import (
     AS_OF, DEMO_STORES, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, past_gaps, sales_series,
 )
-from ai.gap_detection.gaps import cash_flow_gaps, simulate_balance
+from ai.gap_detection.gaps import cash_flow_gaps
+from ai.gap_detection.long_balance import long_balance
 
 RESULTS_PATH = ROSSMANN.models_dir / "results.csv"
 
@@ -143,18 +144,23 @@ class DataStore:
         return self.expenses[(self.expenses["store"] == merchant_id) & (self.expenses["due_date"] >= start)]
 
     def cash_balance(self, merchant_id: int) -> dict:
-        sales = self.sales[merchant_id]
-        bal = simulate_balance(sales, self._store_expenses(merchant_id), self.gaps[merchant_id]["opening_balance"])
+        """Balance from 2015-01-01 to LONG_END: actual sales, then the 14-day forecast, then the
+        longer projection (see ai.gap_detection.long_balance)."""
+        bal, long_gaps = long_balance(
+            merchant_id, self.sales[merchant_id], self._store_expenses(merchant_id),
+            self.gaps[merchant_id]["opening_balance"], self.long_points[merchant_id], self.seasonal_months[merchant_id],
+        )
         return {
             "merchant_id": merchant_id,
             "opening_balance": self.gaps[merchant_id]["opening_balance"],
             "points": [
                 {"date": r.date.strftime("%Y-%m-%d"), "sales": round(float(r.sales), 2),
                  "expenses": round(float(r.expenses), 2), "balance": round(float(r.balance), 2),
-                 "is_forecast": bool(f)}
-                for r, f in zip(bal.itertuples(), sales["is_forecast"])
+                 "is_forecast": r.horizon != "actual", "horizon": r.horizon}
+                for r in bal.itertuples()
             ],
             "past_gaps": self.past_gaps(merchant_id),
+            "long_gaps": long_gaps,
             "is_synthetic_expense": True,
         }
 

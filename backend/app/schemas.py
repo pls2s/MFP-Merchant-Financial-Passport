@@ -153,6 +153,16 @@ class BalancePoint(BaseModel):
     expenses: float
     balance: float
     is_forecast: bool
+    horizon: Literal["actual", "14d", "3m", "1y"] = Field(
+        description="Where the day's sales come from: actual, 14-day forecast, 3-month rollout, monthly outlook")
+
+
+class LongGap(BaseModel):
+    date: IsoDate
+    shortfall: float
+    balance_after: float
+    contributors: list["Contributor"]
+    horizon: Literal["3m", "1y"]
 
 
 class CashBalance(BaseModel):
@@ -160,6 +170,9 @@ class CashBalance(BaseModel):
     opening_balance: float
     points: list[BalancePoint]
     past_gaps: list["Gap"] = Field(description="Shortfalls in the actual-sales history (before as_of)")
+    long_gaps: list[LongGap] = Field(
+        description="Possible shortfalls after the 14-day window (3-month rollout / monthly outlook) — less certain, "
+                    "not part of cash-flow-gaps")
     is_synthetic_expense: Literal[True] = True
 
 

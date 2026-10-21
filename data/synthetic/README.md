@@ -44,6 +44,17 @@ window, and they are excluded from "average monthly expenses" in the credit sign
 | --- | --- | --- |
 | 2015-01-01 to 2015-07-17 | Actual sales (`models/forecasts/sales_history.parquet`) | Past gaps (`cash-balance.past_gaps`) |
 | 2015-07-18 to 2015-07-31 | WS1 forecast (`models/forecasts/ensemble.json`) | Upcoming gaps (`cash-flow-gaps`) |
+| 2015-08-01 to 2015-10-09 | Recursive LSTM+GRU rollout (`long_forecast.parquet`) | `cash-balance.long_gaps`, `horizon: "3m"` |
+| 2015-10-10 to 2016-07-31 | Monthly outlook (`seasonal_outlook.parquet`) spread over the days of each month by the store's average sales per weekday (holidays ignored; stores without an outlook use the rollout's average day) | `cash-balance.long_gaps`, `horizon: "1y"` |
+
+The two longer periods feed only the 3-month / 1-year views of the balance chart
+(`ai/gap_detection/long_balance.py`, computed on request). They are less certain, shown faded, and never
+reported through `cash-flow-gaps`. Expenses after 2015-07-31 continue each store's baseline pattern
+(`scenario: "baseline_extended"`): the same supplier cycle with the store's average invoice ± 10%, the
+same rent and payroll, utilities at the store's average ± 15%; rng seed **42 + 1000 + store**, so the
+base expenses above are unchanged. The owner keeps withdrawing cash above the reserve on the 25th from
+2015-08-25 on. With these settings 66 stores (5.9%) may run short in the 3-month part and 96 (8.6%) in
+the monthly-outlook part; the demo stores, with their 5-day reserve, run short several times.
 
 Demo "today" is **2015-07-17**, the last forecast origin. Minimum buffer **0**.
 

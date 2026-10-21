@@ -86,9 +86,11 @@ def reserve_target(expenses: pd.DataFrame, params: ExpenseParams = ExpenseParams
 
 
 def add_owner_draws(store: int, sales: pd.DataFrame, expenses: pd.DataFrame, reserve: float,
-                    until: pd.Timestamp, params: ExpenseParams = ExpenseParams()) -> pd.DataFrame:
-    """Owner withdrawals: on `owner_draw_day` each month up to `until`, take out the cash above
-    `reserve`, so profit does not pile up over a long simulation. Balance starts at `reserve`.
+                    until: pd.Timestamp, params: ExpenseParams = ExpenseParams(),
+                    since: pd.Timestamp | None = None) -> pd.DataFrame:
+    """Owner withdrawals: on `owner_draw_day` each month up to `until` (and from `since`, if given),
+    take out the cash above `reserve`, so profit does not pile up over a long simulation.
+    Balance starts at `reserve`.
 
     sales     columns: date, sales (one row per day)
     expenses  this store's expenses (due_date, amount, ...)
@@ -99,7 +101,7 @@ def add_owner_draws(store: int, sales: pd.DataFrame, expenses: pd.DataFrame, res
     balance = reserve + flow.cumsum()
     rows = []
     for day in pd.date_range(sales["date"].min(), until, freq="D"):
-        if day.day != params.owner_draw_day:
+        if day.day != params.owner_draw_day or (since is not None and day < since):
             continue
         draw = round(float(balance[day]) - reserve, 2)
         if draw > 0:

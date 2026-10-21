@@ -102,6 +102,18 @@ def test_cash_balance_matches_gaps(client):
     assert by_date["2015-07-17"]["is_forecast"] is False
 
 
+def test_cash_balance_long_projection(client):
+    bal = client.get("/api/v1/merchants/1/cash-balance").json()
+    by_date = {p["date"]: p for p in bal["points"]}
+    assert bal["points"][-1]["date"] == "2016-07-31"
+    assert [by_date[d]["horizon"] for d in ("2015-07-17", "2015-07-18", "2015-08-01", "2015-10-10")] == \
+        ["actual", "14d", "3m", "1y"]
+    # the 14-day part is unchanged by the longer projection
+    gaps = client.get("/api/v1/merchants/1/cash-flow-gaps").json()["gaps"]
+    assert all(by_date[g["date"]]["balance"] == g["balance_after"] for g in gaps)
+    assert all(g["date"] >= "2015-08-01" and g["horizon"] in ("3m", "1y") for g in bal["long_gaps"])
+
+
 def test_long_forecast_has_84_days_and_real_backtest(client):
     body = client.get("/api/v1/merchants/1/long-forecast").json()
     pts = body["points"]

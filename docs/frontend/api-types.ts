@@ -86,13 +86,23 @@ export interface BalancePoint {
   expenses: number; // synthetic
   balance: number; // synthetic
   is_forecast: boolean;
+  horizon: BalanceHorizon;
+}
+
+// actual sales · 14-day forecast · 3-month rollout · monthly outlook spread over days
+export type BalanceHorizon = "actual" | "14d" | "3m" | "1y";
+
+// A possible shortfall after the 14-day window — less certain, not part of cash-flow-gaps
+export interface LongGap extends Gap {
+  horizon: "3m" | "1y";
 }
 
 export interface CashBalance {
   merchant_id: number;
   opening_balance: number; // on 2015-01-01 (= the store's cash reserve target)
-  points: BalancePoint[]; // 2015-01-01 .. 2015-07-31
+  points: BalancePoint[]; // 2015-01-01 .. 2016-07-31 (after 2015-07-31: longer projection)
   past_gaps: Gap[]; // shortfalls before as_of (synthetic expenses, actual sales)
+  long_gaps: LongGap[]; // possible shortfalls from 2015-08-01 (3-month rollout / monthly outlook)
   is_synthetic_expense: true;
 }
 
