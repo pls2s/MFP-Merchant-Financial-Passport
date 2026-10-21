@@ -7,7 +7,7 @@ import { Offers } from "../components/Offers";
 import { SalesChart } from "../components/SalesChart";
 import { Card, ErrorState, ExperimentalBadge, Skeleton, SyntheticBadge } from "../components/ui";
 import { money, thaiDate, thaiDatesInText } from "../format";
-import type { CashBalance, CashFlowGaps, CreditSignal, Forecast, ModelResult, SalesHistory } from "../types";
+import type { CashBalance, CashFlowGaps, CreditSignal, Forecast, Gap, ModelResult, SalesHistory } from "../types";
 import { useAsync } from "../useAsync";
 
 const COMPONENTS: { key: keyof CreditSignal["components"]; label: string; weight: number }[] = [
@@ -36,7 +36,7 @@ async function loadPassport(id: number): Promise<PassportData> {
   return { asOf, forecast, history, balance, gaps, credit, results };
 }
 
-function SummaryCards({ asOf, forecast, gaps, credit }: PassportData) {
+function SummaryCards({ asOf, forecast, gaps, credit, balance }: PassportData) {
   const recent = forecast.points.filter((p) => p.date <= asOf);
   const recentSales = recent.reduce((sum, p) => sum + (p.actual ?? 0), 0);
   const next = gaps.gaps[0];
@@ -65,12 +65,17 @@ function SummaryCards({ asOf, forecast, gaps, credit }: PassportData) {
             <div className="stat-sub">ใน 14 วันข้างหน้า</div>
           </>
         )}
+        {balance.past_gaps.length > 0 && (
+          <div className="stat-sub" style={{ color: "var(--warn)" }}>
+            ที่ผ่านมาเคยเงินไม่พอ {balance.past_gaps.length} ครั้ง
+          </div>
+        )}
       </section>
     </div>
   );
 }
 
-function GapAlerts({ gaps }: { gaps: CashFlowGaps }) {
+function GapAlerts({ gaps, pastGaps }: { gaps: CashFlowGaps; pastGaps: Gap[] }) {
   return (
     <Card title="การแจ้งเตือนเงินสด" badges={<SyntheticBadge />}>
       {gaps.gaps.length === 0 ? (
@@ -97,8 +102,24 @@ function GapAlerts({ gaps }: { gaps: CashFlowGaps }) {
           ))}
         </div>
       )}
+      {pastGaps.length > 0 && (
+        <details className="past-gaps" open={pastGaps.length <= 3}>
+          <summary>ที่ผ่านมาเงินสดเคยไม่พอ {pastGaps.length} ครั้ง (ตั้งแต่ 1 ม.ค. 2558)</summary>
+          <ul>
+            {[...pastGaps].reverse().map((g) => (
+              <li key={g.date}>
+                <span>
+                  {thaiDate(g.date)}
+                  {g.contributors[0] && <span className="due"> · {g.contributors[0].label} {money(g.contributors[0].amount)}</span>}
+                </span>
+                <span className="num">ขาด {money(g.shortfall)}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
       <p className="disclaimer">
-        รายจ่ายและยอดเงินคงเหลือเป็นข้อมูลจำลอง · ยอดเงินตั้งต้น {money(gaps.opening_balance)}
+        รายจ่ายและยอดเงินคงเหลือเป็นข้อมูลจำลอง · ยอดเงินตั้งต้น {money(gaps.opening_balance)} (1 ม.ค. 2558)
       </p>
     </Card>
   );
@@ -164,13 +185,13 @@ export function Passport() {
           <SummaryCards {...state.data} />
           <Card title="ยอดขายจริงและยอดขายที่คาดการณ์" badges={<span className="badge">LSTM+GRU</span>}>
             <SalesChart forecast={state.data.forecast} history={state.data.history}
-              asOf={state.data.asOf} gaps={state.data.gaps.gaps} />
+              asOf={state.data.asOf} gaps={state.data.gaps.gaps} pastGaps={state.data.balance.past_gaps} />
             <ForecastAccuracy forecast={state.data.forecast} asOf={state.data.asOf} results={state.data.results} />
           </Card>
           <Card title="ยอดเงินคงเหลือที่คาดการณ์" badges={<SyntheticBadge />}>
-            <BalanceChart balance={state.data.balance} asOf={state.data.asOf} />
+            <BalanceChart balance={state.data.balance} asOf={state.data.asOf} gaps={state.data.gaps.gaps} />
           </Card>
-          <GapAlerts gaps={state.data.gaps} />
+          <GapAlerts gaps={state.data.gaps} pastGaps={state.data.balance.past_gaps} />
           <Factors credit={state.data.credit} />
           <Copilot merchantId={id} />
           <Offers gaps={state.data.gaps.gaps} />

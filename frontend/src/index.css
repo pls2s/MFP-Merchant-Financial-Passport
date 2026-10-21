@@ -216,6 +216,11 @@ tr.highlight td { background: var(--accent-soft); font-weight: 600; }
 .tooltip-tags { margin-top: 4px; font-size: 0.78rem; color: var(--series-promo); font-weight: 600; }
 .swatch.promo { height: 10px; background: var(--series-promo); opacity: 0.3; }
 .swatch.bar { width: 10px; height: 10px; background: var(--series-expense); opacity: 0.6; border-radius: 2px; }
+.swatch.dashed.past-gap { background: repeating-linear-gradient(90deg, var(--warn) 0 5px, transparent 5px 8px); }
+.past-gaps { margin-top: 14px; }
+.past-gaps summary { cursor: pointer; font-weight: 600; color: var(--warn); }
+.past-gaps ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; font-size: 0.9rem; }
+.past-gaps li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 10px; background: var(--warn-soft); border-radius: 8px; }
 .swatch.dashed.balance { background: repeating-linear-gradient(90deg, var(--series-balance) 0 5px, transparent 5px 8px); }
 .chart-tooltip { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; box-shadow: var(--shadow); }
 

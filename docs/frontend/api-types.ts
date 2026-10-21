@@ -58,8 +58,9 @@ export interface BalancePoint {
 
 export interface CashBalance {
   merchant_id: number;
-  opening_balance: number;
-  points: BalancePoint[];
+  opening_balance: number; // on 2015-01-01 (= the store's cash reserve target)
+  points: BalancePoint[]; // 2015-01-01 .. 2015-07-31
+  past_gaps: Gap[]; // shortfalls before as_of (synthetic expenses, actual sales)
   is_synthetic_expense: true;
 }
 

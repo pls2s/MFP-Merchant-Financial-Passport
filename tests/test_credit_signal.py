@@ -55,3 +55,12 @@ def test_contract_shape_status_and_wording():
     assert "-3,200" in buffer_warning and "2015-07-22" in buffer_warning and "20,000" in buffer_warning
     text = json.dumps(result, ensure_ascii=False).lower()
     assert "approve" not in text and "อนุมัติ" not in text
+
+
+def test_past_gaps_add_risk_indicator_without_changing_score():
+    args = (1, _history(), AS_OF, 30_000, pd.Timestamp("2015-07-25"), 20_000, [])
+    plain = credit_signal(*args)
+    with_past = credit_signal(*args, past_gaps=[{"date": "2015-03-01", "shortfall": 1200.0},
+                                                {"date": "2015-06-02", "shortfall": 2047.0}])
+    assert with_past["score"] == plain["score"]
+    assert any("เคยไม่พอ 2 ครั้ง" in r and "2015-06-02" in r and "2,047" in r for r in with_past["risk_indicators"])

@@ -26,6 +26,11 @@ export function thaiMonthShort(iso: string): string {
   return `${TH_MONTHS[m - 1]} ${String(y + 543).slice(2)}`;
 }
 
+/** First day of each month among `dates` — axis ticks for long ranges (one label per month). */
+export function monthStarts(dates: string[]): string[] {
+  return dates.filter((d) => d.endsWith("-01"));
+}
+
 /** Rewrite ISO dates inside API text (e.g. risk indicators) to the Thai format. */
 export function thaiDatesInText(text: string): string {
   return text.replace(/\d{4}-\d{2}-\d{2}/g, thaiDate);

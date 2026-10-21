@@ -16,7 +16,7 @@ import pandas as pd
 
 from ai.cashflow_forecast.preprocess import PROCESSED_PATH
 from ai.credit_signal.signal import credit_signal
-from ai.gap_detection.build import AS_OF, EXPENSES_PATH, GAPS_PATH, SYNTHETIC_DIR, sales_series
+from ai.gap_detection.build import AS_OF, EXPENSES_PATH, GAPS_PATH, SYNTHETIC_DIR, past_gaps, sales_series
 from ai.gap_detection.gaps import simulate_balance
 
 CREDIT_PATH = SYNTHETIC_DIR / "credit_signal.json"
@@ -30,7 +30,9 @@ def build() -> list[dict]:
     series = sales_series()
 
     months = (expenses["due_date"].max() - expenses["due_date"].min()).days / 30
-    monthly_expenses = expenses[expenses["scenario"] == "baseline"].groupby("store")["amount"].sum() / months
+    # Operating costs only: owner withdrawals are profit taken out, not an expense of running the store.
+    operating = expenses[(expenses["scenario"] == "baseline") & (expenses["type"] != "owner_draw")]
+    monthly_expenses = operating.groupby("store")["amount"].sum() / months
 
     out = []
     for store, s in sorted(series.items()):
@@ -41,6 +43,7 @@ def build() -> list[dict]:
         out.append(credit_signal(
             store, history[history["store"] == store], AS_OF, float(low["balance"]), low["date"],
             float(monthly_expenses[store]), gaps[store]["gaps"],
+            past_gaps(s, store_exp, gaps[store]["opening_balance"]),
         ))
     return out
 

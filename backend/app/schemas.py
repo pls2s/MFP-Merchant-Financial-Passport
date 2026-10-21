@@ -81,6 +81,7 @@ class CashBalance(BaseModel):
     merchant_id: int
     opening_balance: float
     points: list[BalancePoint]
+    past_gaps: list["Gap"] = Field(description="Shortfalls in the actual-sales history (before as_of)")
     is_synthetic_expense: Literal[True] = True
 
 
@@ -168,3 +169,6 @@ class ModelResult(BaseModel):
     mae: float
     rmse: float
     n_days: int
+
+
+CashBalance.model_rebuild()

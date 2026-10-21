@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { money, thaiDate, thaiDateShort, thaiMonthShort, thaiWeekday } from "../format";
+import { money, monthStarts, thaiDate, thaiDateShort, thaiMonthShort, thaiWeekday } from "../format";
 import type { Forecast, Gap, SalesHistory } from "../types";
 
 const RANGES = [
@@ -99,11 +99,12 @@ function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: 
   );
 }
 
-export function SalesChart({ forecast, history, asOf, gaps }: {
+export function SalesChart({ forecast, history, asOf, gaps, pastGaps }: {
   forecast: Forecast;
   history: SalesHistory;
   asOf: string;
   gaps: Gap[];
+  pastGaps: Gap[];
 }) {
   const [range, setRange] = useState<RangeKey>("3m");
   const [showFutureActual, setShowFutureActual] = useState(false);
@@ -132,6 +133,7 @@ export function SalesChart({ forecast, history, asOf, gaps }: {
         <span><i className="swatch band" />ช่วงคาดการณ์โดยประมาณ</span>
         <span><i className="swatch promo" />วันโปรโมชัน</span>
         <span><i className="swatch" style={{ background: "var(--bad)" }} />วันที่เงินอาจไม่พอ</span>
+        {pastGaps.length > 0 && <span><i className="swatch dashed past-gap" />วันที่เงินเคยไม่พอ</span>}
       </div>
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer>
@@ -146,10 +148,11 @@ export function SalesChart({ forecast, history, asOf, gaps }: {
             <XAxis
               dataKey="date"
               tickFormatter={long ? thaiMonthShort : thaiDateShort}
+              ticks={long ? monthStarts(rows.map((r) => r.date)) : undefined}
               tick={{ fill: "var(--text-2)", fontSize: 12 }}
               axisLine={{ stroke: "var(--border)" }}
               tickLine={false}
-              minTickGap={long ? 40 : 24}
+              minTickGap={long ? 8 : 24}
             />
             <YAxis
               tickFormatter={(v: number) => money(v)}
@@ -166,6 +169,9 @@ export function SalesChart({ forecast, history, asOf, gaps }: {
             <ReferenceLine x={asOf} stroke="var(--text-3)" strokeDasharray="3 3"
               label={{ value: "วันนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
             {gaps.map((g) => <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={2} />)}
+            {pastGaps.filter((g) => rows.length && g.date >= rows[0].date).map((g) => (
+              <ReferenceLine key={`past-${g.date}`} x={g.date} stroke="var(--warn)" strokeWidth={2} strokeDasharray="4 3" />
+            ))}
           </ComposedChart>
         </ResponsiveContainer>
       </div>

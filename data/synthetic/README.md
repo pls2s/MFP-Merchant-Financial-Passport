@@ -1,9 +1,9 @@
 # Synthetic expenses — assumptions
 
 **All data in this folder is synthetic (ข้อมูลจำลอง). Never present it as real.**
-Expenses, invoices and balances are generated; only the sales they are compared against come from
-Rossmann (actual) and the WS1 forecast. Every API response built from these files carries
-`is_synthetic_expense: true`, and the credit signal is always `status: "experimental"`.
+Expenses, owner withdrawals, invoices and balances are generated; only the sales they are compared
+against come from Rossmann (actual) and the WS1 forecast. Every API response built from these files
+carries `is_synthetic_expense: true`, and the credit signal is always `status: "experimental"`.
 
 Regenerate:
 
@@ -26,40 +26,46 @@ as zero), so expenses stay realistic relative to income. Monthly costs use 30 ×
 | Rent | Fixed, due on the 1st | Share of monthly sales | 8% |
 | Payroll | 24 times a year: 15th and last day of the month | Share of monthly sales (half each payment) | 15% |
 | Utilities | Monthly, due on the 20th | Share of monthly sales | 3%, ± 15% uniform noise |
-| Opening balance | Once, at the start of the simulation | Days of average daily expenses | 5–45, uniform per store |
+| Cash reserve | Kept by the owner; also the opening balance on 2015-01-01 | Days of average daily expenses | 5–45, uniform per store |
+| Owner withdrawal | On the 25th of each month up to the demo date | Amount | Whatever cash is above the reserve that day (none if below) |
 
-Total expenses ≈ 86% of sales, leaving a ~14% margin before the opening balance.
+Operating costs ≈ 86% of sales, leaving a ~14% margin. Without withdrawals that margin would pile up
+over 6½ months and no store would ever run short; owners take profit out, so the balance hovers around
+each store's reserve and dips when invoices bunch up. Withdrawals are not simulated in the forecast
+window, and they are excluded from "average monthly expenses" in the credit signal.
 
-- Random seed: **42** for expenses, **43** (seed + 1) for opening balances
+- Random seed: **42** for expenses, **43** (seed + 1) for reserve sizes
 - Expenses generated for 2015-01-01 to 2015-07-31
 - Settlement delay for sales cash-in: **0 days** (not simulated)
 
 ## Simulation timeline
 
-| Period | Sales used |
-| --- | --- |
-| 2015-06-20 to 2015-07-17 | Actual sales (balance history) |
-| 2015-07-18 to 2015-07-31 | WS1 forecast (`models/forecasts/ensemble.json`) |
+| Period | Sales used | Gaps |
+| --- | --- | --- |
+| 2015-01-01 to 2015-07-17 | Actual sales (`models/forecasts/sales_history.parquet`) | Past gaps (`cash-balance.past_gaps`) |
+| 2015-07-18 to 2015-07-31 | WS1 forecast (`models/forecasts/ensemble.json`) | Upcoming gaps (`cash-flow-gaps`) |
 
-Demo "today" is **2015-07-17**, the last forecast origin. The opening balance applies on 2015-06-20.
-Gaps are reported only in the forecast window, with a minimum buffer of **0**.
+Demo "today" is **2015-07-17**, the last forecast origin. Minimum buffer **0**.
+
+With these settings **88 of 1,115 stores (7.9%)** ran short at least once before the demo date, and
+**9 of the other 1,112 stores (0.8%)** are projected to run short in the forecast window.
 
 ## Demo stores with a deliberate gap
 
 Stores **1, 25 and 817** represent a store with a thin cash reserve that places a large order:
 
+- reserve of **5 days** of average expenses, so their history has natural shortfalls
+  (store 1: 1, store 25: 6, store 817: 3 since 1 January)
 - one extra supplier invoice ("ค่าสินค้า supplier (สั่งล็อตใหญ่)", `scenario: "demo_gap"`) due on
-  **2015-07-22**, worth 21 days of normal purchases (21 × 60% × average daily sales, rounded to 100)
-- the opening balance lowered just enough that the balance on 2015-07-22 is −2 days of average sales
+  **2015-07-22**, sized to leave a balance of −2 days of average sales that day (rounded to 100);
+  this comes to 1.3–2.1× a normal invoice
 
-So the demo always shows an alert with a date and an amount.
-
-Without these, 4 of the other 1,112 stores (0.4%) have a gap in the forecast window.
+So the demo always shows an upcoming alert with a date and an amount, and a history of past shortfalls.
 
 ## Files
 
 | File | Content |
 | --- | --- |
-| `expenses.parquet` | store, due_date, type, label, amount, scenario (`baseline` / `demo_gap`), is_synthetic |
-| `cash_flow_gaps.json` | `cash-flow-gaps` contract object per store |
-| `credit_signal.json` | `credit-signal` contract object per store |
+| `expenses.parquet` | store, due_date, type (`supplier_invoice` / `rent` / `payroll` / `utilities` / `owner_draw`), label, amount, scenario (`baseline` / `demo_gap`), is_synthetic |
+| `cash_flow_gaps.json` | `cash-flow-gaps` contract object per store (upcoming gaps; `opening_balance` = reserve on 2015-01-01) |
+| `credit_signal.json` | `credit-signal` contract object per store (risk indicators include past shortfalls) |

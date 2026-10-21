@@ -15,6 +15,7 @@ LABELS = {
     "rent": "ค่าเช่าร้าน",
     "payroll": "เงินเดือนพนักงาน",
     "utilities": "ค่าน้ำค่าไฟ",
+    "owner_draw": "เจ้าของร้านถอนเงินใช้ส่วนตัว",
 }
 
 
@@ -31,9 +32,11 @@ class ExpenseParams:
     payroll_share: float = 0.15           # half on the 15th, half on the last day of the month
     utilities_share: float = 0.03         # due on the 20th
     utilities_noise: float = 0.15
-    # Opening balance = N days of average daily expenses, N drawn per store from this range
-    # (stores differ in how much cash they keep).
-    opening_balance_days: tuple = (5, 45)
+    # Cash reserve the owner aims to keep = N days of average daily expenses, N drawn per store from
+    # this range (stores differ in how much cash they keep). It is also the opening balance.
+    reserve_days: tuple = (5, 45)
+    # On this day each month the owner withdraws any cash above the reserve (see add_owner_draws).
+    owner_draw_day: int = 25
 
 
 def generate(stores: pd.DataFrame, start: str, end: str, params: ExpenseParams = ExpenseParams()) -> pd.DataFrame:
@@ -73,10 +76,34 @@ def generate(stores: pd.DataFrame, start: str, end: str, params: ExpenseParams =
     return out.sort_values(["store", "due_date", "type"]).reset_index(drop=True)
 
 
-def opening_balance(expenses: pd.DataFrame, params: ExpenseParams = ExpenseParams()) -> pd.Series:
-    """Per store: N × average daily expenses over the generated range, N ~ U(opening_balance_days)."""
+def reserve_target(expenses: pd.DataFrame, params: ExpenseParams = ExpenseParams()) -> pd.Series:
+    """Per store: N × average daily expenses over the generated range, N ~ U(reserve_days)."""
     days = (expenses["due_date"].max() - expenses["due_date"].min()).days + 1
     per_day = expenses.groupby("store")["amount"].sum() / days
-    lo, hi = params.opening_balance_days
+    lo, hi = params.reserve_days
     n_days = np.random.default_rng(params.seed + 1).integers(lo, hi + 1, len(per_day))
     return (per_day * n_days).round(2)
+
+
+def add_owner_draws(store: int, sales: pd.DataFrame, expenses: pd.DataFrame, reserve: float,
+                    until: pd.Timestamp, params: ExpenseParams = ExpenseParams()) -> pd.DataFrame:
+    """Owner withdrawals: on `owner_draw_day` each month up to `until`, take out the cash above
+    `reserve`, so profit does not pile up over a long simulation. Balance starts at `reserve`.
+
+    sales     columns: date, sales (one row per day)
+    expenses  this store's expenses (due_date, amount, ...)
+    returns   the draw rows (same columns as `generate`)
+    """
+    due = expenses.groupby("due_date")["amount"].sum()
+    flow = sales.set_index("date")["sales"] - sales["date"].map(due).fillna(0.0).to_numpy()
+    balance = reserve + flow.cumsum()
+    rows = []
+    for day in pd.date_range(sales["date"].min(), until, freq="D"):
+        if day.day != params.owner_draw_day:
+            continue
+        draw = round(float(balance[day]) - reserve, 2)
+        if draw > 0:
+            balance[balance.index >= day] -= draw
+            rows.append({"store": store, "due_date": day, "type": "owner_draw", "label": LABELS["owner_draw"],
+                         "amount": draw, "scenario": "baseline", "is_synthetic": True})
+    return pd.DataFrame(rows, columns=expenses.columns)

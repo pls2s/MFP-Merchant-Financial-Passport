@@ -1,300 +1,1561 @@
 {
   "merchant_id": 817,
-  "opening_balance": 135793.96,
+  "opening_balance": 77667.53,
   "points": [
+    {
+      "date": "2015-01-01",
+      "sales": 0.0,
+      "expenses": 43579.66,
+      "balance": 34087.87,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-02",
+      "sales": 18370.0,
+      "expenses": 0.0,
+      "balance": 52457.87,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-03",
+      "sales": 14621.0,
+      "expenses": 77368.03,
+      "balance": -10289.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-04",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": -10289.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-05",
+      "sales": 24867.0,
+      "expenses": 0.0,
+      "balance": 14577.84,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-06",
+      "sales": 23307.0,
+      "expenses": 0.0,
+      "balance": 37884.84,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-07",
+      "sales": 20704.0,
+      "expenses": 0.0,
+      "balance": 58588.84,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-08",
+      "sales": 19052.0,
+      "expenses": 0.0,
+      "balance": 77640.84,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-09",
+      "sales": 18174.0,
+      "expenses": 0.0,
+      "balance": 95814.84,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-10",
+      "sales": 10310.0,
+      "expenses": 71090.76,
+      "balance": 35034.08,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-11",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 35034.08,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-12",
+      "sales": 23898.0,
+      "expenses": 0.0,
+      "balance": 58932.08,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-13",
+      "sales": 21924.0,
+      "expenses": 0.0,
+      "balance": 80856.08,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-14",
+      "sales": 21206.0,
+      "expenses": 0.0,
+      "balance": 102062.08,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-15",
+      "sales": 20851.0,
+      "expenses": 40855.93,
+      "balance": 82057.15,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-16",
+      "sales": 20263.0,
+      "expenses": 0.0,
+      "balance": 102320.15,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-17",
+      "sales": 13200.0,
+      "expenses": 72321.51,
+      "balance": 43198.64,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-18",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 43198.64,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-19",
+      "sales": 18913.0,
+      "expenses": 0.0,
+      "balance": 62111.64,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-20",
+      "sales": 18484.0,
+      "expenses": 18623.84,
+      "balance": 61971.8,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-21",
+      "sales": 16981.0,
+      "expenses": 0.0,
+      "balance": 78952.8,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-22",
+      "sales": 18117.0,
+      "expenses": 0.0,
+      "balance": 97069.8,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-23",
+      "sales": 17185.0,
+      "expenses": 0.0,
+      "balance": 114254.8,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-24",
+      "sales": 11985.0,
+      "expenses": 75441.95,
+      "balance": 50797.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-25",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 50797.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-26",
+      "sales": 21887.0,
+      "expenses": 0.0,
+      "balance": 72684.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-27",
+      "sales": 22552.0,
+      "expenses": 0.0,
+      "balance": 95236.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-28",
+      "sales": 21931.0,
+      "expenses": 0.0,
+      "balance": 117167.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-29",
+      "sales": 22102.0,
+      "expenses": 0.0,
+      "balance": 139269.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-30",
+      "sales": 20883.0,
+      "expenses": 0.0,
+      "balance": 160152.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-01-31",
+      "sales": 13026.0,
+      "expenses": 122893.29,
+      "balance": 50285.56,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-01",
+      "sales": 0.0,
+      "expenses": 43579.66,
+      "balance": 6705.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-02",
+      "sales": 24894.0,
+      "expenses": 0.0,
+      "balance": 31599.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-03",
+      "sales": 22139.0,
+      "expenses": 0.0,
+      "balance": 53738.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-04",
+      "sales": 20452.0,
+      "expenses": 0.0,
+      "balance": 74190.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-05",
+      "sales": 20977.0,
+      "expenses": 0.0,
+      "balance": 95167.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-06",
+      "sales": 19151.0,
+      "expenses": 0.0,
+      "balance": 114318.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-07",
+      "sales": 12608.0,
+      "expenses": 80417.09,
+      "balance": 46509.81,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-08",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 46509.81,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-09",
+      "sales": 20634.0,
+      "expenses": 0.0,
+      "balance": 67143.81,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-10",
+      "sales": 20233.0,
+      "expenses": 0.0,
+      "balance": 87376.81,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-11",
+      "sales": 19231.0,
+      "expenses": 0.0,
+      "balance": 106607.81,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-12",
+      "sales": 19574.0,
+      "expenses": 0.0,
+      "balance": 126181.81,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-13",
+      "sales": 18708.0,
+      "expenses": 0.0,
+      "balance": 144889.81,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-14",
+      "sales": 14495.0,
+      "expenses": 73482.23,
+      "balance": 85902.58,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-15",
+      "sales": 0.0,
+      "expenses": 40855.93,
+      "balance": 45046.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-16",
+      "sales": 23566.0,
+      "expenses": 0.0,
+      "balance": 68612.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-17",
+      "sales": 22111.0,
+      "expenses": 0.0,
+      "balance": 90723.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-18",
+      "sales": 19701.0,
+      "expenses": 0.0,
+      "balance": 110424.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-19",
+      "sales": 20422.0,
+      "expenses": 0.0,
+      "balance": 130846.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-20",
+      "sales": 19850.0,
+      "expenses": 18331.42,
+      "balance": 132365.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-21",
+      "sales": 12273.0,
+      "expenses": 73245.38,
+      "balance": 71392.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-22",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 71392.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-23",
+      "sales": 17605.0,
+      "expenses": 0.0,
+      "balance": 88997.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-24",
+      "sales": 18209.0,
+      "expenses": 0.0,
+      "balance": 107206.85,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-25",
+      "sales": 17369.0,
+      "expenses": 46908.32,
+      "balance": 77667.53,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-26",
+      "sales": 17333.0,
+      "expenses": 0.0,
+      "balance": 95000.53,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-27",
+      "sales": 18179.0,
+      "expenses": 0.0,
+      "balance": 113179.53,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-02-28",
+      "sales": 13587.0,
+      "expenses": 124553.75,
+      "balance": 2212.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-01",
+      "sales": 0.0,
+      "expenses": 43579.66,
+      "balance": -41366.88,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-02",
+      "sales": 24530.0,
+      "expenses": 0.0,
+      "balance": -16836.88,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-03",
+      "sales": 24297.0,
+      "expenses": 0.0,
+      "balance": 7460.12,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-04",
+      "sales": 21293.0,
+      "expenses": 0.0,
+      "balance": 28753.12,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-05",
+      "sales": 21282.0,
+      "expenses": 0.0,
+      "balance": 50035.12,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-06",
+      "sales": 20649.0,
+      "expenses": 0.0,
+      "balance": 70684.12,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-07",
+      "sales": 13079.0,
+      "expenses": 78603.96,
+      "balance": 5159.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-08",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 5159.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-09",
+      "sales": 17311.0,
+      "expenses": 0.0,
+      "balance": 22470.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-10",
+      "sales": 18356.0,
+      "expenses": 0.0,
+      "balance": 40826.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-11",
+      "sales": 18039.0,
+      "expenses": 0.0,
+      "balance": 58865.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-12",
+      "sales": 18611.0,
+      "expenses": 0.0,
+      "balance": 77476.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-13",
+      "sales": 16904.0,
+      "expenses": 0.0,
+      "balance": 94380.16,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-14",
+      "sales": 13062.0,
+      "expenses": 79094.33,
+      "balance": 28347.83,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-15",
+      "sales": 0.0,
+      "expenses": 40855.93,
+      "balance": -12508.1,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-16",
+      "sales": 23672.0,
+      "expenses": 0.0,
+      "balance": 11163.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-17",
+      "sales": 21524.0,
+      "expenses": 0.0,
+      "balance": 32687.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-18",
+      "sales": 20383.0,
+      "expenses": 0.0,
+      "balance": 53070.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-19",
+      "sales": 21487.0,
+      "expenses": 0.0,
+      "balance": 74557.9,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-20",
+      "sales": 19842.0,
+      "expenses": 17775.44,
+      "balance": 76624.46,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-21",
+      "sales": 11543.0,
+      "expenses": 69478.77,
+      "balance": 18688.69,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-22",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 18688.69,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-23",
+      "sales": 19616.0,
+      "expenses": 0.0,
+      "balance": 38304.69,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-24",
+      "sales": 18084.0,
+      "expenses": 0.0,
+      "balance": 56388.69,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-25",
+      "sales": 18033.0,
+      "expenses": 0.0,
+      "balance": 74421.69,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-26",
+      "sales": 19145.0,
+      "expenses": 0.0,
+      "balance": 93566.69,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-27",
+      "sales": 18171.0,
+      "expenses": 0.0,
+      "balance": 111737.69,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-28",
+      "sales": 14921.0,
+      "expenses": 70239.1,
+      "balance": 56419.59,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-29",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 56419.59,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-30",
+      "sales": 26301.0,
+      "expenses": 0.0,
+      "balance": 82720.59,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-03-31",
+      "sales": 24361.0,
+      "expenses": 40855.93,
+      "balance": 66225.66,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-01",
+      "sales": 27057.0,
+      "expenses": 43579.66,
+      "balance": 49703.0,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-02",
+      "sales": 26833.0,
+      "expenses": 0.0,
+      "balance": 76536.0,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-03",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 76536.0,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-04",
+      "sales": 17202.0,
+      "expenses": 73129.23,
+      "balance": 20608.77,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-05",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 20608.77,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-06",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 20608.77,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-07",
+      "sales": 20980.0,
+      "expenses": 0.0,
+      "balance": 41588.77,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-08",
+      "sales": 19265.0,
+      "expenses": 0.0,
+      "balance": 60853.77,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-09",
+      "sales": 19580.0,
+      "expenses": 0.0,
+      "balance": 80433.77,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-10",
+      "sales": 17770.0,
+      "expenses": 0.0,
+      "balance": 98203.77,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-11",
+      "sales": 12578.0,
+      "expenses": 81481.06,
+      "balance": 29300.71,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-12",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 29300.71,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-13",
+      "sales": 26072.0,
+      "expenses": 0.0,
+      "balance": 55372.71,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-14",
+      "sales": 23663.0,
+      "expenses": 0.0,
+      "balance": 79035.71,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-15",
+      "sales": 21998.0,
+      "expenses": 40855.93,
+      "balance": 60177.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-16",
+      "sales": 22631.0,
+      "expenses": 0.0,
+      "balance": 82808.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-17",
+      "sales": 21524.0,
+      "expenses": 0.0,
+      "balance": 104332.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-18",
+      "sales": 13319.0,
+      "expenses": 82528.29,
+      "balance": 35123.49,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-19",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 35123.49,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-20",
+      "sales": 21277.0,
+      "expenses": 16872.15,
+      "balance": 39528.34,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-21",
+      "sales": 19156.0,
+      "expenses": 0.0,
+      "balance": 58684.34,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-22",
+      "sales": 16265.0,
+      "expenses": 0.0,
+      "balance": 74949.34,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-23",
+      "sales": 17520.0,
+      "expenses": 0.0,
+      "balance": 92469.34,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-24",
+      "sales": 19292.0,
+      "expenses": 0.0,
+      "balance": 111761.34,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-25",
+      "sales": 12166.0,
+      "expenses": 71551.71,
+      "balance": 52375.63,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-26",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 52375.63,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-27",
+      "sales": 25498.0,
+      "expenses": 0.0,
+      "balance": 77873.63,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-28",
+      "sales": 25161.0,
+      "expenses": 0.0,
+      "balance": 103034.63,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-29",
+      "sales": 24525.0,
+      "expenses": 0.0,
+      "balance": 127559.63,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-04-30",
+      "sales": 25979.0,
+      "expenses": 40855.93,
+      "balance": 112682.7,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-01",
+      "sales": 0.0,
+      "expenses": 43579.66,
+      "balance": 69103.04,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-02",
+      "sales": 17160.0,
+      "expenses": 79531.52,
+      "balance": 6731.52,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-03",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 6731.52,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-04",
+      "sales": 28072.0,
+      "expenses": 0.0,
+      "balance": 34803.52,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-05",
+      "sales": 21962.0,
+      "expenses": 0.0,
+      "balance": 56765.52,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-06",
+      "sales": 21646.0,
+      "expenses": 0.0,
+      "balance": 78411.52,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-07",
+      "sales": 21387.0,
+      "expenses": 0.0,
+      "balance": 99798.52,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-08",
+      "sales": 20153.0,
+      "expenses": 0.0,
+      "balance": 119951.52,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-09",
+      "sales": 11984.0,
+      "expenses": 81971.08,
+      "balance": 49964.44,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-10",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 49964.44,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-11",
+      "sales": 22361.0,
+      "expenses": 0.0,
+      "balance": 72325.44,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-12",
+      "sales": 21100.0,
+      "expenses": 0.0,
+      "balance": 93425.44,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-13",
+      "sales": 22672.0,
+      "expenses": 0.0,
+      "balance": 116097.44,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-14",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 116097.44,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-15",
+      "sales": 20642.0,
+      "expenses": 40855.93,
+      "balance": 95883.51,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-16",
+      "sales": 13821.0,
+      "expenses": 82043.73,
+      "balance": 27660.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-17",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 27660.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-18",
+      "sales": 26705.0,
+      "expenses": 0.0,
+      "balance": 54365.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-19",
+      "sales": 25232.0,
+      "expenses": 0.0,
+      "balance": 79597.78,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-20",
+      "sales": 20748.0,
+      "expenses": 18208.73,
+      "balance": 82137.05,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-21",
+      "sales": 22520.0,
+      "expenses": 0.0,
+      "balance": 104657.05,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-22",
+      "sales": 22397.0,
+      "expenses": 0.0,
+      "balance": 127054.05,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-23",
+      "sales": 14827.0,
+      "expenses": 75636.1,
+      "balance": 66244.95,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-24",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 66244.95,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-25",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 66244.95,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-26",
+      "sales": 22840.0,
+      "expenses": 0.0,
+      "balance": 89084.95,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-27",
+      "sales": 21900.0,
+      "expenses": 0.0,
+      "balance": 110984.95,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-28",
+      "sales": 19957.0,
+      "expenses": 0.0,
+      "balance": 130941.95,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-29",
+      "sales": 20771.0,
+      "expenses": 0.0,
+      "balance": 151712.95,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-30",
+      "sales": 13920.0,
+      "expenses": 72585.08,
+      "balance": 93047.87,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-05-31",
+      "sales": 0.0,
+      "expenses": 40855.93,
+      "balance": 52191.94,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-01",
+      "sales": 29475.0,
+      "expenses": 43579.66,
+      "balance": 38087.28,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-02",
+      "sales": 26627.0,
+      "expenses": 0.0,
+      "balance": 64714.28,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-03",
+      "sales": 26953.0,
+      "expenses": 0.0,
+      "balance": 91667.28,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-04",
+      "sales": 25051.0,
+      "expenses": 0.0,
+      "balance": 116718.28,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-05",
+      "sales": 22762.0,
+      "expenses": 0.0,
+      "balance": 139480.28,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-06",
+      "sales": 13590.0,
+      "expenses": 83224.05,
+      "balance": 69846.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-07",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 69846.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-08",
+      "sales": 22076.0,
+      "expenses": 0.0,
+      "balance": 91922.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-09",
+      "sales": 20205.0,
+      "expenses": 0.0,
+      "balance": 112127.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-10",
+      "sales": 21379.0,
+      "expenses": 0.0,
+      "balance": 133506.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-11",
+      "sales": 21053.0,
+      "expenses": 0.0,
+      "balance": 154559.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-12",
+      "sales": 19520.0,
+      "expenses": 0.0,
+      "balance": 174079.23,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-13",
+      "sales": 11943.0,
+      "expenses": 72856.65,
+      "balance": 113165.58,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-14",
+      "sales": 0.0,
+      "expenses": 0.0,
+      "balance": 113165.58,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-15",
+      "sales": 28545.0,
+      "expenses": 40855.93,
+      "balance": 100854.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-16",
+      "sales": 25085.0,
+      "expenses": 0.0,
+      "balance": 125939.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-17",
+      "sales": 24332.0,
+      "expenses": 0.0,
+      "balance": 150271.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-18",
+      "sales": 23337.0,
+      "expenses": 0.0,
+      "balance": 173608.65,
+      "is_forecast": false
+    },
+    {
+      "date": "2015-06-19",
+      "sales": 22946.0,
+      "expenses": 0.0,
+      "balance": 196554.65,
+      "is_forecast": false
+    },
     {
       "date": "2015-06-20",
       "sales": 14658.0,
       "expenses": 89104.23,
-      "balance": 61347.73,
+      "balance": 122108.42,
       "is_forecast": false
     },
     {
       "date": "2015-06-21",
       "sales": 0.0,
       "expenses": 0.0,
-      "balance": 61347.73,
+      "balance": 122108.42,
       "is_forecast": false
     },
     {
       "date": "2015-06-22",
       "sales": 21859.0,
       "expenses": 0.0,
-      "balance": 83206.73,
+      "balance": 143967.42,
       "is_forecast": false
     },
     {
       "date": "2015-06-23",
       "sales": 19446.0,
       "expenses": 0.0,
-      "balance": 102652.73,
+      "balance": 163413.42,
       "is_forecast": false
     },
     {
       "date": "2015-06-24",
       "sales": 21898.0,
       "expenses": 0.0,
-      "balance": 124550.73,
+      "balance": 185311.42,
       "is_forecast": false
     },
     {
       "date": "2015-06-25",
       "sales": 19451.0,
-      "expenses": 0.0,
-      "balance": 144001.73,
+      "expenses": 127094.89,
+      "balance": 77667.53,
       "is_forecast": false
     },
     {
       "date": "2015-06-26",
       "sales": 19273.0,
       "expenses": 0.0,
-      "balance": 163274.73,
+      "balance": 96940.53,
       "is_forecast": false
     },
     {
       "date": "2015-06-27",
       "sales": 13108.0,
       "expenses": 71775.22,
-      "balance": 104607.51,
+      "balance": 38273.31,
       "is_forecast": false
     },
     {
       "date": "2015-06-28",
       "sales": 0.0,
       "expenses": 0.0,
-      "balance": 104607.51,
+      "balance": 38273.31,
       "is_forecast": false
     },
     {
       "date": "2015-06-29",
       "sales": 28456.0,
       "expenses": 0.0,
-      "balance": 133063.51,
+      "balance": 66729.31,
       "is_forecast": false
     },
     {
       "date": "2015-06-30",
       "sales": 27140.0,
       "expenses": 40855.93,
-      "balance": 119347.58,
+      "balance": 53013.38,
       "is_forecast": false
     },
     {
       "date": "2015-07-01",
       "sales": 24957.0,
       "expenses": 43579.66,
-      "balance": 100724.92,
+      "balance": 34390.72,
       "is_forecast": false
     },
     {
       "date": "2015-07-02",
       "sales": 24384.0,
       "expenses": 0.0,
-      "balance": 125108.92,
+      "balance": 58774.72,
       "is_forecast": false
     },
     {
       "date": "2015-07-03",
       "sales": 22937.0,
       "expenses": 0.0,
-      "balance": 148045.92,
+      "balance": 81711.72,
       "is_forecast": false
     },
     {
       "date": "2015-07-04",
       "sales": 13001.0,
       "expenses": 76760.66,
-      "balance": 84286.26,
+      "balance": 17952.06,
       "is_forecast": false
     },
     {
       "date": "2015-07-05",
       "sales": 0.0,
       "expenses": 0.0,
-      "balance": 84286.26,
+      "balance": 17952.06,
       "is_forecast": false
     },
     {
       "date": "2015-07-06",
       "sales": 22403.0,
       "expenses": 0.0,
-      "balance": 106689.26,
+      "balance": 40355.06,
       "is_forecast": false
     },
     {
       "date": "2015-07-07",
       "sales": 20064.0,
       "expenses": 0.0,
-      "balance": 126753.26,
+      "balance": 60419.06,
       "is_forecast": false
     },
     {
       "date": "2015-07-08",
       "sales": 21079.0,
       "expenses": 0.0,
-      "balance": 147832.26,
+      "balance": 81498.06,
       "is_forecast": false
     },
     {
       "date": "2015-07-09",
       "sales": 21279.0,
       "expenses": 0.0,
-      "balance": 169111.26,
+      "balance": 102777.06,
       "is_forecast": false
     },
     {
       "date": "2015-07-10",
       "sales": 20231.0,
       "expenses": 0.0,
-      "balance": 189342.26,
+      "balance": 123008.06,
       "is_forecast": false
     },
     {
       "date": "2015-07-11",
       "sales": 13111.0,
       "expenses": 70272.83,
-      "balance": 132180.43,
+      "balance": 65846.23,
       "is_forecast": false
     },
     {
       "date": "2015-07-12",
       "sales": 0.0,
       "expenses": 0.0,
-      "balance": 132180.43,
+      "balance": 65846.23,
       "is_forecast": false
     },
     {
       "date": "2015-07-13",
       "sales": 27178.0,
       "expenses": 0.0,
-      "balance": 159358.43,
+      "balance": 93024.23,
       "is_forecast": false
     },
     {
       "date": "2015-07-14",
       "sales": 25460.0,
       "expenses": 0.0,
-      "balance": 184818.43,
+      "balance": 118484.23,
       "is_forecast": false
     },
     {
       "date": "2015-07-15",
       "sales": 24210.0,
       "expenses": 40855.93,
-      "balance": 168172.5,
+      "balance": 101838.3,
       "is_forecast": false
     },
     {
       "date": "2015-07-16",
       "sales": 23899.0,
       "expenses": 0.0,
-      "balance": 192071.5,
+      "balance": 125737.3,
       "is_forecast": false
     },
     {
       "date": "2015-07-17",
       "sales": 21685.0,
       "expenses": 0.0,
-      "balance": 213756.5,
+      "balance": 147422.3,
       "is_forecast": false
     },
     {
       "date": "2015-07-18",
       "sales": 12711.15,
       "expenses": 77342.59,
-      "balance": 149125.06,
+      "balance": 82790.86,
       "is_forecast": true
     },
     {
       "date": "2015-07-19",
       "sales": 0.0,
       "expenses": 0.0,
-      "balance": 149125.06,
+      "balance": 82790.86,
       "is_forecast": true
     },
     {
       "date": "2015-07-20",
       "sales": 20410.53,
       "expenses": 14906.86,
-      "balance": 154628.73,
+      "balance": 88294.53,
       "is_forecast": true
     },
     {
       "date": "2015-07-21",
       "sales": 19080.72,
       "expenses": 0.0,
-      "balance": 173709.45,
+      "balance": 107375.25,
       "is_forecast": true
     },
     {
       "date": "2015-07-22",
       "sales": 18790.54,
-      "expenses": 228800.0,
-      "balance": -36300.01,
+      "expenses": 162500.0,
+      "balance": -36334.21,
       "is_forecast": true
     },
     {
       "date": "2015-07-23",
       "sales": 19125.41,
       "expenses": 0.0,
-      "balance": -17174.6,
+      "balance": -17208.8,
       "is_forecast": true
     },
     {
       "date": "2015-07-24",
       "sales": 17432.67,
       "expenses": 0.0,
-      "balance": 258.07,
+      "balance": 223.87,
       "is_forecast": true
     },
     {
       "date": "2015-07-25",
       "sales": 12100.49,
       "expenses": 83031.94,
-      "balance": -70673.38,
+      "balance": -70707.58,
       "is_forecast": true
     },
     {
       "date": "2015-07-26",
       "sales": 0.0,
       "expenses": 0.0,
-      "balance": -70673.38,
+      "balance": -70707.58,
       "is_forecast": true
     },
     {
       "date": "2015-07-27",
       "sales": 26184.88,
       "expenses": 0.0,
-      "balance": -44488.5,
+      "balance": -44522.7,
       "is_forecast": true
     },
     {
       "date": "2015-07-28",
       "sales": 24779.15,
       "expenses": 0.0,
-      "balance": -19709.35,
+      "balance": -19743.55,
       "is_forecast": true
     },
     {
       "date": "2015-07-29",
       "sales": 23717.67,
       "expenses": 0.0,
-      "balance": 4008.32,
+      "balance": 3974.12,
       "is_forecast": true
     },
     {
       "date": "2015-07-30",
       "sales": 24009.29,
       "expenses": 0.0,
-      "balance": 28017.61,
+      "balance": 27983.41,
       "is_forecast": true
     },
     {
       "date": "2015-07-31",
       "sales": 22017.92,
       "expenses": 40855.93,
-      "balance": 9179.6,
+      "balance": 9145.4,
       "is_forecast": true
+    }
+  ],
+  "past_gaps": [
+    {
+      "date": "2015-01-03",
+      "shortfall": 10289.16,
+      "balance_after": -10289.16,
+      "contributors": [
+        {
+          "type": "supplier_invoice",
+          "label": "ค่าสินค้า supplier",
+          "amount": 77368.03,
+          "due_date": "2015-01-03"
+        },
+        {
+          "type": "rent",
+          "label": "ค่าเช่าร้าน",
+          "amount": 43579.66,
+          "due_date": "2015-01-01"
+        }
+      ]
+    },
+    {
+      "date": "2015-03-01",
+      "shortfall": 41366.88,
+      "balance_after": -41366.88,
+      "contributors": [
+        {
+          "type": "supplier_invoice",
+          "label": "ค่าสินค้า supplier",
+          "amount": 83697.82,
+          "due_date": "2015-02-28"
+        },
+        {
+          "type": "owner_draw",
+          "label": "เจ้าของร้านถอนเงินใช้ส่วนตัว",
+          "amount": 46908.32,
+          "due_date": "2015-02-25"
+        },
+        {
+          "type": "rent",
+          "label": "ค่าเช่าร้าน",
+          "amount": 43579.66,
+          "due_date": "2015-03-01"
+        },
+        {
+          "type": "payroll",
+          "label": "เงินเดือนพนักงาน",
+          "amount": 40855.93,
+          "due_date": "2015-02-28"
+        }
+      ]
+    },
+    {
+      "date": "2015-03-15",
+      "shortfall": 12508.1,
+      "balance_after": -12508.1,
+      "contributors": [
+        {
+          "type": "supplier_invoice",
+          "label": "ค่าสินค้า supplier",
+          "amount": 79094.33,
+          "due_date": "2015-03-14"
+        },
+        {
+          "type": "payroll",
+          "label": "เงินเดือนพนักงาน",
+          "amount": 40855.93,
+          "due_date": "2015-03-15"
+        }
+      ]
     }
   ],
   "is_synthetic_expense": true

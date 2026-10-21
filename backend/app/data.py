@@ -11,7 +11,9 @@ from ai.cashflow_forecast.predict import HISTORY_PATH
 from ai.copilot.explain import explain, load_dotenv
 from ai.copilot.facts import MerchantContext, score_rank
 from ai.credit_signal.build import CREDIT_PATH
-from ai.gap_detection.build import AS_OF, DEMO_STORES, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, sales_series
+from ai.gap_detection.build import (
+    AS_OF, DEMO_STORES, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, past_gaps, sales_series,
+)
 from ai.gap_detection.gaps import cash_flow_gaps, simulate_balance
 
 RESULTS_PATH = ROSSMANN.models_dir / "results.csv"
@@ -92,8 +94,13 @@ class DataStore:
                  "is_forecast": bool(f)}
                 for r, f in zip(bal.itertuples(), sales["is_forecast"])
             ],
+            "past_gaps": self.past_gaps(merchant_id),
             "is_synthetic_expense": True,
         }
+
+    def past_gaps(self, merchant_id: int) -> list[dict]:
+        return past_gaps(self.sales[merchant_id], self._store_expenses(merchant_id),
+                         self.gaps[merchant_id]["opening_balance"])
 
     def cash_flow_gaps(self, merchant_id: int, min_buffer: float = 0.0) -> dict:
         """Re-run the WS2 gap finder so the minimum buffer can be changed per request."""
@@ -108,7 +115,7 @@ class DataStore:
             merchant_id=merchant_id, as_of=AS_OF, forecast=self.forecasts[merchant_id],
             gaps=self.cash_flow_gaps(merchant_id), credit=self.credit[merchant_id],
             history=self.history[merchant_id], sales=self.sales[merchant_id],
-            expenses=self._store_expenses(merchant_id),
+            expenses=self._store_expenses(merchant_id), past_gaps=self.past_gaps(merchant_id),
             score_rank=score_rank(self.credit[merchant_id]["score"], [c["score"] for c in self.credit.values()]),
         )
         return explain(ctx, question, history)

@@ -57,6 +57,7 @@ class MerchantContext:
     sales: pd.DataFrame            # date, sales, is_forecast (simulation input)
     expenses: pd.DataFrame         # due_date, type, label, amount (synthetic, simulation window)
     score_rank: tuple[int, int] | None = None  # (rank by score, number of stores); 1 = highest
+    past_gaps: list[dict] | None = None          # shortfalls before as_of (same shape as gaps)
 
 
 def _sales_patterns(ctx: MerchantContext) -> dict:
@@ -191,6 +192,14 @@ def build_facts(ctx: MerchantContext) -> dict:
             }
             for g in ctx.gaps["gaps"]
         ],
+        "ประวัติวันที่เงินสดเคยไม่พอ (ข้อมูลจำลอง ตั้งแต่ 1 ม.ค. 2558)": {
+            "จำนวนครั้ง": str(len(ctx.past_gaps or [])),
+            "รายการ": [
+                f"{thai_date(g['date'])} ขาดประมาณ {money(g['shortfall'])}"
+                + (f" ({g['contributors'][0]['label']} {money(g['contributors'][0]['amount'])})" if g["contributors"] else "")
+                for g in (ctx.past_gaps or [])
+            ],
+        },
         "สถานการณ์สมมติ (ระบบคำนวณให้แล้ว)": _scenarios(ctx),
         "สัญญาณการเงิน (ทดลอง ไม่ใช่คะแนนเครดิต)": score,
         "จุดแข็ง": credit["positive_factors"],
@@ -213,7 +222,7 @@ def load_context(merchant_id: int) -> MerchantContext:
     """Build the context from the committed files (CLI use; the backend builds it from memory)."""
     from ai.cashflow_forecast.predict import HISTORY_PATH
     from ai.credit_signal.build import CREDIT_PATH
-    from ai.gap_detection.build import AS_OF, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, sales_series
+    from ai.gap_detection.build import AS_OF, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, past_gaps, sales_series
 
     def find(path):
         return next(x for x in json.loads(path.read_text()) if x["merchant_id"] == merchant_id)
@@ -224,8 +233,10 @@ def load_context(merchant_id: int) -> MerchantContext:
     expenses = pd.read_parquet(EXPENSES_PATH)
     expenses = expenses[(expenses["store"] == merchant_id) & (expenses["due_date"] >= sales["date"].min())]
     history = pd.read_parquet(HISTORY_PATH)
+    gaps = find(GAPS_PATH)
     return MerchantContext(
-        merchant_id=merchant_id, as_of=AS_OF, forecast=find(FORECASTS_PATH), gaps=find(GAPS_PATH), credit=credit,
+        merchant_id=merchant_id, as_of=AS_OF, forecast=find(FORECASTS_PATH), gaps=gaps, credit=credit,
+        past_gaps=past_gaps(sales, expenses, gaps["opening_balance"]),
         history=history[history["store"] == merchant_id].drop(columns="store"),
         sales=sales, expenses=expenses,
         score_rank=score_rank(credit["score"], [c["score"] for c in credit_all]),
