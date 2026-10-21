@@ -47,6 +47,35 @@ export interface SalesHistory {
   points: HistoryPoint[]; // through 2015-07-31 (flags are known in advance)
 }
 
+// GET /api/v1/merchants/{id}/long-forecast  (dashboard extension)
+export interface LongForecast {
+  merchant_id: number;
+  method: string;
+  points: { date: IsoDate; forecast: number; lower: number; upper: number; synthetic_inputs: boolean }[]; // 84 days
+  backtest: {
+    origin: IsoDate; // 2015-05-08, end of Train
+    days: number;
+    wape_store: number | null;
+    wape_all_stores: number;
+    wape_by_block: Record<string, number>; // "1-14": 0.0645, ...
+    points: { date: IsoDate; forecast: number; actual: number }[];
+  };
+}
+
+// GET /api/v1/merchants/{id}/seasonal-outlook  (dashboard extension, NOT a model forecast)
+export interface SeasonalOutlook {
+  merchant_id: number;
+  method: string;
+  is_model_forecast: false;
+  months: { month: string; outlook: number | null; lower: number | null; upper: number | null }[]; // "2015-08"
+  backtest: {
+    origin: IsoDate;
+    wape_store: number | null;
+    wape_all_stores: number;
+    months: { month: string; outlook: number | null; actual: number | null }[];
+  };
+}
+
 // GET /api/v1/merchants/{id}/cash-balance  (dashboard extension)
 export interface BalancePoint {
   date: IsoDate;

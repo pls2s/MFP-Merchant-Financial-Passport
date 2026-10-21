@@ -40,6 +40,13 @@ def ctx():
                 "risk_indicators": ["เงินสำรองต่ำกว่ารายจ่าย 1 เดือน: คาดว่าเหลือต่ำสุด -7,900 วันที่ 2015-07-22",
                                     "เงินสดอาจไม่พอวันที่ 2015-07-22 ขาดประมาณ 7,900"]},
         history=history, sales=sim, expenses=expenses, score_rank=(1113, 1115),
+        long_forecast=pd.DataFrame({"date": pd.date_range("2015-07-18", periods=84), "forecast": 1000.0,
+                                    "lower": 900.0, "upper": 1100.0}),
+        seasonal=pd.DataFrame({"month": [f"2015-{m:02d}" for m in range(8, 13)] + [f"2016-{m:02d}" for m in range(1, 8)],
+                               "outlook": [30000.0] * 11 + [None], "lower": [27000.0] * 11 + [None],
+                               "upper": [33000.0] * 11 + [None]}),
+        long_metrics={"recursive_3_months": {"wape_all_stores": 0.08, "wape_by_store": {"1": 0.076}},
+                      "seasonal_1_year": {"wape_all_stores": 0.072, "wape_by_store": {"1": 0.056}}},
     )
 
 
@@ -81,7 +88,7 @@ def test_score_rank_ties_share_rank():
     ("โปรโมชันช่วยไหม", "โปรโมชัน"),
     ("ทำไมคะแนนได้เท่านี้", "องค์ประกอบ"),
     ("ควรกู้เงินไหม", "ไม่ให้คำแนะนำด้านสินเชื่อ"),
-    ("เดือนหน้ายอดขายจะเป็นยังไง", "พยากรณ์ได้แค่"),
+    ("เดือนหน้ายอดขายจะเป็นยังไง", "พยากรณ์ 3 เดือนข้างหน้า"),
     ("สัปดาห์หน้ายอดขายเป็นยังไง", "ยอดขายคาดการณ์รายสัปดาห์"),
 ])
 def test_template_answers_by_topic_and_passes_validation(facts, question, expected):
@@ -151,20 +158,27 @@ def test_api_error_falls_back(ctx, monkeypatch):
     assert cp.explain(ctx)["source"] == "template"
 
 
-def test_next_month_outlook_is_labelled_and_uses_last_year(facts):
+def test_long_range_facts_label_methods_and_accuracy(facts):
     fc = facts["การพยากรณ์ยอดขาย (โมเดล LSTM+GRU)"]
     assert "14 วัน" in fc["ช่วงที่โมเดลพยากรณ์"] and "18 ก.ค. 2558" in fc["ช่วงที่โมเดลพยากรณ์"]
-    outlook = facts["ภาพรวมเดือนหน้าแบบคร่าว ๆ (จากข้อมูลปีก่อน ไม่ใช่ผลโมเดล)"]
-    assert outlook["เดือน"] == "ส.ค. 2558" and "ไม่ใช่ผลโมเดล" in outlook["หมายเหตุ"]
-    assert "ยอดขายจริง ส.ค. 2557 (ปีก่อน)" in outlook
-    # The synthetic store has no trend, so the rough estimate stays close to last year's month.
-    last_year = float(outlook["ยอดขายจริง ส.ค. 2557 (ปีก่อน)"].replace(",", ""))
-    estimate = float(outlook["ประมาณการคร่าว ๆ (ยอดปีก่อน × อัตราเปลี่ยนแปลง)"].replace(",", ""))
-    assert abs(estimate / last_year - 1) < 0.05
+    lr = facts["พยากรณ์ระยะยาว"]
+    rec = lr["พยากรณ์ 3 เดือนข้างหน้า (LSTM+GRU ทายต่อเนื่องทีละ 14 วัน)"]
+    assert rec["ยอดขายรายเดือน"][1].startswith("ส.ค. 2558: 31,000")  # 31 days × 1,000
+    assert "7.6%" in rec["ความแม่น (ทดสอบย้อนหลัง 84 วัน)"]
+    sea = lr["ภาพรวม 12 เดือนข้างหน้า (ตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning)"]
+    assert len(sea["ยอดขายรายเดือน"]) == 12 and sea["ยอดขายรายเดือน"][-1].endswith("ข้อมูลไม่พอ")
 
 
-def test_next_month_outlook_needs_full_last_year(ctx):
-    ctx.history = ctx.history[ctx.history["date"] > AS_OF - pd.Timedelta(days=364)]
-    outlook = build_facts(ctx)["ภาพรวมเดือนหน้าแบบคร่าว ๆ (จากข้อมูลปีก่อน ไม่ใช่ผลโมเดล)"]
-    assert outlook["สถานะ"].startswith("ข้อมูลปีก่อนไม่ครบ")
-    assert cp.validate(cp.template_answer(build_facts(ctx), "เดือนหน้าเป็นยังไง"), build_facts(ctx)) is None
+def test_long_range_missing_data(ctx):
+    ctx.long_forecast, ctx.seasonal = None, None
+    facts = build_facts(ctx)
+    assert facts["พยากรณ์ระยะยาว"] == {"สถานะ": "ไม่มีข้อมูลพยากรณ์ระยะยาว"}
+    text = cp.template_answer(facts, "เดือนหน้าเป็นยังไง")
+    assert "ยังไม่มีข้อมูลพยากรณ์ระยะยาว" in text and cp.validate(text, facts) is None
+
+
+def test_validate_rejects_month_year_not_in_facts(facts):
+    assert cp.validate("ธ.ค. 2558: 30,000", facts) is None
+    assert cp.validate("ธันวาคม 2558 ยอดประมาณ 30,000", facts) is None  # full month name is fine
+    assert "months not in facts" in cp.validate("ธันวาคม 2559 ยอดประมาณ 30,000", facts)  # beyond the outlook
+    assert cp.validate("ธันวาคม 2559 ยังพยากรณ์ไม่ได้", facts, user_text="ธันวาคม 2559 จะเป็นยังไง") is None

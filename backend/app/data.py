@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import pandas as pd
 
 from ai.cashflow_forecast.preprocess import ROSSMANN
+from ai.cashflow_forecast.long_range import FORECASTS_DIR
 from ai.cashflow_forecast.predict import HISTORY_PATH
 from ai.copilot.explain import explain, load_dotenv
 from ai.copilot.facts import MerchantContext, score_rank
@@ -23,6 +24,14 @@ def _by_merchant(path) -> dict[int, dict]:
     return {obj["merchant_id"]: obj for obj in json.loads(path.read_text())}
 
 
+def _by_store(df: pd.DataFrame) -> dict[int, pd.DataFrame]:
+    return {int(s): g.drop(columns="store").reset_index(drop=True) for s, g in df.groupby("store")}
+
+
+def _num(x) -> float | None:
+    return None if pd.isna(x) else round(float(x), 2)
+
+
 @dataclass
 class DataStore:
     forecasts: dict[int, dict]
@@ -32,6 +41,11 @@ class DataStore:
     expenses: pd.DataFrame
     results: pd.DataFrame
     history: dict[int, pd.DataFrame]
+    long_points: dict[int, pd.DataFrame]
+    long_back: dict[int, pd.DataFrame]
+    seasonal_months: dict[int, pd.DataFrame]
+    seasonal_back: dict[int, pd.DataFrame]
+    long_metrics: dict
 
     @classmethod
     def load(cls) -> "DataStore":
@@ -43,7 +57,12 @@ class DataStore:
             sales=sales_series(),
             expenses=pd.read_parquet(EXPENSES_PATH),
             results=pd.read_csv(RESULTS_PATH),
-            history={int(s): df.drop(columns="store") for s, df in pd.read_parquet(HISTORY_PATH).groupby("store")},
+            history=_by_store(pd.read_parquet(HISTORY_PATH)),
+            long_points=_by_store(pd.read_parquet(FORECASTS_DIR / "long_forecast.parquet")),
+            long_back=_by_store(pd.read_parquet(FORECASTS_DIR / "long_backtest.parquet")),
+            seasonal_months=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_outlook.parquet")),
+            seasonal_back=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_backtest.parquet")),
+            long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
         )
 
     def merchants(self) -> list[dict]:
@@ -76,6 +95,38 @@ class DataStore:
                 }
                 for r in h.itertuples()
             ],
+        }
+
+    def long_forecast(self, merchant_id: int) -> dict:
+        m = self.long_metrics["recursive_3_months"]
+        back = self.long_back[merchant_id]
+        return {
+            "merchant_id": merchant_id,
+            "method": "LSTM+GRU ensemble rolled forward 14 days at a time (forecasts fed back as input)",
+            "points": [{"date": r.date.strftime("%Y-%m-%d"), "forecast": _num(r.forecast), "lower": _num(r.lower),
+                        "upper": _num(r.upper), "synthetic_inputs": bool(r.synthetic_inputs)}
+                       for r in self.long_points[merchant_id].itertuples()],
+            "backtest": {
+                "origin": m["origin"], "days": m["days"], "wape_store": m["wape_by_store"].get(str(merchant_id)),
+                "wape_all_stores": m["wape_all_stores"], "wape_by_block": m["wape_by_block"],
+                "points": [{"date": r.date.strftime("%Y-%m-%d"), "forecast": _num(r.forecast), "actual": _num(r.actual)}
+                           for r in back.itertuples()],
+            },
+        }
+
+    def seasonal_outlook(self, merchant_id: int) -> dict:
+        m = self.long_metrics["seasonal_1_year"]
+        return {
+            "merchant_id": merchant_id,
+            "method": "Same month last year × change of the last 12 weeks vs a year earlier (not a deep-learning forecast)",
+            "months": [{"month": r.month, "outlook": _num(r.outlook), "lower": _num(r.lower), "upper": _num(r.upper)}
+                       for r in self.seasonal_months[merchant_id].itertuples()],
+            "backtest": {
+                "origin": m["origin"], "wape_store": m["wape_by_store"].get(str(merchant_id)),
+                "wape_all_stores": m["wape_all_stores"],
+                "months": [{"month": r.month, "outlook": _num(r.outlook), "actual": _num(r.actual)}
+                           for r in self.seasonal_back[merchant_id].itertuples()],
+            },
         }
 
     def _store_expenses(self, merchant_id: int) -> pd.DataFrame:
@@ -116,6 +167,8 @@ class DataStore:
             gaps=self.cash_flow_gaps(merchant_id), credit=self.credit[merchant_id],
             history=self.history[merchant_id], sales=self.sales[merchant_id],
             expenses=self._store_expenses(merchant_id), past_gaps=self.past_gaps(merchant_id),
+            long_forecast=self.long_points[merchant_id], seasonal=self.seasonal_months[merchant_id],
+            long_metrics=self.long_metrics,
             score_rank=score_rank(self.credit[merchant_id]["score"], [c["score"] for c in self.credit.values()]),
         )
         return explain(ctx, question, history)

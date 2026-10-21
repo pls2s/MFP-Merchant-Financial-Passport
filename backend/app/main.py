@@ -65,6 +65,18 @@ def sales_history(merchant_id: int, days: int = Query(default=90, ge=7, le=365))
     return store.sales_history(merchant_id, days)
 
 
+@app.get("/api/v1/merchants/{merchant_id}/long-forecast", response_model=schemas.LongForecast)
+def long_forecast(merchant_id: int):
+    _require(merchant_id)
+    return store.long_forecast(merchant_id)
+
+
+@app.get("/api/v1/merchants/{merchant_id}/seasonal-outlook", response_model=schemas.SeasonalOutlook)
+def seasonal_outlook(merchant_id: int):
+    _require(merchant_id)
+    return store.seasonal_outlook(merchant_id)
+
+
 @app.get("/api/v1/merchants/{merchant_id}/cash-balance", response_model=schemas.CashBalance)
 def cash_balance(merchant_id: int):
     _require(merchant_id)

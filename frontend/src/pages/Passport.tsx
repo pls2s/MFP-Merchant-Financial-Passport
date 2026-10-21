@@ -2,12 +2,13 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import { BalanceChart } from "../components/BalanceChart";
 import { Copilot } from "../components/Copilot";
-import { ForecastAccuracy } from "../components/ForecastAccuracy";
 import { Offers } from "../components/Offers";
 import { SalesChart } from "../components/SalesChart";
 import { Card, ErrorState, ExperimentalBadge, Skeleton, SyntheticBadge } from "../components/ui";
 import { money, thaiDate, thaiDatesInText } from "../format";
-import type { CashBalance, CashFlowGaps, CreditSignal, Forecast, Gap, ModelResult, SalesHistory } from "../types";
+import type {
+  CashBalance, CashFlowGaps, CreditSignal, Forecast, Gap, LongForecast, ModelResult, SalesHistory, SeasonalOutlook,
+} from "../types";
 import { useAsync } from "../useAsync";
 
 const COMPONENTS: { key: keyof CreditSignal["components"]; label: string; weight: number }[] = [
@@ -26,14 +27,16 @@ interface PassportData {
   gaps: CashFlowGaps;
   credit: CreditSignal;
   results: ModelResult[];
+  longForecast: LongForecast;
+  seasonal: SeasonalOutlook;
 }
 
 async function loadPassport(id: number): Promise<PassportData> {
-  const [asOf, forecast, history, balance, gaps, credit, results] = await Promise.all([
+  const [asOf, forecast, history, balance, gaps, credit, results, longForecast, seasonal] = await Promise.all([
     api.asOf(), api.forecast(id), api.salesHistory(id), api.cashBalance(id),
-    api.cashFlowGaps(id), api.creditSignal(id), api.modelResults(),
+    api.cashFlowGaps(id), api.creditSignal(id), api.modelResults(), api.longForecast(id), api.seasonalOutlook(id),
   ]);
-  return { asOf, forecast, history, balance, gaps, credit, results };
+  return { asOf, forecast, history, balance, gaps, credit, results, longForecast, seasonal };
 }
 
 function SummaryCards({ asOf, forecast, gaps, credit, balance }: PassportData) {
@@ -185,8 +188,8 @@ export function Passport() {
           <SummaryCards {...state.data} />
           <Card title="ยอดขายจริงและยอดขายที่คาดการณ์" badges={<span className="badge">LSTM+GRU</span>}>
             <SalesChart forecast={state.data.forecast} history={state.data.history}
+              longForecast={state.data.longForecast} seasonal={state.data.seasonal} results={state.data.results}
               asOf={state.data.asOf} gaps={state.data.gaps.gaps} pastGaps={state.data.balance.past_gaps} />
-            <ForecastAccuracy forecast={state.data.forecast} asOf={state.data.asOf} results={state.data.results} />
           </Card>
           <Card title="ยอดเงินคงเหลือที่คาดการณ์" badges={<SyntheticBadge />}>
             <BalanceChart balance={state.data.balance} asOf={state.data.asOf} gaps={state.data.gaps.gaps} />

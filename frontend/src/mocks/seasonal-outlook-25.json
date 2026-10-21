@@ -1,0 +1,146 @@
+{
+  "merchant_id": 25,
+  "method": "Same month last year × change of the last 12 weeks vs a year earlier (not a deep-learning forecast)",
+  "is_model_forecast": false,
+  "months": [
+    {
+      "month": "2015-08",
+      "outlook": 265101.78,
+      "lower": 246161.98,
+      "upper": 284041.58
+    },
+    {
+      "month": "2015-09",
+      "outlook": 267592.69,
+      "lower": 228966.19,
+      "upper": 306219.19
+    },
+    {
+      "month": "2015-10",
+      "outlook": 278350.59,
+      "lower": 253348.08,
+      "upper": 303353.11
+    },
+    {
+      "month": "2015-11",
+      "outlook": 276956.06,
+      "lower": 248952.57,
+      "upper": 304959.56
+    },
+    {
+      "month": "2015-12",
+      "outlook": 314086.03,
+      "lower": 288457.32,
+      "upper": 339714.74
+    },
+    {
+      "month": "2016-01",
+      "outlook": 286226.56,
+      "lower": 253722.43,
+      "upper": 318730.69
+    },
+    {
+      "month": "2016-02",
+      "outlook": 251455.84,
+      "lower": 231334.05,
+      "upper": 271577.64
+    },
+    {
+      "month": "2016-03",
+      "outlook": 292029.19,
+      "lower": 254656.82,
+      "upper": 329401.56
+    },
+    {
+      "month": "2016-04",
+      "outlook": 276553.84,
+      "lower": 251885.72,
+      "upper": 301221.97
+    },
+    {
+      "month": "2016-05",
+      "outlook": 270568.5,
+      "lower": 245131.82,
+      "upper": 296005.18
+    },
+    {
+      "month": "2016-06",
+      "outlook": 286076.5,
+      "lower": 241074.34,
+      "upper": 331078.66
+    },
+    {
+      "month": "2016-07",
+      "outlook": 291595.81,
+      "lower": 258176.67,
+      "upper": 325014.95
+    }
+  ],
+  "backtest": {
+    "origin": "2014-07-31",
+    "wape_store": 0.16473616659641266,
+    "wape_all_stores": 0.07202297449111938,
+    "months": [
+      {
+        "month": "2014-08",
+        "outlook": 245937.78,
+        "actual": 259683.0
+      },
+      {
+        "month": "2014-09",
+        "outlook": 232547.0,
+        "actual": 262123.0
+      },
+      {
+        "month": "2014-10",
+        "outlook": 247716.17,
+        "actual": 272661.0
+      },
+      {
+        "month": "2014-11",
+        "outlook": 255785.28,
+        "actual": 271295.0
+      },
+      {
+        "month": "2014-12",
+        "outlook": 285671.59,
+        "actual": 307666.0
+      },
+      {
+        "month": "2015-01",
+        "outlook": 107294.89,
+        "actual": 280376.0
+      },
+      {
+        "month": "2015-02",
+        "outlook": 167507.8,
+        "actual": 246316.0
+      },
+      {
+        "month": "2015-03",
+        "outlook": 231225.16,
+        "actual": 286060.0
+      },
+      {
+        "month": "2015-04",
+        "outlook": 236767.88,
+        "actual": 270901.0
+      },
+      {
+        "month": "2015-05",
+        "outlook": 244162.08,
+        "actual": 265038.0
+      },
+      {
+        "month": "2015-06",
+        "outlook": 232222.19,
+        "actual": 280229.0
+      },
+      {
+        "month": "2015-07",
+        "outlook": 252455.86,
+        "actual": 277207.0
+      }
+    ]
+  }
+}

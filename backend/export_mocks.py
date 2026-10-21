@@ -33,6 +33,8 @@ def main() -> None:
             files[f"forecast-{m}.json"] = client.get(f"{base}/forecast").json()
             files[f"sales-history-{m}.json"] = client.get(f"{base}/sales-history", params={"days": 365}).json()
             files[f"cash-balance-{m}.json"] = client.get(f"{base}/cash-balance").json()
+            files[f"long-forecast-{m}.json"] = client.get(f"{base}/long-forecast").json()
+            files[f"seasonal-outlook-{m}.json"] = client.get(f"{base}/seasonal-outlook").json()
             files[f"cash-flow-gaps-{m}.json"] = client.get(f"{base}/cash-flow-gaps").json()
             files[f"credit-signal-{m}.json"] = client.get(f"{base}/credit-signal").json()
             files[f"copilot-{m}.json"] = client.post(f"{base}/copilot", json={"question": None}).json()

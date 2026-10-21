@@ -100,3 +100,24 @@ def test_cash_balance_matches_gaps(client):
     assert by_date[first["date"]]["balance"] == first["balance_after"]
     assert by_date[first["date"]]["is_forecast"] is True
     assert by_date["2015-07-17"]["is_forecast"] is False
+
+
+def test_long_forecast_has_84_days_and_real_backtest(client):
+    body = client.get("/api/v1/merchants/1/long-forecast").json()
+    pts = body["points"]
+    assert len(pts) == 84 and pts[0]["date"] == "2015-07-18"
+    assert all(p["lower"] <= p["forecast"] <= p["upper"] for p in pts)
+    assert pts[-1]["synthetic_inputs"] and not pts[0]["synthetic_inputs"]
+    # First 14 days equal the main 14-day forecast (same models, actual inputs).
+    main = {p["date"]: p["forecast"] for p in client.get("/api/v1/merchants/1/forecast").json()["points"]}
+    assert all(abs(p["forecast"] - main[p["date"]]) < 1 for p in pts[:14])
+    bt = body["backtest"]
+    assert bt["origin"] == "2015-05-08" and len(bt["points"]) == 84 and 0 < bt["wape_all_stores"] < 0.2
+
+
+def test_seasonal_outlook_is_labelled_and_backtested(client):
+    body = client.get("/api/v1/merchants/1/seasonal-outlook").json()
+    assert body["is_model_forecast"] is False
+    assert [m["month"] for m in body["months"]][:2] == ["2015-08", "2015-09"] and len(body["months"]) == 12
+    assert all(m["lower"] <= m["outlook"] <= m["upper"] for m in body["months"] if m["outlook"] is not None)
+    assert body["backtest"]["origin"] == "2014-07-31" and len(body["backtest"]["months"]) == 12

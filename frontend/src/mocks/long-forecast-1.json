@@ -1,0 +1,1030 @@
+{
+  "merchant_id": 1,
+  "method": "LSTM+GRU ensemble rolled forward 14 days at a time (forecasts fed back as input)",
+  "points": [
+    {
+      "date": "2015-07-18",
+      "forecast": 4172.49,
+      "lower": 3730.74,
+      "upper": 4614.24,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-19",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-20",
+      "forecast": 3964.25,
+      "lower": 3544.55,
+      "upper": 4383.95,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-21",
+      "forecast": 3657.84,
+      "lower": 3270.58,
+      "upper": 4045.1,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-22",
+      "forecast": 3611.02,
+      "lower": 3228.72,
+      "upper": 3993.32,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-23",
+      "forecast": 3605.98,
+      "lower": 3224.21,
+      "upper": 3987.75,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-24",
+      "forecast": 3846.82,
+      "lower": 3439.55,
+      "upper": 4254.09,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-25",
+      "forecast": 4078.19,
+      "lower": 3646.43,
+      "upper": 4509.95,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-26",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-27",
+      "forecast": 5512.11,
+      "lower": 4928.53,
+      "upper": 6095.69,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-28",
+      "forecast": 5230.42,
+      "lower": 4676.67,
+      "upper": 5784.17,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-29",
+      "forecast": 5218.88,
+      "lower": 4666.35,
+      "upper": 5771.41,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-30",
+      "forecast": 5063.96,
+      "lower": 4527.83,
+      "upper": 5600.09,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-07-31",
+      "forecast": 5205.8,
+      "lower": 4654.65,
+      "upper": 5756.95,
+      "synthetic_inputs": false
+    },
+    {
+      "date": "2015-08-01",
+      "forecast": 4297.88,
+      "lower": 3716.44,
+      "upper": 4879.32,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-02",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-03",
+      "forecast": 5927.61,
+      "lower": 5125.69,
+      "upper": 6729.53,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-04",
+      "forecast": 5258.06,
+      "lower": 4546.72,
+      "upper": 5969.4,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-05",
+      "forecast": 4904.95,
+      "lower": 4241.38,
+      "upper": 5568.51,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-06",
+      "forecast": 4747.14,
+      "lower": 4104.92,
+      "upper": 5389.36,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-07",
+      "forecast": 4595.16,
+      "lower": 3973.5,
+      "upper": 5216.82,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-08",
+      "forecast": 4109.53,
+      "lower": 3553.57,
+      "upper": 4665.49,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-09",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-10",
+      "forecast": 4087.15,
+      "lower": 3534.22,
+      "upper": 4640.08,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-11",
+      "forecast": 3730.04,
+      "lower": 3225.42,
+      "upper": 4234.66,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-12",
+      "forecast": 3686.96,
+      "lower": 3188.16,
+      "upper": 4185.75,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-13",
+      "forecast": 3684.46,
+      "lower": 3186.0,
+      "upper": 4182.91,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-14",
+      "forecast": 3734.3,
+      "lower": 3229.11,
+      "upper": 4239.5,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-15",
+      "forecast": 4001.48,
+      "lower": 3526.03,
+      "upper": 4476.93,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-16",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-17",
+      "forecast": 5616.51,
+      "lower": 4949.16,
+      "upper": 6283.85,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-18",
+      "forecast": 4898.4,
+      "lower": 4316.38,
+      "upper": 5480.43,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-19",
+      "forecast": 4571.58,
+      "lower": 4028.39,
+      "upper": 5114.77,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-20",
+      "forecast": 4437.61,
+      "lower": 3910.34,
+      "upper": 4964.88,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-21",
+      "forecast": 4393.71,
+      "lower": 3871.66,
+      "upper": 4915.77,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-22",
+      "forecast": 3899.67,
+      "lower": 3436.31,
+      "upper": 4363.02,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-23",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-24",
+      "forecast": 3835.99,
+      "lower": 3380.2,
+      "upper": 4291.78,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-25",
+      "forecast": 3461.58,
+      "lower": 3050.28,
+      "upper": 3872.88,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-26",
+      "forecast": 3543.24,
+      "lower": 3122.24,
+      "upper": 3964.24,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-27",
+      "forecast": 3623.75,
+      "lower": 3193.18,
+      "upper": 4054.32,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-28",
+      "forecast": 4116.4,
+      "lower": 3627.29,
+      "upper": 4605.5,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-29",
+      "forecast": 4188.09,
+      "lower": 3613.09,
+      "upper": 4763.09,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-30",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-08-31",
+      "forecast": 6099.4,
+      "lower": 5261.99,
+      "upper": 6936.81,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-01",
+      "forecast": 5272.24,
+      "lower": 4548.39,
+      "upper": 5996.09,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-02",
+      "forecast": 4896.12,
+      "lower": 4223.91,
+      "upper": 5568.33,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-03",
+      "forecast": 4680.43,
+      "lower": 4037.83,
+      "upper": 5323.02,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-04",
+      "forecast": 4622.76,
+      "lower": 3988.08,
+      "upper": 5257.44,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-05",
+      "forecast": 4219.37,
+      "lower": 3640.08,
+      "upper": 4798.67,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-06",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-07",
+      "forecast": 4047.51,
+      "lower": 3491.81,
+      "upper": 4603.21,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-08",
+      "forecast": 3764.28,
+      "lower": 3247.46,
+      "upper": 4281.09,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-09",
+      "forecast": 3601.7,
+      "lower": 3107.21,
+      "upper": 4096.19,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-10",
+      "forecast": 3613.24,
+      "lower": 3117.16,
+      "upper": 4109.31,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-11",
+      "forecast": 3724.87,
+      "lower": 3213.46,
+      "upper": 4236.27,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-12",
+      "forecast": 4230.75,
+      "lower": 3706.42,
+      "upper": 4755.08,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-13",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-14",
+      "forecast": 5363.07,
+      "lower": 4698.41,
+      "upper": 6027.73,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-15",
+      "forecast": 4861.87,
+      "lower": 4259.32,
+      "upper": 5464.41,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-16",
+      "forecast": 4482.0,
+      "lower": 3926.53,
+      "upper": 5037.47,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-17",
+      "forecast": 4285.81,
+      "lower": 3754.66,
+      "upper": 4816.97,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-18",
+      "forecast": 4561.12,
+      "lower": 3995.84,
+      "upper": 5126.39,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-19",
+      "forecast": 4227.97,
+      "lower": 3703.98,
+      "upper": 4751.95,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-20",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-21",
+      "forecast": 3753.65,
+      "lower": 3288.45,
+      "upper": 4218.86,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-22",
+      "forecast": 3522.05,
+      "lower": 3085.55,
+      "upper": 3958.55,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-23",
+      "forecast": 3414.26,
+      "lower": 2991.12,
+      "upper": 3837.4,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-24",
+      "forecast": 3530.21,
+      "lower": 3092.7,
+      "upper": 3967.72,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-25",
+      "forecast": 3710.58,
+      "lower": 3250.71,
+      "upper": 4170.44,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-26",
+      "forecast": 4291.38,
+      "lower": 3642.69,
+      "upper": 4940.07,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-27",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-28",
+      "forecast": 5216.42,
+      "lower": 4427.9,
+      "upper": 6004.93,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-29",
+      "forecast": 4983.84,
+      "lower": 4230.48,
+      "upper": 5737.2,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-09-30",
+      "forecast": 4723.39,
+      "lower": 4009.4,
+      "upper": 5437.38,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-01",
+      "forecast": 4332.79,
+      "lower": 3677.84,
+      "upper": 4987.73,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-02",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-03",
+      "forecast": 3786.59,
+      "lower": 3214.21,
+      "upper": 4358.97,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-04",
+      "forecast": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-05",
+      "forecast": 5624.23,
+      "lower": 4774.07,
+      "upper": 6474.39,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-06",
+      "forecast": 5004.95,
+      "lower": 4248.4,
+      "upper": 5761.51,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-07",
+      "forecast": 4680.46,
+      "lower": 3972.96,
+      "upper": 5387.96,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-08",
+      "forecast": 4496.97,
+      "lower": 3817.21,
+      "upper": 5176.73,
+      "synthetic_inputs": true
+    },
+    {
+      "date": "2015-10-09",
+      "forecast": 4466.22,
+      "lower": 3791.11,
+      "upper": 5141.34,
+      "synthetic_inputs": true
+    }
+  ],
+  "backtest": {
+    "origin": "2015-05-08",
+    "days": 84,
+    "wape_store": 0.07595875859260559,
+    "wape_all_stores": 0.07975709438323975,
+    "wape_by_block": {
+      "1-14": 0.06449821591377258,
+      "15-28": 0.08014923334121704,
+      "29-42": 0.07291459292173386,
+      "43-56": 0.08994701504707336,
+      "57-70": 0.07774309813976288,
+      "71-84": 0.09248270839452744
+    },
+    "points": [
+      {
+        "date": "2015-05-09",
+        "forecast": 4681.36,
+        "actual": 4945.0
+      },
+      {
+        "date": "2015-05-10",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-05-11",
+        "forecast": 3926.43,
+        "actual": 3551.0
+      },
+      {
+        "date": "2015-05-12",
+        "forecast": 3818.54,
+        "actual": 3547.0
+      },
+      {
+        "date": "2015-05-13",
+        "forecast": 4601.28,
+        "actual": 3998.0
+      },
+      {
+        "date": "2015-05-14",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-05-15",
+        "forecast": 5211.74,
+        "actual": 4178.0
+      },
+      {
+        "date": "2015-05-16",
+        "forecast": 4524.44,
+        "actual": 4431.0
+      },
+      {
+        "date": "2015-05-17",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-05-18",
+        "forecast": 5263.18,
+        "actual": 5280.0
+      },
+      {
+        "date": "2015-05-19",
+        "forecast": 4724.48,
+        "actual": 5235.0
+      },
+      {
+        "date": "2015-05-20",
+        "forecast": 4378.94,
+        "actual": 4735.0
+      },
+      {
+        "date": "2015-05-21",
+        "forecast": 4392.94,
+        "actual": 3755.0
+      },
+      {
+        "date": "2015-05-22",
+        "forecast": 4730.45,
+        "actual": 4459.0
+      },
+      {
+        "date": "2015-05-23",
+        "forecast": 4719.96,
+        "actual": 4276.0
+      },
+      {
+        "date": "2015-05-24",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-05-25",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-05-26",
+        "forecast": 4491.39,
+        "actual": 4211.0
+      },
+      {
+        "date": "2015-05-27",
+        "forecast": 3805.81,
+        "actual": 4083.0
+      },
+      {
+        "date": "2015-05-28",
+        "forecast": 3777.97,
+        "actual": 4111.0
+      },
+      {
+        "date": "2015-05-29",
+        "forecast": 4310.07,
+        "actual": 4656.0
+      },
+      {
+        "date": "2015-05-30",
+        "forecast": 4841.36,
+        "actual": 5592.0
+      },
+      {
+        "date": "2015-05-31",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-06-01",
+        "forecast": 6098.78,
+        "actual": 5774.0
+      },
+      {
+        "date": "2015-06-02",
+        "forecast": 5303.89,
+        "actual": 5450.0
+      },
+      {
+        "date": "2015-06-03",
+        "forecast": 5540.49,
+        "actual": 5809.0
+      },
+      {
+        "date": "2015-06-04",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-06-05",
+        "forecast": 6389.68,
+        "actual": 5384.0
+      },
+      {
+        "date": "2015-06-06",
+        "forecast": 4732.73,
+        "actual": 4183.0
+      },
+      {
+        "date": "2015-06-07",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-06-08",
+        "forecast": 4251.6,
+        "actual": 4071.0
+      },
+      {
+        "date": "2015-06-09",
+        "forecast": 3915.39,
+        "actual": 4102.0
+      },
+      {
+        "date": "2015-06-10",
+        "forecast": 3807.5,
+        "actual": 3591.0
+      },
+      {
+        "date": "2015-06-11",
+        "forecast": 3822.88,
+        "actual": 3627.0
+      },
+      {
+        "date": "2015-06-12",
+        "forecast": 4112.36,
+        "actual": 3695.0
+      },
+      {
+        "date": "2015-06-13",
+        "forecast": 4651.78,
+        "actual": 4256.0
+      },
+      {
+        "date": "2015-06-14",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-06-15",
+        "forecast": 5528.8,
+        "actual": 5518.0
+      },
+      {
+        "date": "2015-06-16",
+        "forecast": 4892.38,
+        "actual": 4852.0
+      },
+      {
+        "date": "2015-06-17",
+        "forecast": 4502.82,
+        "actual": 4000.0
+      },
+      {
+        "date": "2015-06-18",
+        "forecast": 4442.19,
+        "actual": 4645.0
+      },
+      {
+        "date": "2015-06-19",
+        "forecast": 4689.56,
+        "actual": 4202.0
+      },
+      {
+        "date": "2015-06-20",
+        "forecast": 4476.45,
+        "actual": 4097.0
+      },
+      {
+        "date": "2015-06-21",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-06-22",
+        "forecast": 4034.47,
+        "actual": 3846.0
+      },
+      {
+        "date": "2015-06-23",
+        "forecast": 3705.75,
+        "actual": 3762.0
+      },
+      {
+        "date": "2015-06-24",
+        "forecast": 3645.03,
+        "actual": 3346.0
+      },
+      {
+        "date": "2015-06-25",
+        "forecast": 3576.92,
+        "actual": 3533.0
+      },
+      {
+        "date": "2015-06-26",
+        "forecast": 4014.57,
+        "actual": 3317.0
+      },
+      {
+        "date": "2015-06-27",
+        "forecast": 4491.03,
+        "actual": 4019.0
+      },
+      {
+        "date": "2015-06-28",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-06-29",
+        "forecast": 5872.78,
+        "actual": 5197.0
+      },
+      {
+        "date": "2015-06-30",
+        "forecast": 5434.82,
+        "actual": 5735.0
+      },
+      {
+        "date": "2015-07-01",
+        "forecast": 5032.74,
+        "actual": 5223.0
+      },
+      {
+        "date": "2015-07-02",
+        "forecast": 4880.27,
+        "actual": 5558.0
+      },
+      {
+        "date": "2015-07-03",
+        "forecast": 4699.84,
+        "actual": 4665.0
+      },
+      {
+        "date": "2015-07-04",
+        "forecast": 4518.14,
+        "actual": 4797.0
+      },
+      {
+        "date": "2015-07-05",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-07-06",
+        "forecast": 4208.34,
+        "actual": 4359.0
+      },
+      {
+        "date": "2015-07-07",
+        "forecast": 3916.65,
+        "actual": 3650.0
+      },
+      {
+        "date": "2015-07-08",
+        "forecast": 3982.6,
+        "actual": 3797.0
+      },
+      {
+        "date": "2015-07-09",
+        "forecast": 4013.8,
+        "actual": 3897.0
+      },
+      {
+        "date": "2015-07-10",
+        "forecast": 4132.65,
+        "actual": 3808.0
+      },
+      {
+        "date": "2015-07-11",
+        "forecast": 4492.36,
+        "actual": 3530.0
+      },
+      {
+        "date": "2015-07-12",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-07-13",
+        "forecast": 5983.84,
+        "actual": 5054.0
+      },
+      {
+        "date": "2015-07-14",
+        "forecast": 5376.69,
+        "actual": 5042.0
+      },
+      {
+        "date": "2015-07-15",
+        "forecast": 4954.56,
+        "actual": 4767.0
+      },
+      {
+        "date": "2015-07-16",
+        "forecast": 4840.29,
+        "actual": 4427.0
+      },
+      {
+        "date": "2015-07-17",
+        "forecast": 4868.92,
+        "actual": 4852.0
+      },
+      {
+        "date": "2015-07-18",
+        "forecast": 4301.28,
+        "actual": 4406.0
+      },
+      {
+        "date": "2015-07-19",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-07-20",
+        "forecast": 4108.06,
+        "actual": 4395.0
+      },
+      {
+        "date": "2015-07-21",
+        "forecast": 3797.73,
+        "actual": 3558.0
+      },
+      {
+        "date": "2015-07-22",
+        "forecast": 3753.99,
+        "actual": 3464.0
+      },
+      {
+        "date": "2015-07-23",
+        "forecast": 3722.38,
+        "actual": 3769.0
+      },
+      {
+        "date": "2015-07-24",
+        "forecast": 3981.82,
+        "actual": 3706.0
+      },
+      {
+        "date": "2015-07-25",
+        "forecast": 4213.8,
+        "actual": 4364.0
+      },
+      {
+        "date": "2015-07-26",
+        "forecast": 0.0,
+        "actual": 0.0
+      },
+      {
+        "date": "2015-07-27",
+        "forecast": 5671.4,
+        "actual": 6102.0
+      },
+      {
+        "date": "2015-07-28",
+        "forecast": 5381.9,
+        "actual": 5011.0
+      },
+      {
+        "date": "2015-07-29",
+        "forecast": 5360.19,
+        "actual": 4782.0
+      },
+      {
+        "date": "2015-07-30",
+        "forecast": 5228.14,
+        "actual": 5020.0
+      },
+      {
+        "date": "2015-07-31",
+        "forecast": 5157.42,
+        "actual": 5263.0
+      }
+    ]
+  }
+}

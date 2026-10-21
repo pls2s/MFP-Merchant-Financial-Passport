@@ -6,9 +6,11 @@ import type {
   CopilotResponse,
   CreditSignal,
   Forecast,
+  LongForecast,
   Merchant,
   ModelResult,
   SalesHistory,
+  SeasonalOutlook,
 } from "./types";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -48,6 +50,12 @@ export const api = {
   /** One year of actual sales + promo/holiday flags; the chart slices it per range. */
   salesHistory: (id: number): Promise<SalesHistory> =>
     USE_MOCK ? mock(`sales-history-${id}`) : request(`/api/v1/merchants/${id}/sales-history?days=365`),
+
+  longForecast: (id: number): Promise<LongForecast> =>
+    USE_MOCK ? mock(`long-forecast-${id}`) : request(`/api/v1/merchants/${id}/long-forecast`),
+
+  seasonalOutlook: (id: number): Promise<SeasonalOutlook> =>
+    USE_MOCK ? mock(`seasonal-outlook-${id}`) : request(`/api/v1/merchants/${id}/seasonal-outlook`),
 
   cashBalance: (id: number): Promise<CashBalance> =>
     USE_MOCK ? mock(`cash-balance-${id}`) : request(`/api/v1/merchants/${id}/cash-balance`),

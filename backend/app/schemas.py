@@ -66,6 +66,70 @@ class SalesHistory(BaseModel):
     points: list[HistoryPoint]
 
 
+# --- GET /api/v1/merchants/{id}/long-forecast (dashboard extension) -----------
+
+
+class LongPoint(BaseModel):
+    date: IsoDate
+    forecast: float
+    lower: float
+    upper: float
+    synthetic_inputs: bool = Field(description="Promo/open days assumed from last year (after the data ends)")
+
+
+class BacktestPoint(BaseModel):
+    date: IsoDate
+    forecast: float
+    actual: float
+
+
+class LongBacktest(BaseModel):
+    origin: IsoDate
+    days: int
+    wape_store: float | None
+    wape_all_stores: float
+    wape_by_block: dict[str, float]
+    points: list[BacktestPoint]
+
+
+class LongForecast(BaseModel):
+    merchant_id: int
+    method: str
+    points: list[LongPoint]
+    backtest: LongBacktest
+
+
+# --- GET /api/v1/merchants/{id}/seasonal-outlook (dashboard extension) --------
+
+
+class OutlookMonth(BaseModel):
+    month: str = Field(description="YYYY-MM")
+    outlook: float | None
+    lower: float | None
+    upper: float | None
+
+
+class OutlookBacktestMonth(BaseModel):
+    month: str
+    outlook: float | None
+    actual: float | None
+
+
+class SeasonalBacktest(BaseModel):
+    origin: IsoDate
+    wape_store: float | None
+    wape_all_stores: float
+    months: list[OutlookBacktestMonth]
+
+
+class SeasonalOutlook(BaseModel):
+    merchant_id: int
+    method: str
+    is_model_forecast: Literal[False] = False
+    months: list[OutlookMonth]
+    backtest: SeasonalBacktest
+
+
 # --- GET /api/v1/merchants/{id}/cash-balance (dashboard extension) ------------
 
 

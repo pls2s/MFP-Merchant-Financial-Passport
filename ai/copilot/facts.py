@@ -58,6 +58,9 @@ class MerchantContext:
     expenses: pd.DataFrame         # due_date, type, label, amount (synthetic, simulation window)
     score_rank: tuple[int, int] | None = None  # (rank by score, number of stores); 1 = highest
     past_gaps: list[dict] | None = None          # shortfalls before as_of (same shape as gaps)
+    long_forecast: pd.DataFrame | None = None    # date, forecast, lower, upper (84 days, recursive LSTM+GRU)
+    seasonal: pd.DataFrame | None = None         # month, outlook, lower, upper (12 months, seasonal)
+    long_metrics: dict | None = None             # models/forecasts/long_range_metrics.json
 
 
 def _sales_patterns(ctx: MerchantContext) -> dict:
@@ -121,29 +124,41 @@ def _forecast_facts(ctx: MerchantContext) -> dict:
     return facts
 
 
-def _next_month_outlook(ctx: MerchantContext) -> dict:
-    """Rough outlook for the month after as_of, outside the 14-day model horizon:
-    same month last year × year-over-year change of the last 28 days. Not a model forecast."""
-    h = ctx.history.set_index("date")["sales"]
-    nxt = (ctx.as_of + pd.offsets.MonthBegin(1)).normalize()
-    month_name = f"{THAI_MONTHS[nxt.month - 1]} {nxt.year + 543}"
-    note = "ไม่ใช่ผลโมเดล โมเดลพยากรณ์ได้แค่ 14 วันข้างหน้า"
-    last_year = h[(h.index >= nxt - pd.DateOffset(years=1)) & (h.index < nxt + pd.offsets.MonthBegin(1) - pd.DateOffset(years=1))]
-    recent = h[(h.index > ctx.as_of - pd.Timedelta(days=28)) & (h.index <= ctx.as_of)]
-    # 364 days back keeps the same weekdays.
-    same_period = h[(h.index > ctx.as_of - pd.Timedelta(days=28 + 364)) & (h.index <= ctx.as_of - pd.Timedelta(days=364))]
-    complete = (len(last_year) >= 28 and len(same_period) == 28 and len(recent) == 28
-                and not last_year.isna().any() and not same_period.isna().any() and same_period.sum() > 0)
-    if not complete:
-        return {"เดือน": month_name, "สถานะ": "ข้อมูลปีก่อนไม่ครบ ประมาณการไม่ได้", "หมายเหตุ": note}
-    yoy = recent.sum() / same_period.sum() - 1
-    return {
-        "เดือน": month_name,
-        f"ยอดขายจริง {THAI_MONTHS[nxt.month - 1]} {nxt.year + 542} (ปีก่อน)": money(last_year.sum()),
-        "ยอดขาย 28 วันล่าสุดเทียบช่วงเดียวกันปีก่อน": pct(yoy),
-        "ประมาณการคร่าว ๆ (ยอดปีก่อน × อัตราเปลี่ยนแปลง)": money(last_year.sum() * (1 + yoy)),
-        "หมายเหตุ": note,
-    }
+def _long_range(ctx: MerchantContext) -> dict:
+    """3-month recursive LSTM+GRU and 12-month seasonal outlook, with their backtests."""
+    out = {}
+    m = ctx.long_metrics or {}
+    if ctx.long_forecast is not None and len(ctx.long_forecast):
+        lf = ctx.long_forecast.assign(month=ctx.long_forecast["date"].dt.to_period("M"))
+        months = []
+        for per, g in lf.groupby("month"):
+            label = f"{THAI_MONTHS[per.month - 1]} {per.year + 543}"
+            span = f" ({thai_date(g['date'].min())} ถึง {thai_date(g['date'].max())})" if len(g) < per.days_in_month else ""
+            months.append(f"{label}{span}: {money(g['forecast'].sum())} (ช่วงประมาณ {money(g['lower'].sum())} ถึง {money(g['upper'].sum())})")
+        rec = m.get("recursive_3_months", {})
+        out["พยากรณ์ 3 เดือนข้างหน้า (LSTM+GRU ทายต่อเนื่องทีละ 14 วัน)"] = {
+            "ช่วงที่ครอบคลุม": f"{thai_date(lf['date'].min())} ถึง {thai_date(lf['date'].max())}",
+            "ยอดขายรายเดือน": months,
+            "ความแม่น (ทดสอบย้อนหลัง 84 วัน)": (
+                f"ร้านนี้คลาดเคลื่อนเฉลี่ย {rec['wape_by_store'][str(ctx.merchant_id)] * 100:.1f}% ทุกร้าน {rec['wape_all_stores'] * 100:.1f}%"
+                if str(ctx.merchant_id) in rec.get("wape_by_store", {}) else "ไม่มีข้อมูล"),
+            "หมายเหตุ": "ยิ่งไกลยิ่งคลาดมากขึ้น หลัง 31 ก.ค. 2558 ใช้ตารางโปรโมชันจำลองแบบเดียวกับปีก่อน",
+        }
+    if ctx.seasonal is not None and len(ctx.seasonal):
+        sea = m.get("seasonal_1_year", {})
+        rows = [f"{THAI_MONTHS[int(r.month[5:]) - 1]} {int(r.month[:4]) + 543}: "
+                + (f"{money(r.outlook)} (ช่วงประมาณ {money(r.lower)} ถึง {money(r.upper)})" if pd.notna(r.outlook) else "ข้อมูลไม่พอ")
+                for r in ctx.seasonal.itertuples()]
+        first, last = ctx.seasonal["month"].iloc[0], ctx.seasonal["month"].iloc[-1]
+        out["ภาพรวม 12 เดือนข้างหน้า (ตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning)"] = {
+            "ช่วงที่ครอบคลุม": (f"{THAI_MONTHS[int(first[5:]) - 1]} {int(first[:4]) + 543} ถึง "
+                               f"{THAI_MONTHS[int(last[5:]) - 1]} {int(last[:4]) + 543} (หลังจากนี้พยากรณ์ไม่ได้)"),
+            "ยอดขายรายเดือน": rows,
+            "ความแม่น (ทดสอบย้อนหลัง 12 เดือน)": (
+                f"ร้านนี้คลาดเคลื่อนเฉลี่ย {sea['wape_by_store'][str(ctx.merchant_id)] * 100:.1f}% ทุกร้าน {sea['wape_all_stores'] * 100:.1f}%"
+                if str(ctx.merchant_id) in sea.get("wape_by_store", {}) else "ไม่มีข้อมูล"),
+        }
+    return out or {"สถานะ": "ไม่มีข้อมูลพยากรณ์ระยะยาว"}
 
 
 def _balance_summary(sales: pd.DataFrame, expenses: pd.DataFrame, opening: float, as_of: pd.Timestamp) -> dict:
@@ -204,7 +219,7 @@ def build_facts(ctx: MerchantContext) -> dict:
         "วันนี้ (ข้อมูลล่าสุด)": thai_day(ctx.as_of),
         "ยอดขายที่ผ่านมา (ข้อมูลจริง)": _sales_patterns(ctx),
         "การพยากรณ์ยอดขาย (โมเดล LSTM+GRU)": _forecast_facts(ctx),
-        "ภาพรวมเดือนหน้าแบบคร่าว ๆ (จากข้อมูลปีก่อน ไม่ใช่ผลโมเดล)": _next_month_outlook(ctx),
+        "พยากรณ์ระยะยาว": _long_range(ctx),
         "รายจ่ายที่จะครบกำหนดใน 14 วันข้างหน้า (ข้อมูลจำลอง)": {
             "รายการ": [f"{thai_date(r.due_date)}: {r.label} {money(r.amount)}" for r in upcoming.itertuples()],
             "รวม": money(upcoming["amount"].sum()),
@@ -245,6 +260,11 @@ def _thai_dates(text: str) -> str:
     return re.sub(r"\d{4}-\d{2}-\d{2}", lambda m: thai_date(m.group()), text)
 
 
+def _store_rows(path, merchant_id: int) -> pd.DataFrame:
+    df = pd.read_parquet(path)
+    return df[df["store"] == merchant_id].drop(columns="store").reset_index(drop=True)
+
+
 def score_rank(score: int, all_scores: list[int]) -> tuple[int, int]:
     """1 + number of stores with a strictly higher score (ties share a rank)."""
     return 1 + sum(s > score for s in all_scores), len(all_scores)
@@ -252,6 +272,7 @@ def score_rank(score: int, all_scores: list[int]) -> tuple[int, int]:
 
 def load_context(merchant_id: int) -> MerchantContext:
     """Build the context from the committed files (CLI use; the backend builds it from memory)."""
+    from ai.cashflow_forecast.long_range import FORECASTS_DIR
     from ai.cashflow_forecast.predict import HISTORY_PATH
     from ai.credit_signal.build import CREDIT_PATH
     from ai.gap_detection.build import AS_OF, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, past_gaps, sales_series
@@ -272,4 +293,7 @@ def load_context(merchant_id: int) -> MerchantContext:
         history=history[history["store"] == merchant_id].drop(columns="store"),
         sales=sales, expenses=expenses,
         score_rank=score_rank(credit["score"], [c["score"] for c in credit_all]),
+        long_forecast=_store_rows(FORECASTS_DIR / "long_forecast.parquet", merchant_id),
+        seasonal=_store_rows(FORECASTS_DIR / "seasonal_outlook.parquet", merchant_id),
+        long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
     )

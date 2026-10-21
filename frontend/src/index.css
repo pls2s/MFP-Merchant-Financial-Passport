@@ -216,6 +216,10 @@ tr.highlight td { background: var(--accent-soft); font-weight: 600; }
 .tooltip-tags { margin-top: 4px; font-size: 0.78rem; color: var(--series-promo); font-weight: 600; }
 .swatch.promo { height: 10px; background: var(--series-promo); opacity: 0.3; }
 .swatch.bar { width: 10px; height: 10px; background: var(--series-expense); opacity: 0.6; border-radius: 2px; }
+.swatch.synthetic { height: 10px; background: var(--text-3); opacity: 0.2; }
+.block-bars { display: flex; align-items: flex-end; gap: 8px; margin-top: 6px; }
+.block-bar { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 0.72rem; flex: 1; }
+.block-bar > div { width: 100%; max-width: 34px; background: var(--series-forecast); opacity: 0.75; border-radius: 3px 3px 0 0; }
 .swatch.dashed.past-gap { background: repeating-linear-gradient(90deg, var(--warn) 0 5px, transparent 5px 8px); }
 .past-gaps { margin-top: 14px; }
 .past-gaps summary { cursor: pointer; font-weight: 600; color: var(--warn); }
@@ -229,6 +233,7 @@ tr.highlight td { background: var(--accent-soft); font-weight: 600; }
 .accuracy-head { display: grid; gap: 2px; margin-bottom: 12px; }
 .accuracy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .accuracy-value { font-size: 1.3rem; font-weight: 700; margin-top: 2px; }
+.accuracy-grid .span-2 { grid-column: span 2; }
 
 /* Offers */
 .offer { border: 1px dashed var(--border); border-radius: 10px; padding: 14px 16px; }
@@ -240,6 +245,7 @@ tr.highlight td { background: var(--accent-soft); font-weight: 600; }
   .copilot-form { flex-direction: column; }
   main { padding: 16px; }
   .grid-3, .grid-2, .accuracy-grid { grid-template-columns: 1fr; }
+  .accuracy-grid .span-2 { grid-column: auto; }
   .meter { grid-template-columns: 7.5rem 1fr 2.4rem; }
   .stat-value { font-size: 1.45rem; }
 }
