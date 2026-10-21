@@ -56,21 +56,41 @@ def test_no_api_key_falls_back_to_template(monkeypatch):
 
 
 def test_valid_llm_answer_is_used(monkeypatch):
-    monkeypatch.setattr(cp, "call_llm", lambda facts, q: "วันที่ 22 ก.ค. 2558 เงินอาจขาดประมาณ 7,900")
+    monkeypatch.setattr(cp, "call_llm", lambda facts, q, feedback=None: "วันที่ 22 ก.ค. 2558 เงินอาจขาดประมาณ 7,900")
     result = cp.explain(1, FORECAST, GAPS, CREDIT, AS_OF)
     assert result["source"] == "llm" and result["fallback_reason"] is None
     assert result["answer"].endswith(cp.DISCLAIMER)  # appended when the model leaves it out
 
 
 def test_hallucinated_llm_answer_falls_back(monkeypatch):
-    monkeypatch.setattr(cp, "call_llm", lambda facts, q: "เงินจะขาด 12,345 แนะนำให้กู้")
+    monkeypatch.setattr(cp, "call_llm", lambda facts, q, feedback=None: "เงินจะขาด 12,345 แนะนำให้กู้")
     result = cp.explain(1, FORECAST, GAPS, CREDIT, AS_OF)
     assert result["source"] == "template"
     assert "7,900" in result["answer"]
 
 
 def test_api_error_falls_back(monkeypatch):
-    def boom(facts, q):
+    def boom(facts, q, feedback=None):
         raise requests.ConnectionError("down")
     monkeypatch.setattr(cp, "call_llm", boom)
     assert cp.explain(1, FORECAST, GAPS, CREDIT, AS_OF)["source"] == "template"
+
+
+def test_retry_once_with_feedback_then_accept(monkeypatch):
+    calls = []
+
+    def fake(facts, q, feedback=None):
+        calls.append(feedback)
+        return "รวม 99,999" if feedback is None else "วันที่ 22 ก.ค. 2558 ขาดประมาณ 7,900"
+
+    monkeypatch.setattr(cp, "call_llm", fake)
+    result = cp.explain(1, FORECAST, GAPS, CREDIT, AS_OF)
+    assert result["source"] == "llm"
+    assert calls[0] is None and "99999" in calls[1]
+
+
+def test_gives_up_after_max_attempts(monkeypatch):
+    calls = []
+    monkeypatch.setattr(cp, "call_llm", lambda facts, q, feedback=None: calls.append(1) or "รวม 99,999")
+    result = cp.explain(1, FORECAST, GAPS, CREDIT, AS_OF)
+    assert result["source"] == "template" and len(calls) == cp.MAX_ATTEMPTS

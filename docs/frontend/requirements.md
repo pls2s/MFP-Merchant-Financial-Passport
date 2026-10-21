@@ -1,0 +1,230 @@
+# Frontend requirements — MFP Dashboard
+
+เอกสารนี้สำหรับทีม **WS3a Frontend** สรุปสิ่งที่ต้องทำ ข้อมูลที่ backend ส่งมา และกฎ UX ที่ต้องทำตาม
+อ้างอิง `CLAUDE.md` (Workstream 3) และ `backend/README.md`
+
+| ไฟล์ | ใช้ทำอะไร |
+| --- | --- |
+| `docs/frontend/requirements.md` | เอกสารนี้ |
+| `docs/frontend/api-types.ts` | TypeScript types ตรงกับ API — คัดลอกไปเป็น `frontend/src/types.ts` |
+| `docs/frontend/mocks/*.json` | ตัวอย่าง response จริงจาก API — คัดลอกไปไว้ที่ `frontend/src/mocks/` |
+
+สร้าง mock ใหม่เมื่อข้อมูลเปลี่ยน: `python -m backend.export_mocks`
+
+---
+
+## 1. เทคโนโลยีและโครงสร้าง
+
+- **React + Vite + TypeScript**, กราฟใช้ **Recharts**
+- **ทุกการเรียก API ต้องผ่าน `src/api.ts`** ไฟล์เดียว ห้าม `fetch` ตรงจาก component
+- สลับ mock / API จริงด้วย environment variable (ตั้งใน `.env` ที่ root ของ repo หรือ `frontend/.env`)
+
+```bash
+VITE_USE_MOCK=true                      # true = อ่าน src/mocks/, false = เรียก backend
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+- Mock ต้องตรงกับ contract ทุก field — ใช้ไฟล์ใน `docs/frontend/mocks/` ได้เลย (มีร้าน 1, 2, 25, 817)
+- ตอนสร้างโปรเจกต์ด้วย `npm create vite@latest frontend` ถ้ามีไฟล์อยู่แล้วให้เลือก **Ignore files and continue** (อย่าเลือก Remove)
+
+ตัวอย่าง `src/api.ts`:
+
+```ts
+import type { Merchant, Forecast, CashFlowGaps, CreditSignal, CopilotResponse, ModelResult } from "./types";
+
+const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
+const BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+
+async function get<T>(path: string, mock: () => Promise<{ default: T }>): Promise<T> {
+  if (USE_MOCK) return (await mock()).default;
+  const res = await fetch(`${BASE}${path}`);
+  if (!res.ok) throw new Error(`${res.status} ${path}`);
+  return res.json();
+}
+
+export const api = {
+  merchants: () => get<Merchant[]>("/api/v1/merchants", () => import("./mocks/merchants.json")),
+  forecast: (id: number) => get<Forecast>(`/api/v1/merchants/${id}/forecast`, () => import(`./mocks/forecast-${id}.json`)),
+  // cashFlowGaps, creditSignal, modelResults แบบเดียวกัน; copilot ใช้ POST
+};
+```
+
+> โหมด mock มีข้อมูลแค่ร้าน 1, 2, 25, 817 — ร้านอื่นให้แสดงข้อความ "ไม่มีข้อมูลตัวอย่างในโหมด mock"
+
+---
+
+## 2. Endpoints ที่ใช้
+
+Backend: `uvicorn backend.app.main:app --reload --port 8000` → ทดลองได้ที่ http://localhost:8000/docs
+
+| Method | Path | ใช้ในหน้า |
+| --- | --- | --- |
+| GET | `/api/v1/merchants?q=` | 1 เลือกร้าน |
+| GET | `/api/v1/merchants/{id}/forecast` | 2 Passport (กราฟ, การ์ดสรุป) |
+| GET | `/api/v1/merchants/{id}/cash-flow-gaps` | 2 Passport (การ์ดเตือน) |
+| GET | `/api/v1/merchants/{id}/credit-signal` | 2 Passport (คะแนน, ปัจจัย) |
+| POST | `/api/v1/merchants/{id}/copilot` | 2 Passport (กล่อง copilot) |
+| GET | `/api/v1/model-results` | 3 ผลโมเดล |
+
+Shape ทั้งหมดอยู่ใน `docs/frontend/api-types.ts` ร้านที่ไม่มีในระบบ → `404`
+
+### ไทม์ไลน์ของข้อมูล (สำคัญ)
+
+"วันนี้" ของ demo คือ **17 ก.ค. 2558 (2015-07-17)** — ได้จาก `GET /health` (`as_of`)
+
+| ช่วง | ข้อมูล |
+| --- | --- |
+| 20 มิ.ย. – 17 ก.ค. 2558 (28 วัน) | ยอดขายจริง (`actual`) |
+| 18 – 31 ก.ค. 2558 (14 วัน) | ยอดขายคาดการณ์ (`forecast`, `lower`, `upper`) และช่วงที่เงินอาจขาด |
+
+`points` ใน forecast มีครบ 42 วัน ทุกวันมีทั้ง `forecast` และ `actual` (ช่วงอดีตเป็นผล backtest; ช่วงอนาคตมี `actual` ไว้ประเมินโมเดลเท่านั้น)
+
+---
+
+## 3. หน้าจอ
+
+### หน้า 1 — เลือกร้าน (Merchant picker)
+
+- ช่องค้นหา (เลขร้านหรือชื่อ) — กรองฝั่ง client จากรายการทั้งหมด หรือส่ง `?q=`
+- รายการร้าน 1,115 ร้าน แต่ละแถวแสดง:
+  - ชื่อ (`name`, เช่น "ร้านตัวอย่าง #1")
+  - badge **"มีความเสี่ยงเงินขาด"** + จำนวนครั้ง ถ้า `gap_count > 0`
+  - คะแนน `score` พร้อม badge **"ทดลอง"**
+- **ร้านสาธิต (`is_demo: true` → ร้าน 1, 25, 817) แสดงไว้บนสุด** พร้อม badge **"ร้านสาธิต"**
+- ใช้ virtualization หรือแบ่งหน้า เพราะมี 1,115 แถว
+- คลิกแล้วไปหน้า 2 (`/merchants/:id`)
+
+### หน้า 2 — Financial Passport (หน้าหลัก)
+
+เรียก 3 endpoint พร้อมกัน (forecast, cash-flow-gaps, credit-signal) แล้วค่อยเรียก copilot แยก (ช้ากว่า)
+
+**2.1 การ์ดสรุป 3 ใบ**
+
+| การ์ด | ค่า | คำนวณจาก |
+| --- | --- | --- |
+| ยอดขาย 28 วันล่าสุด | ผลรวม | `forecast.points[].actual` ที่ `date <= as_of` (มีข้อมูล 28 วัน ไม่ใช่ 30) |
+| สัญญาณการเงิน | `score`/100 + badge **"ทดลอง — ไม่ใช่คะแนนเครดิต"** | `credit-signal.score` |
+| เงินอาจขาดครั้งถัดไป | วันที่ + จำนวนเงิน หรือ "ไม่พบใน 14 วันข้างหน้า" | `cash-flow-gaps.gaps[0].date`, `.shortfall` |
+
+**2.2 กราฟยอดขายจริงเทียบคาดการณ์** (Recharts `ComposedChart`)
+
+- เส้นทึบ: ยอดขายจริง ถึงวันที่ 17 ก.ค.
+- เส้นประ: ค่าคาดการณ์ 18–31 ก.ค.
+- แถบสีจาง: `lower`–`upper` ช่วง 18–31 ก.ค. ป้ายว่า **"ช่วงคาดการณ์โดยประมาณ"** (ห้ามเขียนว่า "มั่นใจ 80%" — coverage จริงประมาณ 70%)
+- เส้นแนวตั้งที่ 17 ก.ค. ป้าย "วันนี้"
+- จุด/เส้นแนวตั้งสีเตือนที่วันที่ใน `gaps[].date`
+- (ไม่บังคับ) toggle "แสดงยอดจริงช่วงคาดการณ์" สำหรับหน้าประเมินโมเดล — ค่าเริ่มต้นปิด
+- Tooltip: วันที่ + ยอดจริง/คาดการณ์/ช่วง
+- วันที่ร้านปิด `forecast` และ `actual` เป็น 0 — แสดงเป็นช่องว่าง ไม่ต้องลากเส้นลงศูนย์
+
+**2.3 การ์ดเตือนเงินสดอาจไม่พอ** (หนึ่งใบต่อ `gaps[]`)
+
+- หัวการ์ด: **"วันที่ 22 ก.ค. 2558 เงินสดอาจไม่พอ ขาดประมาณ 7,900"** — ต้องมีวันที่และจำนวนเงินเสมอ
+- รายการ `contributors` (เรียงมาแล้ว มาก→น้อย): `label`, `amount`, `due_date`
+- badge **"ข้อมูลจำลอง"** บนการ์ด (มาจาก `is_synthetic_expense: true`)
+- ไม่มี gap → การ์ดสีเขียว "ไม่พบช่วงที่เงินสดอาจไม่พอใน 14 วันข้างหน้า"
+- (ไม่บังคับ) ช่อง "เงินสำรองขั้นต่ำ" → เรียกใหม่ด้วย `?min_buffer=`
+
+**2.4 ปัจจัยบวก / ความเสี่ยง**
+
+- สองคอลัมน์: `positive_factors` (สีเขียว), `risk_indicators` (สีส้ม/แดง) — ข้อความภาษาไทยพร้อมใช้
+- แสดง 5 องค์ประกอบใน `components` เป็นแถบ 0–1 ได้ (ไม่บังคับ):
+  ความสม่ำเสมอ 30%, แนวโน้ม 20%, วันที่มียอดขาย 20%, เงินสำรอง 20%, ความถี่เงินขาด 10%
+- หัวข้อต้องมี **"สัญญาณทดลอง (experimental)"** เสมอ
+
+**2.5 กล่อง AI Copilot** (ไม่บังคับ — ตัดได้ถ้าเวลาไม่พอ)
+
+- ช่องพิมพ์คำถาม + ปุ่ม "ถาม" + ปุ่มลัด เช่น "สรุปสถานะร้าน", "สัปดาห์หน้าต้องระวังอะไร"
+- `POST` body `{ "question": "..." }` (หรือไม่ส่ง question เพื่อขอสรุป)
+- **ปกติใช้เวลา 1.5–3.5 วินาที (วัดจริง) แต่สูงสุดได้ราว 40 วินาที** ถ้า API ช้าหรือต้องลองตอบใหม่ → ต้องมี loading state และปุ่มกดซ้ำไม่ได้ระหว่างรอ
+- แสดง `answer` (มี `\n` ได้ — ใช้ `white-space: pre-line`) และ `disclaimer` ใต้คำตอบเสมอ
+- `source: "llm"` → badge "AI (Typhoon)"; `"template"` → badge "สรุปอัตโนมัติ" — **ไม่ต้องแสดง `fallback_reason` ให้ผู้ใช้**
+- Error → "ขออภัย ไม่สามารถสร้างคำอธิบายได้ในขณะนี้"
+
+**2.6 ข้อเสนอผลิตภัณฑ์การเงิน** (ไม่บังคับ — `CLAUDE.md` ให้ตัดเป็นอันดับแรก)
+
+- ยังไม่มี endpoint — ถ้าทำ ให้ใช้กฎง่าย ๆ ฝั่ง frontend กับข้อมูลตัวอย่างคงที่
+  เช่น มี gap → แสดง "เงินทุนหมุนเวียน" และ "รับเงินจากยอดขายล่วงหน้า"
+- ทุกใบต้องมี badge **"ตัวอย่าง"** และข้อความ "ข้อเสนอจำลอง ไม่ใช่ข้อเสนอจริงจากผู้ให้บริการ"
+- **ห้ามใช้คำว่า "อนุมัติ" / "approve" / "ผ่านการพิจารณา"**
+
+### หน้า 3 — ผลการทดลองโมเดล (สำหรับนำเสนอ)
+
+- ตารางจาก `/api/v1/model-results` แยก Validation / Test (แท็บหรือ toggle, ค่าเริ่มต้น Test)
+
+| คอลัมน์ | ค่า |
+| --- | --- |
+| โมเดล | `seasonal_naive` → Seasonal naive, `lightgbm` → LightGBM, `lstm` → LSTM, `gru` → GRU, `ensemble` → **LSTM+GRU (โมเดลหลัก)** |
+| WAPE | `wape` เป็น % ทศนิยม 2 ตำแหน่ง |
+| MAE, RMSE | จำนวนเต็มมีจุลภาค |
+
+- เน้นแถว LSTM+GRU, เส้นอ้างอิง "เป้า WAPE ≤ 20%"
+- กราฟแท่ง WAPE (ไม่บังคับ)
+- ข้อความใต้ตาราง: "ทดสอบ 5 random seed แล้ว LSTM+GRU ทัดเทียม LightGBM (8.32% ± 0.22 เทียบกับ 8.30% ± 0.06)"
+
+### หน้า 4 — อัปโหลด CSV (ไม่บังคับ)
+
+**ยังไม่รองรับ** — backend ไม่มี endpoint และโมเดลยังพยากรณ์ร้านที่ไม่เคยเห็นตอนเทรนไม่ได้
+(ดู `docs/report_ws1.md` หัวข้อ 9.2) ถ้าเวลาเหลือให้คุยกับทีม backend/model ก่อน
+
+---
+
+## 4. กฎ UX (จาก CLAUDE.md — ต้องทำครบ)
+
+1. **ภาษาไทยที่เจ้าของร้านเข้าใจ** — ศัพท์เทคนิค (WAPE, LSTM) ใช้ได้เฉพาะหน้า 3
+2. **คำเตือนทุกจุดต้องมีวันที่และจำนวนเงิน**
+3. **ติด badge ทุกส่วนที่เป็นข้อมูลจำลอง:** `ข้อมูลจำลอง` (รายจ่าย, ยอดเงินคงเหลือ, การเตือนเงินขาด) และ `ตัวอย่าง` (ข้อเสนอผลิตภัณฑ์)
+4. **Credit signal แสดง "ทดลอง / experimental" เสมอ** และห้ามเรียกว่า "คะแนนเครดิต"
+5. **ห้ามใช้คำว่า "อนุมัติ" / "approve"** ทุกที่ใน UI
+
+### รูปแบบตัวเลขและวันที่
+
+| ข้อมูล | รูปแบบ | ตัวอย่าง |
+| --- | --- | --- |
+| วันที่ | วัน เดือนย่อ พ.ศ. | 22 ก.ค. 2558 |
+| จำนวนเงิน | จำนวนเต็ม มีจุลภาค **ไม่ใส่หน่วยเงิน** | 7,900 |
+| คะแนน | x/100 | 58/100 |
+| WAPE | % ทศนิยม 2 ตำแหน่ง | 8.18% |
+
+> **ไม่ใส่ "บาท"** — ยอดขายมาจาก Rossmann (หน่วยยูโร) การใส่ "บาท" จะผิดความจริง
+
+```ts
+const TH_MONTHS = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+export const thaiDate = (iso: string) => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d} ${TH_MONTHS[m - 1]} ${y + 543}`;
+};
+export const money = (x: number) => Math.round(x).toLocaleString("en-US");
+```
+
+### สถานะที่ต้องรองรับ
+
+- Loading (skeleton) ทุกส่วนที่รอ API
+- Error → ข้อความภาษาไทย + ปุ่ม "ลองใหม่"
+- 404 → "ไม่พบร้านนี้"
+- หน้าจอมือถือ (กว้าง 375px) ใช้งานได้ ไม่มี horizontal scroll
+
+---
+
+## 5. Acceptance checklist
+
+- [ ] `VITE_USE_MOCK=true` ใช้งานได้ครบทุกหน้า โดยไม่ต้องรัน backend
+- [ ] `VITE_USE_MOCK=false` ใช้กับ backend จริงได้ (CORS เปิดไว้ที่ `http://localhost:5173`)
+- [ ] ทุก API call ผ่าน `src/api.ts`
+- [ ] ร้าน 1 แสดงการ์ดเตือน **22 ก.ค. 2558 ขาดประมาณ 7,900** และ **28 ก.ค. 2558 ขาดประมาณ 3,139**
+- [ ] ร้าน 2 แสดง "ไม่พบช่วงที่เงินสดอาจไม่พอ" และคะแนน 86/100
+- [ ] กราฟมีเส้นจริง เส้นคาดการณ์ แถบช่วงคาดการณ์ และเส้น "วันนี้" 17 ก.ค.
+- [ ] badge `ข้อมูลจำลอง` / `ตัวอย่าง` / `ทดลอง` ครบทุกจุดตามข้อ 4
+- [ ] ค้นหาคำว่า "อนุมัติ" และ "approve" ในโค้ด frontend ไม่เจอ
+- [ ] ไม่มีคำว่า "บาท" กับจำนวนเงิน
+- [ ] Copilot มี loading, แสดง disclaimer, ไม่แสดง `fallback_reason`
+- [ ] หน้า 3 แสดงตารางผล 5 โมเดล และเน้น LSTM+GRU
+
+## 6. ร้านสำหรับ demo
+
+| ร้าน | ใช้แสดง |
+| --- | --- |
+| **1** | เคสหลัก: เงินอาจขาด 2 ครั้ง (22 และ 28 ก.ค.) คะแนน 58 |
+| **2** | ร้านปกติ: ไม่มีความเสี่ยง คะแนน 86 |
+| **25** | เงินอาจขาด 1 ครั้ง |
+| **817** | ร้านใหญ่ที่สุด เงินอาจขาด 2 ครั้ง |

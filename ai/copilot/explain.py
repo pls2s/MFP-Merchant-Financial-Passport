@@ -8,6 +8,7 @@ Rules (CLAUDE.md):
 - The LLM only sees, and may only use, figures from `build_facts`. Every number in
   its answer is checked against those facts; any other number → template fallback.
 - It must not recommend or approve loans; such wording → template fallback.
+- A rejected answer gets one retry with the reason; if that fails too → template.
 - No API key, a timeout or an API error → template fallback.
 
 LLM: Typhoon (OpenAI-compatible chat completions). Configure in .env:
@@ -26,6 +27,7 @@ from ai.cashflow_forecast.preprocess import ROOT
 DEFAULT_BASE_URL = "https://api.opentyphoon.ai/v1"
 DEFAULT_MODEL = "typhoon-v2.5-30b-a3b-instruct"
 TIMEOUT_SECONDS = 20
+MAX_ATTEMPTS = 2
 THAI_MONTHS = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]
 BANNED_PHRASES = ["อนุมัติ", "approve", "ควรกู้", "แนะนำให้กู้", "ควรขอสินเชื่อ", "แนะนำสินเชื่อ", "ยื่นกู้"]
 DISCLAIMER = "รายจ่ายเป็นข้อมูลจำลอง และคะแนนเป็นสัญญาณทดลอง ไม่ใช่คะแนนเครดิต"
@@ -70,6 +72,7 @@ def build_facts(forecast: dict, gaps: dict, credit: dict, as_of: str) -> dict:
                 "วันที่": thai_date(g["date"]),
                 "ขาดประมาณ": money(g["shortfall"]),
                 "รายจ่ายหลัก": [f"{c['label']} {money(c['amount'])}" for c in g["contributors"][:2]],
+                "รวมรายจ่ายหลัก": money(sum(c["amount"] for c in g["contributors"][:2])),
             }
             for g in gaps["gaps"]
         ],
@@ -123,12 +126,14 @@ def validate(answer: str, facts: dict) -> str | None:
     return None
 
 
-def call_llm(facts: dict, question: str | None) -> str:
+def call_llm(facts: dict, question: str | None, feedback: str | None = None) -> str:
     key = os.environ.get("LLM_API_KEY")
     if not key:
         raise RuntimeError("LLM_API_KEY not set")
     user = "FACTS:\n" + json.dumps(facts, ensure_ascii=False, indent=2)
     user += f"\n\nคำถามจากเจ้าของร้าน: {question}" if question else "\n\nสรุปสถานะการเงินของร้านจาก FACTS"
+    if feedback:
+        user += f"\n\nคำตอบก่อนหน้าใช้ไม่ได้ ({feedback}) ตอบใหม่โดยใช้เฉพาะตัวเลขใน FACTS ห้ามคำนวณเอง"
     resp = requests.post(
         f"{os.environ.get('LLM_BASE_URL', DEFAULT_BASE_URL).rstrip('/')}/chat/completions",
         headers={"Authorization": f"Bearer {key}"},
@@ -151,8 +156,11 @@ def explain(merchant_id: int, forecast: dict, gaps: dict, credit: dict, as_of: s
     source, reason = "template", None
     answer = template_explanation(facts)
     try:
-        llm_answer = call_llm(facts, question)
-        reason = validate(llm_answer, facts)
+        for _ in range(MAX_ATTEMPTS):
+            llm_answer = call_llm(facts, question, reason)
+            reason = validate(llm_answer, facts)
+            if reason is None:
+                break
         if reason is None:
             answer, source = llm_answer, "llm"
             if "ข้อมูลจำลอง" not in answer:  # the model sometimes drops rule 4

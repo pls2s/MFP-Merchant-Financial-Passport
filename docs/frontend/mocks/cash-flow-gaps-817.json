@@ -1,0 +1,57 @@
+{
+  "merchant_id": 817,
+  "opening_balance": 135793.96,
+  "gaps": [
+    {
+      "date": "2015-07-22",
+      "shortfall": 36300.01,
+      "balance_after": -36300.01,
+      "contributors": [
+        {
+          "type": "supplier_invoice",
+          "label": "ค่าสินค้า supplier (สั่งล็อตใหญ่)",
+          "amount": 228800.0,
+          "due_date": "2015-07-22"
+        },
+        {
+          "type": "supplier_invoice",
+          "label": "ค่าสินค้า supplier",
+          "amount": 77342.59,
+          "due_date": "2015-07-18"
+        },
+        {
+          "type": "utilities",
+          "label": "ค่าน้ำค่าไฟ",
+          "amount": 14906.86,
+          "due_date": "2015-07-20"
+        }
+      ]
+    },
+    {
+      "date": "2015-07-25",
+      "shortfall": 70673.38,
+      "balance_after": -70673.38,
+      "contributors": [
+        {
+          "type": "supplier_invoice",
+          "label": "ค่าสินค้า supplier (สั่งล็อตใหญ่)",
+          "amount": 228800.0,
+          "due_date": "2015-07-22"
+        },
+        {
+          "type": "supplier_invoice",
+          "label": "ค่าสินค้า supplier",
+          "amount": 83031.94,
+          "due_date": "2015-07-25"
+        },
+        {
+          "type": "utilities",
+          "label": "ค่าน้ำค่าไฟ",
+          "amount": 14906.86,
+          "due_date": "2015-07-20"
+        }
+      ]
+    }
+  ],
+  "is_synthetic_expense": true
+}
