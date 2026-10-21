@@ -7,6 +7,7 @@ Reads   data/raw/rossmann/{train,store}.csv
 Writes  data/processed/rossmann.parquet
 """
 
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +25,52 @@ TRAIN_START = pd.Timestamp("2013-01-01")
 TRAIN_END = pd.Timestamp("2015-05-08")
 VAL_END = pd.Timestamp("2015-06-19")
 TEST_END = pd.Timestamp("2015-07-31")
+
+HORIZON = 14
+
+
+@dataclass(frozen=True)
+class Dataset:
+    """Dates and output locations for one dataset. Rossmann keeps the original
+    top-level paths; other datasets write under models/<name>/."""
+
+    name: str
+    train_start: pd.Timestamp
+    train_end: pd.Timestamp
+    val_end: pd.Timestamp
+    test_end: pd.Timestamp
+
+    @property
+    def processed_path(self) -> Path:
+        return PROCESSED_DIR / f"{self.name}.parquet"
+
+    @property
+    def models_dir(self) -> Path:
+        return ROOT / "models" if self.name == "rossmann" else ROOT / "models" / self.name
+
+    @property
+    def predictions_dir(self) -> Path:
+        return self.models_dir / "predictions"
+
+    @property
+    def val_origins(self) -> list[pd.Timestamp]:
+        return [self.train_end + pd.Timedelta(days=HORIZON * k) for k in range(3)]
+
+    @property
+    def test_origins(self) -> list[pd.Timestamp]:
+        return [self.val_end + pd.Timedelta(days=HORIZON * k) for k in range(3)]
+
+
+ROSSMANN = Dataset("rossmann", TRAIN_START, TRAIN_END, VAL_END, TEST_END)
+# Optional generalization test: same structure, last 42 + 42 days as Test / Validation.
+FAVORITA = Dataset(
+    "favorita",
+    pd.Timestamp("2013-01-01"),
+    pd.Timestamp("2017-05-23"),
+    pd.Timestamp("2017-07-04"),
+    pd.Timestamp("2017-08-15"),
+)
+DATASETS = {d.name: d for d in (ROSSMANN, FAVORITA)}
 
 CALENDAR_FEATURES = ["day_of_week", "day_of_month", "month", "week_of_year"]
 KNOWN_FEATURES = ["open", "promo", "school_holiday", "state_holiday"]
@@ -111,9 +158,9 @@ def add_calendar_features(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def assign_split(df: pd.DataFrame) -> pd.DataFrame:
+def assign_split(df: pd.DataFrame, ds: Dataset = ROSSMANN) -> pd.DataFrame:
     df["split"] = np.select(
-        [df["date"] <= TRAIN_END, df["date"] <= VAL_END],
+        [df["date"] <= ds.train_end, df["date"] <= ds.val_end],
         ["train", "val"],
         default="test",
     )
@@ -126,6 +173,8 @@ def add_targets(df: pd.DataFrame) -> pd.DataFrame:
     train_open = df[(df["split"] == "train") & (df["is_eval_day"] == 1)]
     store_mean = train_open.groupby("store")["sales"].mean().rename("store_mean_sales")
     df = df.merge(store_mean, on="store", how="left")
+    # Stores that opened after Train have no Train sales; use the median store.
+    df["store_mean_sales"] = df["store_mean_sales"].fillna(store_mean.median())
     df["sales_scaled"] = (df["sales"] / df["store_mean_sales"]).astype("float32")
     return df
 
@@ -140,16 +189,19 @@ def build(raw_dir: Path = RAW_DIR) -> pd.DataFrame:
     return df.sort_values(["store", "date"]).reset_index(drop=True)
 
 
-def main() -> None:
-    df = build()
-    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(PROCESSED_PATH, index=False)
+def save(df: pd.DataFrame, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_parquet(path, index=False)
 
     days = df.groupby("split")["date"].agg(["min", "max", "nunique"])
-    print(f"Saved {len(df):,} rows, {df['store'].nunique()} stores → {PROCESSED_PATH}")
+    print(f"Saved {len(df):,} rows, {df['store'].nunique()} stores → {path}")
     print(days)
     print(f"Missing store-days: {df['is_missing'].sum():,}")
     print(f"Open with zero sales: {df['zero_sales_open'].sum():,}")
+
+
+def main() -> None:
+    save(build(), PROCESSED_PATH)
 
 
 if __name__ == "__main__":

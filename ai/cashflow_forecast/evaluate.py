@@ -2,21 +2,21 @@
 
 Usage:
     python -m ai.cashflow_forecast.evaluate
+    python -m ai.cashflow_forecast.evaluate --dataset favorita
 
 Reads   data/processed/rossmann.parquet, models/predictions/*.parquet
 Writes  models/results.csv
 """
 
-from pathlib import Path
+import argparse
 
 import numpy as np
 import pandas as pd
 
-from ai.cashflow_forecast.preprocess import PROCESSED_PATH, ROOT
+from ai.cashflow_forecast.preprocess import DATASETS, ROSSMANN, Dataset
 
-PREDICTIONS_DIR = ROOT / "models" / "predictions"
-RESULTS_PATH = ROOT / "models" / "results.csv"
-MODEL_ORDER = ["seasonal_naive", "lightgbm", "lstm", "gru"]
+PREDICTIONS_DIR = ROSSMANN.predictions_dir
+MODEL_ORDER = ["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"]
 
 
 def wape(y: np.ndarray, y_hat: np.ndarray) -> float:
@@ -39,10 +39,10 @@ def score(predictions: pd.DataFrame, actuals: pd.DataFrame) -> dict[str, float]:
     return {"wape": wape(y, y_hat), "mae": mae(y, y_hat), "rmse": rmse(y, y_hat), "n_days": len(df)}
 
 
-def results_table(predictions_dir: Path = PREDICTIONS_DIR) -> pd.DataFrame:
-    actuals = pd.read_parquet(PROCESSED_PATH, columns=["store", "date", "sales", "is_eval_day"])
+def results_table(ds: Dataset = ROSSMANN) -> pd.DataFrame:
+    actuals = pd.read_parquet(ds.processed_path, columns=["store", "date", "sales", "is_eval_day"])
     rows = []
-    for path in sorted(predictions_dir.glob("*.parquet")):
+    for path in sorted(ds.predictions_dir.glob("*.parquet")):
         preds = pd.read_parquet(path)
         for split in ("val", "test"):
             part = preds[preds["split"] == split]
@@ -54,12 +54,17 @@ def results_table(predictions_dir: Path = PREDICTIONS_DIR) -> pd.DataFrame:
 
 
 def main() -> None:
-    table = results_table()
-    RESULTS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    table.to_csv(RESULTS_PATH, index=False)
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--dataset", choices=list(DATASETS), default="rossmann")
+    ds = DATASETS[parser.parse_args().dataset]
+
+    table = results_table(ds)
+    path = ds.models_dir / "results.csv"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    table.to_csv(path, index=False)
     with pd.option_context("display.float_format", "{:,.4f}".format):
         print(table.to_string(index=False))
-    print(f"Saved → {RESULTS_PATH}")
+    print(f"Saved → {path}")
 
 
 if __name__ == "__main__":

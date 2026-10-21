@@ -26,3 +26,17 @@ frontend/dist/
 
 # Derived from competition data — regenerate with preprocess.py
 data/processed/*.parquet
+
+# Regenerable training outputs
+models/tuning/
+models/logs/
+models/lstm/
+models/gru/
+models/lightgbm/
+models/predictions/
+models/forecasts/*
+!models/forecasts/ensemble.json
+models/favorita/*
+!models/favorita/results.csv
+models/experiments/*
+!models/experiments/*.csv
