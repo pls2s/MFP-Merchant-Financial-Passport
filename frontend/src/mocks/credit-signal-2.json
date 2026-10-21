@@ -1,0 +1,24 @@
+{
+  "merchant_id": 2,
+  "score": 86,
+  "status": "experimental",
+  "components": {
+    "consistency": 0.81,
+    "trend": 0.59,
+    "active_days": 1.0,
+    "cash_buffer": 1.0,
+    "gap_frequency": 1.0
+  },
+  "positive_factors": [
+    "ยอดขายรายสัปดาห์สม่ำเสมอ",
+    "เปิดร้านแล้วมียอดขายเกือบทุกวัน",
+    "เงินสำรองที่คาดการณ์ไม่ต่ำกว่ารายจ่าย 1 เดือน",
+    "ไม่พบช่วงที่เงินสดอาจไม่พอใน 14 วันข้างหน้า"
+  ],
+  "risk_indicators": [],
+  "data_coverage": {
+    "start": "2013-01-01",
+    "end": "2015-07-17",
+    "days": 928
+  }
+}
