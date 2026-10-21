@@ -45,6 +45,8 @@ export interface SalesHistory {
   merchant_id: number;
   as_of: IsoDate;
   points: HistoryPoint[]; // through 2015-07-31 (flags are known in advance)
+  // ข้อมูลจำลอง after the real data ends (?synthetic_days=, default 366, max 1096). Never show as actual sales.
+  synthetic: { label: string; method: string; is_real: false; points: { date: IsoDate; sales: number }[] };
 }
 
 // GET /api/v1/merchants/{id}/long-forecast  (dashboard extension)

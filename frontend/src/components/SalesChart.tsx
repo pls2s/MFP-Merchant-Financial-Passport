@@ -40,6 +40,7 @@ interface Row {
   holiday: boolean;
   schoolHoliday: boolean;
   synthetic: boolean; // promo/open assumed from last year
+  simulated: number | null; // synthetic sales after the real data ends (ข้อมูลจำลอง, never "actual")
   monthly: boolean; // value is a month's average per open day (1-year outlook)
 }
 
@@ -55,6 +56,7 @@ interface Props {
 }
 
 const positive = (x: number | null | undefined) => (x != null && x > 0 ? x : null);
+const DATA_END = "2015-07-31"; // last day of real Rossmann sales
 const addDays = (iso: string, n: number) => new Date(Date.parse(`${iso}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
 const daysInMonth = (ym: string) => new Date(Date.UTC(Number(ym.slice(0, 4)), Number(ym.slice(5, 7)), 0)).getUTCDate();
 
@@ -68,6 +70,7 @@ function buildRows(range: RangeKey, p: Props, showFutureActual: boolean): Row[] 
   const longBack = new Map(longForecast.backtest.points.map((x) => [x.date, x]));
   const outlook = new Map(seasonal.months.map((m) => [m.month, m]));
   const outlookBack = new Map(seasonal.backtest.months.map((m) => [m.month, m]));
+  const simulated = new Map(history.synthetic.points.map((x) => [x.date, x.sales]));
   const lastMonth = seasonal.months[seasonal.months.length - 1].month;
   // Open days per month from the real calendar; a future month uses the same month a year earlier.
   const openDays = new Map<string, number>();
@@ -89,10 +92,11 @@ function buildRows(range: RangeKey, p: Props, showFutureActual: boolean): Row[] 
     const row: Row = {
       date: d, actual: null, predicted: null, forecast: null, band: null,
       open: h?.open ?? true, promo: h?.promo ?? false, holiday: h?.holiday ?? false,
-      schoolHoliday: h?.school_holiday ?? false, synthetic: !h, monthly: false,
+      schoolHoliday: h?.school_holiday ?? false, synthetic: !h, monthly: false, simulated: null,
     };
     if (!future) row.actual = positive(h?.sales);
-    else if (showFutureActual) row.actual = positive(main.get(d)?.actual);
+    else if (showFutureActual && d <= DATA_END) row.actual = positive(main.get(d)?.actual);
+    else if (showFutureActual) row.simulated = positive(simulated.get(d));
 
     if (range === "4w") {
       const m = main.get(d);
@@ -156,6 +160,9 @@ function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: 
     <div className="chart-tooltip">
       <strong>{thaiWeekday(label)} {thaiDate(label)}</strong>
       {r.actual != null && <div>ยอดขายจริง <b className="num">{money(r.actual)}</b></div>}
+      {r.simulated != null && (
+        <div>ยอดขายจำลอง <span className="num">{money(r.simulated)}</span> <span className="muted">(ไม่ใช่ข้อมูลจริง)</span></div>
+      )}
       {r.predicted != null && (
         <div>
           ทายไว้ล่วงหน้า <span className="num">{money(r.predicted)}</span>{unit}
@@ -240,7 +247,7 @@ function LongAccuracy({ range, longForecast, seasonal }: { range: "3m" | "1y"; l
 export function SalesChart(props: Props) {
   const { forecast, results, asOf, gaps, pastGaps, longForecast, seasonal } = props;
   const [range, setRange] = useState<RangeKey>("3m");
-  const [showFutureActual, setShowFutureActual] = useState(false);
+  const [showFutureActual, setShowFutureActual] = useState(true);
   const rows = useMemo(() => buildRows(range, props, showFutureActual), [range, props, showFutureActual]);
   const promo = useMemo(() => spans(rows, "promo"), [rows]);
   // Only the 3-month rollout uses the assumed promo calendar.
@@ -261,6 +268,7 @@ export function SalesChart(props: Props) {
       <div className="chart-legend">
         <span><i className="swatch" style={{ background: "var(--series-actual)" }} />ยอดขายจริง</span>
         <span><i className="swatch" style={{ background: "var(--series-predicted)" }} />ทายไว้ล่วงหน้า (ทดสอบย้อนหลัง)</span>
+        {showFutureActual && range !== "4w" && <span><i className="swatch dashed simulated" />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>}
         <span><i className="swatch dashed" />{range === "1y" ? "ภาพรวมรายเดือน (เฉลี่ยต่อวันที่เปิดร้าน)" : range === "3m" ? "คาดการณ์ 3 เดือน" : "คาดการณ์ 14 วัน"}</span>
         <span><i className="swatch band" />ช่วงคาดการณ์โดยประมาณ</span>
         <span><i className="swatch promo" />วันโปรโมชัน</span>
@@ -294,6 +302,8 @@ export function SalesChart(props: Props) {
             <Area dataKey="band" stroke="none" fill="var(--series-band)" fillOpacity={0.16} connectNulls
               type={range === "1y" ? "stepAfter" : "linear"} isAnimationActive={false} />
             <Line dataKey="actual" stroke="var(--series-actual)" strokeWidth={range === "1y" ? 1 : 1.6} dot={false} connectNulls isAnimationActive={false} />
+            <Line dataKey="simulated" stroke="var(--text-3)" strokeWidth={range === "1y" ? 1 : 1.4} strokeDasharray="6 3 1 3"
+              dot={false} connectNulls isAnimationActive={false} />
             <Line dataKey="predicted" stroke="var(--series-predicted)" strokeWidth={range === "1y" ? 2 : 1.6}
               type={range === "1y" ? "stepAfter" : "linear"} dot={false} connectNulls isAnimationActive={false} />
             <Line dataKey="forecast" stroke="var(--series-forecast)" strokeWidth={2} strokeDasharray="6 4"
@@ -311,12 +321,11 @@ export function SalesChart(props: Props) {
         เส้นสีส้มคือสิ่งที่วิธีพยากรณ์ของช่วงนี้ทายไว้ล่วงหน้าโดยยังไม่เห็นยอดขายจริง แล้วเทียบกับเส้นดำ ·
         เส้นประแนวตั้งสีเทาคือวันหยุดนักขัตฤกษ์ · ชี้ที่กราฟเพื่อดูรายละเอียดรายวัน
       </p>
-      {range !== "1y" && (
-        <label className="check">
-          <input type="checkbox" checked={showFutureActual} onChange={(e) => setShowFutureActual(e.target.checked)} />
-          แสดงยอดขายจริงในช่วงคาดการณ์ถึง 31 ก.ค. 2558 (ใช้ประเมินความแม่นยำ)
-        </label>
-      )}
+      <label className="check">
+        <input type="checkbox" checked={showFutureActual} onChange={(e) => setShowFutureActual(e.target.checked)} />
+        แสดงยอดขายหลังวันนี้ — ยอดจริงถึง 31 ก.ค. 2558 (ข้อมูลจบแค่นั้น) และ<b>ยอดขายจำลอง</b>หลังจากนั้น
+        (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)
+      </label>
       {range === "4w"
         ? <ForecastAccuracy forecast={forecast} asOf={asOf} results={results} />
         : <LongAccuracy range={range} longForecast={longForecast} seasonal={seasonal} />}

@@ -121,3 +121,13 @@ def test_seasonal_outlook_is_labelled_and_backtested(client):
     assert [m["month"] for m in body["months"]][:2] == ["2015-08", "2015-09"] and len(body["months"]) == 12
     assert all(m["lower"] <= m["outlook"] <= m["upper"] for m in body["months"] if m["outlook"] is not None)
     assert body["backtest"]["origin"] == "2014-07-31" and len(body["backtest"]["months"]) == 12
+
+
+def test_synthetic_sales_are_separate_and_labelled(client):
+    body = client.get("/api/v1/merchants/1/sales-history", params={"days": 30}).json()
+    syn = body["synthetic"]
+    assert syn["is_real"] is False and "จำลอง" in syn["label"]
+    assert syn["points"][0]["date"] == "2015-08-01" and len(syn["points"]) == 366
+    assert all(p["date"] <= "2015-07-31" for p in body["points"])  # real points never go past the data
+    long = client.get("/api/v1/merchants/1/sales-history", params={"days": 30, "synthetic_days": 1096}).json()
+    assert long["synthetic"]["points"][-1]["date"] == "2018-07-31"

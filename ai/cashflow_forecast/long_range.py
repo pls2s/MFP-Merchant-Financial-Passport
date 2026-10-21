@@ -14,6 +14,12 @@ B. 1 year — seasonal outlook, not a deep-learning model: each month = the same
    earlier × the change of the last 12 weeks against the same 12 weeks a year earlier.
    Backtest: from 2014-07-31 over Aug 2014 – Jul 2015.
 
+C. Synthetic sales (ข้อมูลจำลอง) from the day after the data ends to SYNTHETIC_END, only so the
+   dashboard's sales line can run past the real data. Each day = the actual sales on the same
+   weekday in the last real year (52·k weeks earlier) × (1 + the store's 12-week trend, capped at
+   ±10% a year)^k × fresh random noise. Independent of the LSTM/GRU, never used in any metric,
+   backtest, cash simulation or copilot fact.
+
 Intervals for both are symmetric 80% ranges: the 80th percentile of the backtest's absolute
 relative error per step ahead (so the point always sits inside its band). They are calibrated on
 the same backtest they are scored on, so their coverage is in-sample, not a validation.
@@ -23,6 +29,7 @@ Writes  models/forecasts/long_forecast.parquet     (store, date, forecast, lower
         models/forecasts/seasonal_outlook.parquet  (store, month, outlook, lower, upper)
         models/forecasts/seasonal_backtest.parquet (store, month, outlook, actual)
         models/forecasts/long_range_metrics.json
+        models/forecasts/synthetic_sales.parquet   (store, date, sales) — ข้อมูลจำลอง
 """
 
 import json
@@ -42,6 +49,10 @@ CALENDAR_END = AS_OF + pd.Timedelta(days=HORIZON * BLOCKS)
 SEASONAL_BACKTEST_ORIGIN = pd.Timestamp("2014-07-31")
 TREND_WEEKS = 12
 INTERVAL = 0.80
+SYNTHETIC_END = pd.Timestamp("2018-07-31")  # three years past the real data; extend freely
+SYNTHETIC_TREND_CAP = 0.10                  # max |yearly growth| applied to synthetic sales
+SYNTHETIC_NOISE = 0.08                      # lognormal sigma of daily synthetic sales
+SEED = 42
 
 
 # --- A. Recursive LSTM+GRU -------------------------------------------------------
@@ -227,6 +238,29 @@ def seasonal_outlooks(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dic
     return fwd[["store", "month", "outlook", "lower", "upper"]], back[["store", "month", "outlook", "actual"]], metrics
 
 
+# --- C. Synthetic sales after the data ends -----------------------------------
+
+
+def synthetic_sales(df: pd.DataFrame, end: pd.Timestamp = SYNTHETIC_END) -> pd.DataFrame:
+    """Synthetic daily sales from DATA_END + 1 to `end` (see the module docstring, part C)."""
+    rng = np.random.default_rng(SEED)
+    sales = df.pivot(index="date", columns="store", values="sales")
+    sales = sales.mask(df.pivot(index="date", columns="store", values="is_missing").astype(bool))
+    growth = trend(df, AS_OF).reindex(sales.columns).fillna(0.0).clip(-SYNTHETIC_TREND_CAP, SYNTHETIC_TREND_CAP)
+    dates = pd.date_range(DATA_END + pd.Timedelta(days=1), end)
+    years = np.ceil((dates - DATA_END).days.to_numpy() / 364).astype(int)  # 52-week steps back into real data
+    base_dates = dates - pd.to_timedelta(years * 364, unit="D")
+    base = sales.reindex(base_dates).to_numpy()
+    fallback = sales.reindex(base_dates - pd.Timedelta(days=364)).to_numpy()  # stores missing that year
+    base = np.where(np.isnan(base), fallback, base)
+    factor = (1 + growth.to_numpy())[None, :] ** years[:, None]
+    noise = rng.lognormal(0.0, SYNTHETIC_NOISE, base.shape)
+    values = np.where(base > 0, base * factor * noise, 0.0)
+    out = pd.DataFrame(values, index=dates, columns=sales.columns).stack().rename("sales").reset_index()
+    out.columns = ["date", "store", "sales"]
+    return out[["store", "date", "sales"]].astype({"sales": "float32"})
+
+
 def main() -> None:
     df = pd.read_parquet(PROCESSED_PATH)
     FORECASTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -245,6 +279,10 @@ def main() -> None:
     print(f"1-year seasonal outlook — backtest from {m_sea['origin']}: WAPE {m_sea['wape_all_stores']:.2%} "
           f"over {m_sea['store_months']:,} store-months, 80% interval coverage (in-sample) {m_sea['interval_coverage_in_sample']:.1%}")
     print(f"  stores with a forward outlook: {out.groupby('store')['outlook'].apply(lambda x: x.notna().all()).sum()}")
+
+    syn = synthetic_sales(df)
+    syn.to_parquet(FORECASTS_DIR / "synthetic_sales.parquet", index=False)
+    print(f"Synthetic sales (ข้อมูลจำลอง): {syn['date'].min().date()}..{syn['date'].max().date()}, {len(syn):,} rows")
 
     (FORECASTS_DIR / "long_range_metrics.json").write_text(json.dumps(
         {"recursive_3_months": m_rec, "seasonal_1_year": m_sea}, indent=1))

@@ -46,6 +46,7 @@ class DataStore:
     seasonal_months: dict[int, pd.DataFrame]
     seasonal_back: dict[int, pd.DataFrame]
     long_metrics: dict
+    synthetic_sales: dict[int, pd.DataFrame]
 
     @classmethod
     def load(cls) -> "DataStore":
@@ -63,6 +64,7 @@ class DataStore:
             seasonal_months=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_outlook.parquet")),
             seasonal_back=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_backtest.parquet")),
             long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
+            synthetic_sales=_by_store(pd.read_parquet(FORECASTS_DIR / "synthetic_sales.parquet")),
         )
 
     def merchants(self) -> list[dict]:
@@ -78,7 +80,7 @@ class DataStore:
             for m in sorted(self.forecasts)
         ]
 
-    def sales_history(self, merchant_id: int, days: int) -> dict:
+    def sales_history(self, merchant_id: int, days: int, synthetic_days: int = 366) -> dict:
         """Last `days` of actual sales up to AS_OF plus the forecast window; sales after AS_OF are hidden
         (the forecast endpoint carries them for evaluation), the known-in-advance flags are not."""
         h = self.history[merchant_id]
@@ -95,6 +97,12 @@ class DataStore:
                 }
                 for r in h.itertuples()
             ],
+            "synthetic": {
+                "label": "ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)",
+                "method": "Same weekday in the last real year × the store's 12-week trend (capped ±10%/year) × random noise",
+                "points": [{"date": r.date.strftime("%Y-%m-%d"), "sales": round(float(r.sales), 2)}
+                           for r in self.synthetic_sales[merchant_id].head(synthetic_days).itertuples()],
+            },
         }
 
     def long_forecast(self, merchant_id: int) -> dict:

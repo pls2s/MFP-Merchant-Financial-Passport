@@ -60,10 +60,23 @@ class HistoryPoint(BaseModel):
     school_holiday: bool
 
 
+class SyntheticSalesPoint(BaseModel):
+    date: IsoDate
+    sales: float
+
+
+class SyntheticSales(BaseModel):
+    label: str
+    method: str
+    is_real: Literal[False] = False
+    points: list[SyntheticSalesPoint]
+
+
 class SalesHistory(BaseModel):
     merchant_id: int
     as_of: IsoDate
     points: list[HistoryPoint]
+    synthetic: SyntheticSales = Field(description="ข้อมูลจำลอง after the real data ends — never use as actual sales")
 
 
 # --- GET /api/v1/merchants/{id}/long-forecast (dashboard extension) -----------
