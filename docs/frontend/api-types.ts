@@ -69,7 +69,8 @@ export interface SeasonalOutlook {
   merchant_id: number;
   method: string;
   is_model_forecast: false;
-  months: { month: string; outlook: number | null; lower: number | null; upper: number | null }[]; // "2015-08"
+  // 24 months from "2015-08"; months 13+ are untested (backtested: false) and have wider bands
+  months: { month: string; outlook: number | null; lower: number | null; upper: number | null; backtested: boolean }[];
   backtest: {
     origin: IsoDate;
     wape_store: number | null;

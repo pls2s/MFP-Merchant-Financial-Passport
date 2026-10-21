@@ -146,15 +146,17 @@ def _long_range(ctx: MerchantContext) -> dict:
         }
     if ctx.seasonal is not None and len(ctx.seasonal):
         sea = m.get("seasonal_1_year", {})
+        tested = ctx.seasonal["backtested"] if "backtested" in ctx.seasonal else pd.Series(True, index=ctx.seasonal.index)
         rows = [f"{THAI_MONTHS[int(r.month[5:]) - 1]} {int(r.month[:4]) + 543}: "
                 + (f"{money(r.outlook)} (ช่วงประมาณ {money(r.lower)} ถึง {money(r.upper)})" if pd.notna(r.outlook) else "ข้อมูลไม่พอ")
-                for r in ctx.seasonal.itertuples()]
+                + ("" if ok else " · ยังไม่ได้ทดสอบย้อนหลัง ความไม่แน่นอนสูง")
+                for r, ok in zip(ctx.seasonal.itertuples(), tested)]
         first, last = ctx.seasonal["month"].iloc[0], ctx.seasonal["month"].iloc[-1]
-        out["ภาพรวม 12 เดือนข้างหน้า (ตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning)"] = {
+        out["ภาพรวมรายเดือนระยะยาว (ตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning)"] = {
             "ช่วงที่ครอบคลุม": (f"{THAI_MONTHS[int(first[5:]) - 1]} {int(first[:4]) + 543} ถึง "
                                f"{THAI_MONTHS[int(last[5:]) - 1]} {int(last[:4]) + 543} (หลังจากนี้พยากรณ์ไม่ได้)"),
             "ยอดขายรายเดือน": rows,
-            "ความแม่น (ทดสอบย้อนหลัง 12 เดือน)": (
+            "ความแม่น (ทดสอบย้อนหลัง 12 เดือนแรก)": (
                 f"ร้านนี้คลาดเคลื่อนเฉลี่ย {sea['wape_by_store'][str(ctx.merchant_id)] * 100:.1f}% ทุกร้าน {sea['wape_all_stores'] * 100:.1f}%"
                 if str(ctx.merchant_id) in sea.get("wape_by_store", {}) else "ไม่มีข้อมูล"),
         }

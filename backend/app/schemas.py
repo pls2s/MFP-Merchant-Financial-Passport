@@ -120,6 +120,7 @@ class OutlookMonth(BaseModel):
     outlook: float | None
     lower: float | None
     upper: float | None
+    backtested: bool = Field(description="Within the 12 months covered by the backtest; later months are untested")
 
 
 class OutlookBacktestMonth(BaseModel):

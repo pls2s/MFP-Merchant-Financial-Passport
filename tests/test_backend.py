@@ -118,7 +118,8 @@ def test_long_forecast_has_84_days_and_real_backtest(client):
 def test_seasonal_outlook_is_labelled_and_backtested(client):
     body = client.get("/api/v1/merchants/1/seasonal-outlook").json()
     assert body["is_model_forecast"] is False
-    assert [m["month"] for m in body["months"]][:2] == ["2015-08", "2015-09"] and len(body["months"]) == 12
+    assert [m["month"] for m in body["months"]][:2] == ["2015-08", "2015-09"] and len(body["months"]) == 24
+    assert [m["backtested"] for m in body["months"]] == [True] * 12 + [False] * 12
     assert all(m["lower"] <= m["outlook"] <= m["upper"] for m in body["months"] if m["outlook"] is not None)
     assert body["backtest"]["origin"] == "2014-07-31" and len(body["backtest"]["months"]) == 12
 

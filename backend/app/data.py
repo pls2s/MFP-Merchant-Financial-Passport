@@ -127,7 +127,8 @@ class DataStore:
         return {
             "merchant_id": merchant_id,
             "method": "Same month last year × change of the last 12 weeks vs a year earlier (not a deep-learning forecast)",
-            "months": [{"month": r.month, "outlook": _num(r.outlook), "lower": _num(r.lower), "upper": _num(r.upper)}
+            "months": [{"month": r.month, "outlook": _num(r.outlook), "lower": _num(r.lower), "upper": _num(r.upper),
+                        "backtested": bool(r.backtested)}
                        for r in self.seasonal_months[merchant_id].itertuples()],
             "backtest": {
                 "origin": m["origin"], "wape_store": m["wape_by_store"].get(str(merchant_id)),

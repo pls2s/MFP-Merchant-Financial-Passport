@@ -10,7 +10,7 @@ A. 3 months — the trained LSTM+GRU ensemble rolled forward recursively: foreca
    synthetic calendar of known-in-advance inputs: open/promo copied from the same weekday
    52 weeks earlier, holidays from the same date a year earlier.
 
-B. 1 year — seasonal outlook, not a deep-learning model: each month = the same month a year
+B. 1–2 years — seasonal outlook, not a deep-learning model: each month = the same month a year
    earlier × the change of the last 12 weeks against the same 12 weeks a year earlier.
    Backtest: from 2014-07-31 over Aug 2014 – Jul 2015.
 
@@ -49,6 +49,8 @@ CALENDAR_END = AS_OF + pd.Timedelta(days=HORIZON * BLOCKS)
 SEASONAL_BACKTEST_ORIGIN = pd.Timestamp("2014-07-31")
 TREND_WEEKS = 12
 INTERVAL = 0.80
+OUTLOOK_MONTHS = 24            # seasonal outlook length; only the first 12 months are backtested
+OUTLOOK_EXTRA_WIDTH = 1.5      # band widening for untested months 13+
 SYNTHETIC_END = pd.Timestamp("2018-07-31")  # three years past the real data; extend freely
 SYNTHETIC_TREND_CAP = 0.10                  # max |yearly growth| applied to synthetic sales
 SYNTHETIC_NOISE = 0.08                      # lognormal sigma of daily synthetic sales
@@ -191,20 +193,20 @@ def trend(df: pd.DataFrame, origin: pd.Timestamp) -> pd.Series:
 
 
 def seasonal(monthly: pd.DataFrame, growth: pd.Series, origin: pd.Timestamp, months: int = 12) -> pd.DataFrame:
-    """Outlook for the `months` months after `origin`'s month. A base month must end by `origin`;
-    otherwise the month two years back is used with the growth applied twice."""
+    """Outlook for the `months` months after `origin`'s month: the same month k years earlier
+    × (1 + growth)^k, with the smallest k whose month ended by `origin` (no peeking past it)."""
     first = origin.to_period("M") + 1
+    empty = pd.Series(np.nan, index=monthly.index)
     rows = []
-    for k in range(months):
-        m = first + k
-        base1, base2 = m - 12, m - 24
-        use1 = base1.end_time.normalize() <= origin
-        base = monthly.get(base1) if use1 else None
-        value = base * (1 + growth) if use1 and base is not None else None
-        if value is None or not use1:
-            b2 = monthly.get(base2)
-            value = b2 * (1 + growth) ** 2 if b2 is not None else pd.Series(np.nan, index=monthly.index)
-        rows.append(pd.DataFrame({"store": monthly.index, "month": str(m), "step": k + 1, "outlook": value.to_numpy()}))
+    for step in range(months):
+        m = first + step
+        value = empty
+        for k in (1, 2, 3):
+            base = m - 12 * k
+            if base.end_time.normalize() <= origin:
+                value = monthly[base] * (1 + growth) ** k if base in monthly.columns else empty
+                break
+        rows.append(pd.DataFrame({"store": monthly.index, "month": str(m), "step": step + 1, "outlook": value.to_numpy()}))
     return pd.concat(rows, ignore_index=True)
 
 
@@ -232,10 +234,14 @@ def seasonal_outlooks(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dic
         "wape_by_store": {int(s): wape(g) for s, g in ev.groupby("store")},
     }
 
-    fwd = seasonal(monthly, trend(df, AS_OF), AS_OF)
-    fwd["lower"] = (fwd["outlook"] * (1 - fwd["step"].map(width))).clip(lower=0)
-    fwd["upper"] = fwd["outlook"] * (1 + fwd["step"].map(width))
-    return fwd[["store", "month", "outlook", "lower", "upper"]], back[["store", "month", "outlook", "actual"]], metrics
+    # Forward outlook runs OUTLOOK_MONTHS; the backtest only covers 12 months, so steps 13+ (based on
+    # sales two years back × growth²) get the 12-month width × OUTLOOK_EXTRA_WIDTH — wider, untested.
+    fwd = seasonal(monthly, trend(df, AS_OF), AS_OF, OUTLOOK_MONTHS)
+    step_width = fwd["step"].map(width).fillna(width.iloc[-1] * OUTLOOK_EXTRA_WIDTH)
+    fwd["lower"] = (fwd["outlook"] * (1 - step_width)).clip(lower=0)
+    fwd["upper"] = fwd["outlook"] * (1 + step_width)
+    fwd["backtested"] = fwd["step"] <= 12
+    return fwd[["store", "month", "outlook", "lower", "upper", "backtested"]], back[["store", "month", "outlook", "actual"]], metrics
 
 
 # --- C. Synthetic sales after the data ends -----------------------------------

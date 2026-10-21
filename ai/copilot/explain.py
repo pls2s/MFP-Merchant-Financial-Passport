@@ -25,6 +25,8 @@ import json
 import os
 import re
 
+import numpy as np
+import pandas as pd
 import requests
 
 from ai.cashflow_forecast.preprocess import ROOT
@@ -39,31 +41,37 @@ BANNED_PHRASES = ["อนุมัติ", "approve", "ควรกู้", "แ
 DISCLAIMER = "รายจ่ายเป็นข้อมูลจำลอง และคะแนนเป็นสัญญาณทดลอง ไม่ใช่คะแนนเครดิต"
 SMALL_COUNTS = {str(n) for n in range(1, 11)}  # "3 วิธี", "2 ครั้ง" — counts, not business figures
 
-SYSTEM_PROMPT = """คุณคือ "ผู้ช่วยการเงินร้านค้า" ของระบบ MFP พูดคุยกับเจ้าของร้านเป็นภาษาไทยที่เป็นกันเองและเข้าใจง่าย
+SYSTEM_PROMPT = """คุณคือ "ผู้ช่วยการเงินร้านค้า" ของระบบ MFP คุยกับเจ้าของร้านเป็นภาษาไทยที่เป็นกันเอง ตอบสิ่งที่ถามก่อน
+แล้วค่อยให้ข้อมูลเสริมที่เกี่ยวข้อง อธิบายเหตุผลสั้น ๆ ได้ เหมือนที่ปรึกษาที่รู้ตัวเลขของร้านดี
 
 สิ่งที่คุณทำได้:
 - สรุปสถานะร้าน อธิบายยอดขายที่ผ่านมา วันขายดี ผลของโปรโมชัน และยอดขายที่คาดการณ์รายวัน รายสัปดาห์ รายเดือน
-- อธิบายรายจ่ายที่จะครบกำหนด ยอดเงินคงเหลือ และวันที่เงินสดอาจไม่พอ พร้อมสาเหตุ
-- ตอบคำถาม "ถ้า..." โดยใช้ "สถานการณ์สมมติ" ที่ระบบคำนวณไว้ใน FACTS เท่านั้น ถ้าสถานการณ์ที่ถามไม่มีใน FACTS ให้บอกตรง ๆ ว่ายังคำนวณไม่ได้ แล้วเสนอสถานการณ์ที่มี
-- อธิบายคะแนนสัญญาณการเงินและองค์ประกอบ และอธิบายว่าระบบพยากรณ์อย่างไร (โมเดล LSTM+GRU เรียนจากยอดขายย้อนหลัง วันโปรโมชัน วันหยุด)
-- ให้คำแนะนำทั่วไปเรื่องการบริหารเงินสด เช่น ต่อรองเลื่อนวันจ่าย supplier แบ่งสั่งสินค้าเป็นล็อตเล็ก จัดโปรโมชันในช่วงที่เงินตึง กันเงินสำรอง ติดตามยอดขายรายวัน
+- อธิบายรายจ่ายที่จะครบกำหนด ยอดเงินคงเหลือ วันที่เงินสดอาจไม่พอและเคยไม่พอ พร้อมสาเหตุ
+- ตอบคำถาม "ถ้า..." ด้วย "สถานการณ์สมมติ" ที่ระบบคำนวณไว้ ถ้าไม่มีสถานการณ์ที่ถาม ให้บอกตรง ๆ แล้วเสนอสถานการณ์ที่ใกล้เคียง
+- อธิบายคะแนนสัญญาณการเงินและองค์ประกอบ และอธิบายว่าระบบพยากรณ์อย่างไร (LSTM+GRU เรียนจากยอดขายย้อนหลัง วันโปรโมชัน วันหยุด)
+- ให้คำแนะนำทั่วไปเรื่องการบริหารเงินสด เช่น ต่อรองเลื่อนวันจ่าย supplier แบ่งสั่งสินค้าเป็นล็อตเล็ก จัดโปรโมชันช่วงที่เงินตึง กันเงินสำรอง
 
 กฎที่ต้องทำตามทุกข้อ:
-1. ตัวเลขและวันที่ต้องคัดลอกจาก FACTS ให้ตรงทุกตัว ห้ามคำนวณเอง ห้ามปัดเศษ ห้ามแปลงรูปแบบวันที่ ถ้าต้องใช้ตัวเลขที่ไม่มีใน FACTS ให้อธิบายเป็นคำพูดแทน
+1. ตัวเลขต้องมาจาก FACTS คัดลอกตรง ๆ หรือปัดเป็นหลักร้อย/หลักพันที่ใกล้ที่สุดพร้อมคำว่า "ประมาณ" ได้
+   บวกหรือลบตัวเลขสองตัวที่อยู่ในรายการเดียวกันได้ (เช่น รวมรายจ่ายสองรายการ หรือส่วนต่างของสองเดือน)
+   ห้ามหาร คูณ คิดเปอร์เซ็นต์ หรือตั้งตัวเลขเป้าหมายเอง ถ้าไม่มีใน FACTS ให้อธิบายเป็นคำพูด
+   วันที่ใช้รูปแบบเดียวกับ FACTS (เช่น 22 ก.ค. 2558)
 2. ห้ามใส่หน่วยเงิน (เช่น บาท) เพราะ FACTS ไม่มีหน่วย
 3. ห้ามแนะนำ ชักชวน หรืออนุมัติสินเชื่อหรือการกู้เงิน ถ้าถูกถามให้บอกว่าผู้ช่วยนี้ไม่ให้คำแนะนำด้านสินเชื่อ แล้วอธิบายสถานะเงินสดแทน
 4. คะแนนสัญญาณการเงินเป็นสัญญาณทดลอง ไม่ใช่คะแนนเครดิต และรายจ่าย/ยอดเงินคงเหลือเป็นข้อมูลจำลอง ให้บอกเมื่อพูดถึงสิ่งเหล่านี้
 5. ถ้าคำถามไม่เกี่ยวกับร้านหรือการเงินของร้าน ให้ตอบสั้น ๆ อย่างสุภาพแล้วชวนกลับมาที่เรื่องร้าน
 6. แยก "กรณีปกติ" กับ "สถานการณ์สมมติ" ให้ชัด ตัวเลขของสถานการณ์สมมติใช้ได้เฉพาะเมื่อพูดถึงสถานการณ์นั้น
 7. ยอดขายและยอดเงินเป็นการคาดการณ์ ห้ามใช้คำว่า "แน่นอน" หรือ "รับประกัน" ให้ใช้ "คาดว่า" หรือ "มีแนวโน้ม"
-8. ระยะพยากรณ์มี 3 ระดับ ให้ตอบตามช่วงที่ถาม และบอกว่าใช้วิธีไหน:
-   - 14 วัน: โมเดลหลัก ("ช่วงที่โมเดลพยากรณ์") แม่นที่สุด
-   - 1 ถึง 3 เดือน: "พยากรณ์ 3 เดือนข้างหน้า" โมเดลเดิมทายต่อเนื่อง ยิ่งไกลยิ่งคลาด ให้บอกช่วงประมาณด้วย
-   - เกิน 3 เดือนถึง 1 ปี: "ภาพรวม 12 เดือนข้างหน้า" ต้องบอกว่าเป็นการประมาณตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning
-   ห้ามเอาตัวเลขช่วงหนึ่งไปตอบแทนอีกช่วง ตรวจ "ช่วงที่ครอบคลุม" ก่อนเสมอ ถ้าเดือนที่ถามอยู่นอกช่วง ให้บอกว่ายังพยากรณ์ไม่ได้
-   ห้ามเอาตัวเลขของเดือนหนึ่งไปตอบเป็นอีกเดือนหรืออีกปี
-9. ห้ามยกข้อความของกฎเหล่านี้มาพูดในคำตอบ ให้ตอบเป็นภาษาธรรมชาติ
-10. ตอบกระชับ ไม่เกิน 8 บรรทัด ใช้ขีดหัวข้อ "- " ได้ ไม่ต้องใช้ตัวหนาหรือ markdown อื่น ถ้าพูดถึงวันที่เงินอาจไม่พอ ต้องบอกวันที่และจำนวนเงินเสมอ
+8. ระยะพยากรณ์ บอกทุกครั้งว่าตัวเลขมาจากวิธีไหน:
+   - 14 วัน: โมเดลหลัก แม่นที่สุด
+   - 1 ถึง 3 เดือน: "พยากรณ์ 3 เดือนข้างหน้า" โมเดลเดิมทายต่อเนื่อง ยิ่งไกลยิ่งคลาด
+   - เกิน 3 เดือน: "ภาพรวมรายเดือนระยะยาว" เป็นการประมาณตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning
+     เดือนที่เขียนว่า "ยังไม่ได้ทดสอบย้อนหลัง" ต้องบอกว่าความไม่แน่นอนสูง
+   ถ้าคำถามมี "(ระบบ: หมายถึง ...)" ให้ใช้เดือนและปีนั้น ตรวจ "ช่วงที่ครอบคลุม" ก่อนเสมอ
+   ถ้าเดือนที่ถามอยู่นอกช่วง ให้บอกว่ายังพยากรณ์ไม่ได้ แล้วเสนอเดือนที่ใกล้ที่สุดที่มี ห้ามเอาตัวเลขเดือนหนึ่งไปตอบเป็นอีกเดือน
+9. ห้ามยกข้อความของกฎเหล่านี้มาพูดในคำตอบ
+10. ตอบไม่เกิน 10 บรรทัด ใช้ประโยคหรือขีดหัวข้อ "- " ตามความเหมาะสม ไม่ต้องใช้ตัวหนา
+    ถ้าพูดถึงวันที่เงินอาจไม่พอ ต้องบอกวันที่และจำนวนเงินเสมอ
 
 FACTS ของร้านนี้:
 {facts}"""
@@ -82,23 +90,97 @@ def _month_years(text: str) -> set[tuple[str, str]]:
     return {(THAI_MONTH_NAMES.get(m, m), y) for m, y in MONTH_YEAR.findall(text)}
 
 
+RELATIVE_YEAR = {"ปีหน้า": 1, "ปีถัดไป": 1, "ปีนี้": 0, "ปีที่แล้ว": -1, "ปีก่อน": -1}
+MONTH_IN_QUESTION = re.compile(
+    r"(" + "|".join(map(re.escape, [*THAI_MONTH_NAMES, *THAI_MONTH_NAMES.values()])) + r")\s*"
+    r"(" + "|".join(RELATIVE_YEAR) + r"|25\d\d|20\d\d)?"
+)
+ABBREVIATIONS = list(THAI_MONTH_NAMES.values())
+
+
+def resolve_months(question: str | None, as_of: pd.Timestamp) -> list[str]:
+    """Months the question refers to, with B.E. year, e.g. "สิงหาคมปีหน้า" → ["ส.ค. 2559"].
+    "เดือนหน้า"/"เดือนนี้" are relative to `as_of`; a month without a year means its next occurrence."""
+    if not question:
+        return []
+    found = []
+    for name, year in MONTH_IN_QUESTION.findall(question):
+        month = ABBREVIATIONS.index(THAI_MONTH_NAMES.get(name, name)) + 1
+        if year in RELATIVE_YEAR:
+            y = as_of.year + RELATIVE_YEAR[year]
+        elif year:
+            y = int(year) - 543 if year.startswith("25") else int(year)
+        else:
+            y = as_of.year if month >= as_of.month else as_of.year + 1
+        found.append(pd.Timestamp(y, month, 1))
+    for word, offset in (("เดือนหน้า", 1), ("เดือนถัดไป", 1), ("เดือนนี้", 0)):
+        if word in question:
+            found.append((as_of + pd.offsets.MonthBegin(offset)).normalize() if offset else as_of.replace(day=1))
+    return list(dict.fromkeys(f"{ABBREVIATIONS[d.month - 1]} {d.year + 543}" for d in found))
+
+
 def _numbers(text: str) -> set[str]:
     return {n.replace(",", "").rstrip(".") for n in NUMBER.findall(text)}
 
 
-def validate(answer: str, facts: dict, user_text: str = "") -> str | None:
+def _fact_groups(node) -> list[str]:
+    """Text of each innermost list or dict of strings in the facts (e.g. the expense list, the
+    monthly outlook); sums and differences are only allowed between numbers of the same group."""
+    groups = []
+    if isinstance(node, dict):
+        direct = [v for v in node.values() if isinstance(v, str)]
+        if direct:
+            groups.append(" ".join(direct))
+        for v in node.values():
+            if not isinstance(v, str):
+                groups += _fact_groups(v)
+    elif isinstance(node, list):
+        if all(isinstance(x, str) for x in node):
+            groups.append(" ".join(node))
+        else:
+            for x in node:
+                groups += _fact_groups(x)
+    return groups
+
+
+def _derived(facts: dict) -> tuple[set[float], np.ndarray]:
+    """Allowed derived numbers: a fact rounded to the nearest hundred/thousand, and exact sums and
+    differences of two money amounts in the same group. A random number passes ~2% of the time."""
+    values = np.array(sorted({float(n) for n in _numbers(json.dumps(facts, ensure_ascii=False))}))
+    rounded = set(np.round(values[values >= 1000], -2)) | set(np.round(values[values >= 10000], -3))
+    sums = [np.zeros(0)]
+    for text in _fact_groups(facts):
+        v = np.unique([float(n) for n in _numbers(text) if float(n) >= 100])
+        if len(v) > 1:
+            sums += [(v[:, None] + v[None, :]).ravel(), np.abs(v[:, None] - v[None, :]).ravel()]
+    return rounded, np.unique(np.concatenate(sums))
+
+
+def _is_derived(value: float, rounded: set[float], sums: np.ndarray) -> bool:
+    if value in rounded:
+        return True
+    i = np.searchsorted(sums, value)
+    return any(abs(sums[j] - value) < 0.5 for j in (i - 1, i) if 0 <= j < len(sums))
+
+
+def validate(answer: str, facts: dict, user_text: str = "", months: list[str] | None = None) -> str | None:
     """None if the answer is safe to show, otherwise the reason it is not."""
     lowered = answer.lower()
     for phrase in BANNED_PHRASES:
         if phrase in lowered:
             return f"banned phrase: {phrase}"
-    allowed = (_numbers(json.dumps(facts, ensure_ascii=False)) | _numbers(DISCLAIMER)
-               | _numbers(user_text) | SMALL_COUNTS | {"100"})
-    invented = _numbers(answer) - allowed
-    if invented:
-        return f"numbers not in facts: {sorted(invented)}"
-    # A month/year must exist in the facts (or the question): catches a figure moved to another month or year.
-    wrong_months = _month_years(answer) - _month_years(json.dumps(facts, ensure_ascii=False)) - _month_years(user_text)
+    facts_text = json.dumps(facts, ensure_ascii=False)
+    exact = _numbers(facts_text) | _numbers(DISCLAIMER) | _numbers(user_text) | SMALL_COUNTS | {"100"}
+    exact |= _numbers(" ".join(months or []))
+    unknown = _numbers(answer) - exact
+    if unknown:
+        rounded, sums = _derived(facts)
+        invented = sorted(n for n in unknown if not _is_derived(float(n), rounded, sums))
+        if invented:
+            return f"numbers not in facts: {invented}"
+    # A month/year must exist in the facts or the question: catches a figure moved to another month or year.
+    known = _month_years(facts_text) | _month_years(user_text) | _month_years(" ".join(months or []))
+    wrong_months = _month_years(answer) - known
     if wrong_months:
         return f"months not in facts: {sorted(' '.join(m) for m in wrong_months)}"
     return None
@@ -139,7 +221,33 @@ def _gap_line(facts: dict) -> str:
     return line
 
 
-def template_answer(facts: dict, question: str | None = None) -> str:
+METHOD_SHORT = {"พยากรณ์ 3 เดือน": "LSTM+GRU ทายต่อเนื่อง", "ภาพรวมรายเดือน": "ภาพรวมตามฤดูกาล ไม่ใช่ผลโมเดล deep learning"}
+
+
+def _long_range_answer(facts: dict, fc: dict, months: list[str]) -> list[str]:
+    """Answer the asked months directly; without specific months, a short overview."""
+    blocks = {k: b for k, b in facts["พยากรณ์ระยะยาว"].items() if isinstance(b, dict) and "ยอดขายรายเดือน" in b}
+    if not blocks:
+        return ["ยังไม่มีข้อมูลพยากรณ์ระยะยาวของร้านนี้"]
+    short = {k: next(v for prefix, v in METHOD_SHORT.items() if k.startswith(prefix)) for k in blocks}
+    if months:
+        lines = []
+        for m in months:
+            hits = [f"- {short[k]}: {row.split(': ', 1)[1]}" for k, b in blocks.items()
+                    for row in b["ยอดขายรายเดือน"] if row.startswith(m)]
+            if hits:
+                lines += [f"{m}:"] + hits
+            else:
+                coverage = " และ ".join(b["ช่วงที่ครอบคลุม"] for b in blocks.values())
+                lines.append(f"{m} อยู่นอกช่วงที่พยากรณ์ได้ (ครอบคลุม {coverage})")
+        return lines
+    lines = [f"โมเดลหลักพยากรณ์{fc['ช่วงที่โมเดลพยากรณ์']}"]
+    for k, b in blocks.items():
+        lines += [f"{short[k]} ครอบคลุม {b['ช่วงที่ครอบคลุม']}:"] + [f"- {x}" for x in b["ยอดขายรายเดือน"][:3]]
+    return lines
+
+
+def template_answer(facts: dict, question: str | None = None, months: list[str] | None = None) -> str:
     """Deterministic, topic-aware fallback built only from `facts`."""
     sales = facts["ยอดขายที่ผ่านมา (ข้อมูลจริง)"]
     fc = facts["การพยากรณ์ยอดขาย (โมเดล LSTM+GRU)"]
@@ -147,19 +255,14 @@ def template_answer(facts: dict, question: str | None = None) -> str:
     bal = facts["ยอดเงินคงเหลือ (ข้อมูลจำลอง)"]
     score = facts["สัญญาณการเงิน (ทดลอง ไม่ใช่คะแนนเครดิต)"]
     topic = _topic(question)
+    if months and topic not in ("loan", "scenario", "expense"):
+        topic = "long_range"
 
     if topic == "loan":
         lines = ["ผู้ช่วยนี้ไม่ให้คำแนะนำด้านสินเชื่อหรือการกู้เงิน แต่สรุปสถานะเงินสดให้ได้ดังนี้", _gap_line(facts),
                  f"ยอดเงินคงเหลือวันนี้ {bal['วันนี้']} ต่ำสุดในช่วงคาดการณ์ {bal['ต่ำสุดในช่วงคาดการณ์']}"]
     elif topic == "long_range":
-        lr = facts["พยากรณ์ระยะยาว"]
-        lines = [f"โมเดลหลักพยากรณ์{fc['ช่วงที่โมเดลพยากรณ์']}"]
-        for key, block in lr.items():
-            if isinstance(block, dict) and "ยอดขายรายเดือน" in block:
-                lines += [f"{key} ครอบคลุม {block['ช่วงที่ครอบคลุม']}:"] + [f"- {x}" for x in block["ยอดขายรายเดือน"][:4]]
-                lines.append(f"ความแม่น: {next(v for k, v in block.items() if k.startswith('ความแม่น'))}")
-        if len(lines) == 1:
-            lines.append("ยังไม่มีข้อมูลพยากรณ์ระยะยาวของร้านนี้")
+        lines = _long_range_answer(facts, fc, months or [])
     elif topic == "forecast":
         lines = [f"โมเดลพยากรณ์{fc['ช่วงที่โมเดลพยากรณ์']}", "ยอดขายคาดการณ์รายสัปดาห์:"]
         lines += [f"- {w}" for w in fc["ยอดขายคาดการณ์รายสัปดาห์"]]
@@ -199,13 +302,17 @@ def template_answer(facts: dict, question: str | None = None) -> str:
 # --- LLM -------------------------------------------------------------------------
 
 
-def call_llm(facts: dict, question: str | None, history: list[dict], feedback: str | None = None) -> str:
+def call_llm(facts: dict, question: str | None, history: list[dict], feedback: str | None = None,
+             months: list[str] | None = None) -> str:
     key = os.environ.get("LLM_API_KEY")
     if not key:
         raise RuntimeError("LLM_API_KEY not set")
     messages = [{"role": "system", "content": SYSTEM_PROMPT.format(facts=json.dumps(facts, ensure_ascii=False, indent=1))}]
     messages += history[-MAX_HISTORY_MESSAGES:]
-    messages.append({"role": "user", "content": question or "สรุปสถานะการเงินของร้านให้หน่อย"})
+    content = question or "สรุปสถานะการเงินของร้านให้หน่อย"
+    if months:
+        content += f" (ระบบ: หมายถึง {', '.join(months)})"
+    messages.append({"role": "user", "content": content})
     if feedback:
         messages.append({"role": "user", "content":
                          f"คำตอบก่อนหน้าใช้ไม่ได้ ({feedback}) ตอบใหม่โดยใช้เฉพาะตัวเลขใน FACTS ห้ามคำนวณเอง"})
@@ -213,7 +320,7 @@ def call_llm(facts: dict, question: str | None, history: list[dict], feedback: s
         f"{os.environ.get('LLM_BASE_URL', DEFAULT_BASE_URL).rstrip('/')}/chat/completions",
         headers={"Authorization": f"Bearer {key}"},
         json={"model": os.environ.get("LLM_MODEL", DEFAULT_MODEL), "messages": messages,
-              "temperature": 0.3, "max_tokens": 700},
+              "temperature": 0.4, "max_tokens": 800},
         timeout=TIMEOUT_SECONDS,
     )
     resp.raise_for_status()
@@ -225,12 +332,13 @@ def explain(ctx: MerchantContext, question: str | None = None, history: list[dic
     history = [m for m in (history or []) if m.get("role") in ("user", "assistant") and m.get("content")]
     facts = build_facts(ctx)
     user_text = " ".join([question or ""] + [m["content"] for m in history if m["role"] == "user"])
+    months = resolve_months(question, ctx.as_of)
     source, reason = "template", None
-    answer = template_answer(facts, question)
+    answer = template_answer(facts, question, months)
     try:
         for _ in range(MAX_ATTEMPTS):
-            llm_answer = call_llm(facts, question, history, reason)
-            reason = validate(llm_answer, facts, user_text)
+            llm_answer = call_llm(facts, question, history, reason, months)
+            reason = validate(llm_answer, facts, user_text, months)
             if reason is None:
                 break
         if reason is None:

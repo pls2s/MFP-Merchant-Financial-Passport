@@ -88,7 +88,7 @@ def test_score_rank_ties_share_rank():
     ("โปรโมชันช่วยไหม", "โปรโมชัน"),
     ("ทำไมคะแนนได้เท่านี้", "องค์ประกอบ"),
     ("ควรกู้เงินไหม", "ไม่ให้คำแนะนำด้านสินเชื่อ"),
-    ("เดือนหน้ายอดขายจะเป็นยังไง", "พยากรณ์ 3 เดือนข้างหน้า"),
+    ("เดือนหน้ายอดขายจะเป็นยังไง", "LSTM+GRU ทายต่อเนื่อง"),
     ("สัปดาห์หน้ายอดขายเป็นยังไง", "ยอดขายคาดการณ์รายสัปดาห์"),
 ])
 def test_template_answers_by_topic_and_passes_validation(facts, question, expected):
@@ -120,7 +120,7 @@ def test_no_api_key_falls_back_to_topic_template(ctx, monkeypatch):
 def test_history_is_passed_and_user_numbers_allowed(ctx, monkeypatch):
     seen = {}
 
-    def fake(facts, q, history, feedback=None):
+    def fake(facts, q, history, feedback=None, months=None):
         seen["history"] = history
         return "ถ้าขายได้ 99,999 ระบบยังไม่มีสถานการณ์นี้ แต่มีกรณียอดขายลดลงให้ดูครับ"
 
@@ -135,7 +135,7 @@ def test_history_is_passed_and_user_numbers_allowed(ctx, monkeypatch):
 def test_retry_once_with_feedback_then_accept(ctx, monkeypatch):
     calls = []
 
-    def fake(facts, q, history, feedback=None):
+    def fake(facts, q, history, feedback=None, months=None):
         calls.append(feedback)
         return "รวม 123,456" if feedback is None else "วันที่ 22 ก.ค. 2558 ขาดประมาณ 7,900"
 
@@ -146,13 +146,13 @@ def test_retry_once_with_feedback_then_accept(ctx, monkeypatch):
 
 def test_gives_up_after_max_attempts(ctx, monkeypatch):
     calls = []
-    monkeypatch.setattr(cp, "call_llm", lambda facts, q, history, feedback=None: calls.append(1) or "แนะนำให้กู้")
+    monkeypatch.setattr(cp, "call_llm", lambda facts, q, history, feedback=None, months=None: calls.append(1) or "แนะนำให้กู้")
     result = cp.explain(ctx)
     assert result["source"] == "template" and len(calls) == cp.MAX_ATTEMPTS
 
 
 def test_api_error_falls_back(ctx, monkeypatch):
-    def boom(facts, q, history, feedback=None):
+    def boom(facts, q, history, feedback=None, months=None):
         raise requests.ConnectionError("down")
     monkeypatch.setattr(cp, "call_llm", boom)
     assert cp.explain(ctx)["source"] == "template"
@@ -165,7 +165,7 @@ def test_long_range_facts_label_methods_and_accuracy(facts):
     rec = lr["พยากรณ์ 3 เดือนข้างหน้า (LSTM+GRU ทายต่อเนื่องทีละ 14 วัน)"]
     assert rec["ยอดขายรายเดือน"][1].startswith("ส.ค. 2558: 31,000")  # 31 days × 1,000
     assert "7.6%" in rec["ความแม่น (ทดสอบย้อนหลัง 84 วัน)"]
-    sea = lr["ภาพรวม 12 เดือนข้างหน้า (ตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning)"]
+    sea = lr["ภาพรวมรายเดือนระยะยาว (ตามฤดูกาลจากยอดปีก่อน ไม่ใช่ผลโมเดล deep learning)"]
     assert len(sea["ยอดขายรายเดือน"]) == 12 and sea["ยอดขายรายเดือน"][-1].endswith("ข้อมูลไม่พอ")
 
 
@@ -182,3 +182,51 @@ def test_validate_rejects_month_year_not_in_facts(facts):
     assert cp.validate("ธันวาคม 2558 ยอดประมาณ 30,000", facts) is None  # full month name is fine
     assert "months not in facts" in cp.validate("ธันวาคม 2559 ยอดประมาณ 30,000", facts)  # beyond the outlook
     assert cp.validate("ธันวาคม 2559 ยังพยากรณ์ไม่ได้", facts, user_text="ธันวาคม 2559 จะเป็นยังไง") is None
+
+
+@pytest.mark.parametrize("question,expected", [
+    ("เดือนสิงหาคมปีหน้าจะเป็นยังไง", ["ส.ค. 2559"]),
+    ("สิงหาคมจะขายได้เท่าไหร่", ["ส.ค. 2558"]),        # next occurrence after 17 Jul 2558
+    ("มีนาคมเป็นยังไง", ["มี.ค. 2559"]),
+    ("ธ.ค. 2558 กับ ธันวาคมปีที่แล้ว", ["ธ.ค. 2558", "ธ.ค. 2557"]),
+    ("เดือนหน้าขายได้เท่าไหร่", ["ส.ค. 2558"]),
+    ("December 2015", []),
+])
+def test_resolve_months(question, expected):
+    assert cp.resolve_months(question, AS_OF) == expected
+
+
+def test_validate_allows_sums_and_rounding_but_not_inventions(facts):
+    # The fixture has expenses 40,000 and 3,000 and a shortfall of 7,900.
+    assert cp.validate("รวมรายจ่ายสองรายการ 43,000", facts) is None            # 40,000 + 3,000
+    assert cp.validate("ส่วนต่าง 37,000", facts) is None                       # 40,000 − 3,000 (same list)
+    assert "numbers not in facts" in cp.validate("ส่วนต่าง 29,000", facts)    # not a sum/difference within a list
+    assert "numbers not in facts" in cp.validate("ตั้งเป้าเงินสำรอง 10,000", facts)  # a made-up target
+    assert cp.validate("ประมาณ 31,000 ต่อเดือน", facts) is None                # 31,000 is in the facts anyway
+    assert "numbers not in facts" in cp.validate("ประมาณ 45,500", facts)
+    assert "numbers not in facts" in cp.validate("เพิ่มขึ้น 37%", facts)          # no self-made percentages
+
+
+def test_month_outside_horizon_gets_direct_template_answer(facts):
+    months = cp.resolve_months("กรกฎาคม 2560 จะขายได้เท่าไหร่", AS_OF)
+    text = cp.template_answer(facts, "กรกฎาคม 2560 จะขายได้เท่าไหร่", months)
+    assert text.startswith("ก.ค. 2560 อยู่นอกช่วงที่พยากรณ์ได้")
+    assert cp.validate(text, facts, months=months) is None
+
+
+def test_month_inside_horizon_gets_its_value(facts):
+    months = cp.resolve_months("สิงหาคมจะขายได้เท่าไหร่", AS_OF)
+    text = cp.template_answer(facts, "สิงหาคมจะขายได้เท่าไหร่", months)
+    assert text.startswith("ส.ค. 2558:") and "LSTM+GRU ทายต่อเนื่อง: 31,000" in text and "ภาพรวมตามฤดูกาล" in text
+
+
+def test_llm_sees_resolved_month(ctx, monkeypatch):
+    seen = {}
+
+    def fake(facts, q, history, feedback=None, months=None):
+        seen["months"] = months
+        return "ส.ค. 2559 อยู่นอกช่วงที่พยากรณ์ได้"
+
+    monkeypatch.setattr(cp, "call_llm", fake)
+    result = cp.explain(ctx, "เดือนสิงหาคมปีหน้าจะเป็นยังไง")
+    assert seen["months"] == ["ส.ค. 2559"] and result["source"] == "llm"

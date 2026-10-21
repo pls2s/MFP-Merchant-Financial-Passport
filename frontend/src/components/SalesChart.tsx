@@ -69,7 +69,7 @@ function Summary({ range, p }: { range: RangeKey; p: Props }) {
     headline = <>3 เดือนข้างหน้า (ถึง {thaiDate(end)}) คาดว่าขายได้ประมาณ <b className="num">{money((next / longForecast.points.length) * 30)}</b> ต่อเดือน{" "}
       <Trend value={next / past(longForecast.points.length) - 1} label="เทียบช่วงเท่ากันที่ผ่านมา" /></>;
   } else {
-    const months = seasonal.months.filter((m) => m.outlook != null);
+    const months = seasonal.months.filter((m) => m.backtested && m.outlook != null);
     if (!months.length) {
       headline = <>ร้านนี้ข้อมูลปีก่อนไม่พอ จึงยังไม่มีภาพรวม 1 ปี</>;
     } else {
@@ -263,7 +263,7 @@ function monthRows(p: Props): MonthRow[] {
   const cur = byMonth.get(thisMonth);
   const rest = sum(forecast.points.filter((x) => x.date > asOf && x.date.startsWith(thisMonth)).map((x) => x.forecast));
   rows.push({ month: thisMonth, actual: cur ? cur.sum : null, forecast: rest, err: null, kind: "current" });
-  seasonal.months.forEach((m) => rows.push({
+  seasonal.months.filter((m) => m.backtested).forEach((m) => rows.push({
     month: m.month, actual: null, forecast: m.outlook,
     err: m.outlook != null && m.lower != null && m.upper != null ? [m.outlook - m.lower, m.upper - m.outlook] : null,
     kind: "outlook",
