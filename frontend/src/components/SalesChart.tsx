@@ -4,12 +4,12 @@ import {
   Bar,
   CartesianGrid,
   Cell,
+  Line,
   ComposedChart,
   ErrorBar,
   ReferenceArea,
   ReferenceLine,
   ResponsiveContainer,
-  Scatter,
   Tooltip,
   XAxis,
   YAxis,
@@ -109,7 +109,7 @@ function Trend({ value, label }: { value: number; label: string }) {
 interface DayRow {
   date: string;
   actual: number | null; // real sales up to today (bar)
-  laterActual: number | null; // real sales after today, up to the data end (tick over the forecast bar) — details only
+  laterActual: number | null; // real sales after today, up to the data end (line over the forecast bars) — details only
   forecast: number | null;
   band: [number, number] | null;
   simulated: number | null; // synthetic sales after the data ends (ข้อมูลจำลอง) — details only
@@ -141,6 +141,8 @@ function dayRows(range: "4w" | "3m", p: Props, details: boolean): DayRow[] {
     if (!future) row.actual = positive(h?.sales);
     else if (details && d <= DATA_END) row.laterActual = positive(main.get(d)?.actual);
     else if (details) row.simulated = positive(simulated.get(d));
+    // join the two lines: the simulated line starts from the last real day
+    if (details && d === DATA_END) row.simulated = row.laterActual;
     if (future && f && positive(f.forecast) && f.lower != null && f.upper != null) {
       row.forecast = f.forecast;
       row.band = [f.lower, f.upper];
@@ -177,13 +179,6 @@ function DayTooltip({ active, payload, label }: { active?: boolean; payload?: { 
   );
 }
 
-/** Horizontal tick the width of a day slot, centred on the value. */
-function DayTick({ cx, cy, color, xAxis }: { cx?: number; cy?: number; color: string; xAxis?: { bandSize?: number } }) {
-  if (cx == null || cy == null) return null;
-  const half = Math.min((xAxis?.bandSize ?? 10) * 0.45, 9);
-  return <line x1={cx - half} x2={cx + half} y1={cy} y2={cy} stroke={color} strokeWidth={2.5} strokeLinecap="round" />;
-}
-
 function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; details: boolean }) {
   const { asOf, gaps, pastGaps } = p;
   const rows = useMemo(() => dayRows(range, p, details), [range, p, details]);
@@ -209,8 +204,8 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
           <span><i className="swatch promo" />วันโปรโมชัน</span>
           {pastGaps.length > 0 && <span><i className="swatch dashed past-gap" />วันที่เงินเคยไม่พอ</span>}
           {range === "3m" && <span><i className="swatch synthetic" />ตารางโปรโมชันจำลอง</span>}
-          <span><i className="swatch tick" />ยอดจริงหลังวันนี้ (ถึง 31 ก.ค.)</span>
-          <span><i className="swatch tick simulated-tick" />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>
+          <span><i className="swatch" style={{ background: "var(--series-actual)" }} />ยอดจริงหลังวันนี้ (ถึง 31 ก.ค.)</span>
+          <span><i className="swatch" style={{ background: "var(--series-simulated)" }} />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>
         </>}
       </div>
       <div style={{ width: "100%", height: 300 }}>
@@ -242,9 +237,11 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
                   fillOpacity={gapDays.has(r.date) ? 0.9 : 0.6} />
               ))}
             </Bar>
-            {/* Details: what actually happened (or synthetic sales) as a short tick over that day's forecast bar. */}
-            <Scatter dataKey="laterActual" shape={<DayTick color="var(--series-actual)" />} isAnimationActive={false} />
-            <Scatter dataKey="simulated" shape={<DayTick color="var(--text-3)" />} isAnimationActive={false} />
+            {/* Details: what actually happened (real, then synthetic) as two coloured lines over the forecast bars. */}
+            <Line dataKey="laterActual" stroke="var(--series-actual)" strokeWidth={2} connectNulls
+              dot={{ r: 2.5, fill: "var(--series-actual)", stroke: "none" }} isAnimationActive={false} />
+            <Line dataKey="simulated" stroke="var(--series-simulated)" strokeWidth={2} connectNulls
+              dot={range === "4w" ? { r: 2.5, fill: "var(--series-simulated)", stroke: "none" } : false} isAnimationActive={false} />
             <ReferenceLine x={asOf} stroke="var(--text-3)" strokeDasharray="3 3"
               label={{ value: "วันนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
             {shown.map((g, i) => (
@@ -376,8 +373,8 @@ export function SalesChart(props: Props) {
       {range === "1y" ? <MonthlyChart p={props} /> : <DailyChart range={range} p={props} details={details} />}
       {details && range !== "1y" && (
         <p className="muted small chart-note">
-          รายละเอียด: แถบเขียว = วันโปรโมชัน · เส้นประเทา = วันหยุดนักขัตฤกษ์ · หลังวันนี้ ขีดดำบนแท่ง = ยอดขายจริงถึง 31 ก.ค. 2558
-          (ข้อมูลจบแค่นั้น) แล้วต่อด้วยขีดเทา = <b>ยอดขายจำลอง</b> (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)
+          รายละเอียด: แถบเขียว = วันโปรโมชัน · เส้นประเทา = วันหยุดนักขัตฤกษ์ · หลังวันนี้ เส้นดำทับแท่งคาดการณ์ = ยอดขายจริงถึง 31 ก.ค. 2558
+          (ข้อมูลจบแค่นั้น) แล้วต่อด้วยเส้นชมพู = <b>ยอดขายจำลอง</b> (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)
           {range === "3m" && " · แรเงาเทา = ตารางโปรโมชันจำลองแบบเดียวกับปีก่อน"}
         </p>
       )}
