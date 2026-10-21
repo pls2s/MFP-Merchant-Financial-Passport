@@ -6,10 +6,10 @@ import {
   Cell,
   ComposedChart,
   ErrorBar,
-  Line,
   ReferenceArea,
   ReferenceLine,
   ResponsiveContainer,
+  Scatter,
   Tooltip,
   XAxis,
   YAxis,
@@ -22,7 +22,8 @@ import type { Forecast, Gap, LongForecast, ModelResult, SalesHistory, SeasonalOu
 import { Accuracy } from "./Accuracy";
 
 /**
- * Sales chart, simple by default:
+ * Sales chart, simple by default. Daily views draw one bar per day so every day is its own slot
+ * (closed days stay empty); the forecast band sits faintly behind the bars.
  *   4w — actual + main LSTM+GRU 14-day forecast
  *   3m — actual + the same models rolled forward 84 days
  *   1y — monthly bars: last 12 months actual, next 12 months seasonal outlook (NOT deep learning)
@@ -106,7 +107,8 @@ function Trend({ value, label }: { value: number; label: string }) {
 
 interface DayRow {
   date: string;
-  actual: number | null;
+  actual: number | null; // real sales up to today (bar)
+  laterActual: number | null; // real sales after today, up to the data end (tick over the forecast bar) — details only
   forecast: number | null;
   band: [number, number] | null;
   simulated: number | null; // synthetic sales after the data ends (ข้อมูลจำลอง) — details only
@@ -131,18 +133,17 @@ function dayRows(range: "4w" | "3m", p: Props, details: boolean): DayRow[] {
     const future = d > asOf;
     const f = range === "4w" ? main.get(d) : long.get(d);
     const row: DayRow = {
-      date: d, actual: null, forecast: null, band: null, simulated: null,
+      date: d, actual: null, laterActual: null, forecast: null, band: null, simulated: null,
       open: h?.open ?? true, promo: h?.promo ?? false, holiday: h?.holiday ?? false,
       schoolHoliday: h?.school_holiday ?? false, assumed: range === "3m" && d > DATA_END,
     };
     if (!future) row.actual = positive(h?.sales);
-    else if (details && d <= DATA_END) row.actual = positive(main.get(d)?.actual);
+    else if (details && d <= DATA_END) row.laterActual = positive(main.get(d)?.actual);
     else if (details) row.simulated = positive(simulated.get(d));
     if (future && f && positive(f.forecast) && f.lower != null && f.upper != null) {
       row.forecast = f.forecast;
       row.band = [f.lower, f.upper];
     }
-    if (d === asOf) row.forecast = row.actual; // join the lines at "today"
     rows.push(row);
   }
   return rows;
@@ -166,12 +167,20 @@ function DayTooltip({ active, payload, label }: { active?: boolean; payload?: { 
     <div className="chart-tooltip">
       <strong>{thaiWeekday(label)} {thaiDate(label)}</strong>
       {r.actual != null && <div>ยอดขายจริง <b className="num">{money(r.actual)}</b></div>}
+      {r.laterActual != null && <div>ยอดขายจริง <b className="num">{money(r.laterActual)}</b></div>}
       {r.simulated != null && <div>ยอดขายจำลอง <span className="num">{money(r.simulated)}</span> <span className="muted">(ไม่ใช่ข้อมูลจริง)</span></div>}
       {r.band && r.forecast != null && <div>คาดการณ์ <b className="num">{money(r.forecast)}</b></div>}
       {r.band && <div className="muted">ช่วง {money(r.band[0])} – {money(r.band[1])}</div>}
       {tags.length > 0 && <div className="tooltip-tags">{tags.join(" · ")}</div>}
     </div>
   );
+}
+
+/** Horizontal tick the width of a day slot, centred on the value. */
+function DayTick({ cx, cy, color, xAxis }: { cx?: number; cy?: number; color: string; xAxis?: { bandSize?: number } }) {
+  if (cx == null || cy == null) return null;
+  const half = Math.min((xAxis?.bandSize ?? 10) * 0.45, 9);
+  return <line x1={cx - half} x2={cx + half} y1={cy} y2={cy} stroke={color} strokeWidth={2.5} strokeLinecap="round" />;
 }
 
 function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; details: boolean }) {
@@ -186,20 +195,22 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
   return (
     <>
       <div className="chart-legend">
-        <span><i className="swatch" style={{ background: "var(--series-actual)" }} />ยอดขายจริง</span>
-        <span><i className="swatch dashed" />{range === "3m" ? "คาดการณ์ 3 เดือน" : "คาดการณ์ 14 วัน"}</span>
+        <span><i className="swatch bar" style={{ background: "var(--series-actual)", opacity: 0.8 }} />ยอดขายจริง</span>
+        <span><i className="swatch bar" style={{ background: "var(--series-forecast)", opacity: 0.6 }} />{range === "3m" ? "คาดการณ์ 3 เดือน" : "คาดการณ์ 14 วัน"}</span>
         <span><i className="swatch band" />ช่วงที่น่าจะเป็น</span>
+        <span className="muted">ช่องว่าง = ร้านปิด</span>
         {gaps.length > 0 && <span><i className="swatch" style={{ background: "var(--bad)" }} />วันที่เงินอาจไม่พอ</span>}
         {details && <>
           <span><i className="swatch promo" />วันโปรโมชัน</span>
           {pastGaps.length > 0 && <span><i className="swatch dashed past-gap" />วันที่เงินเคยไม่พอ</span>}
           {range === "3m" && <span><i className="swatch synthetic" />ตารางโปรโมชันจำลอง</span>}
-          <span><i className="swatch dashed simulated" />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>
+          <span><i className="swatch tick" />ยอดจริงหลังวันนี้ (ถึง 31 ก.ค.)</span>
+          <span><i className="swatch tick simulated-tick" />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>
         </>}
       </div>
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
-          <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}>
+          <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }} barCategoryGap="22%">
             <CartesianGrid stroke="var(--border)" vertical={false} />
             {assumed.map(([a, b]) => (
               <ReferenceArea key={`as-${a}`} x1={a} x2={b} fill="var(--text-3)" fillOpacity={0.08} stroke="none" ifOverflow="hidden" />
@@ -214,11 +225,14 @@ function DailyChart({ range, p, details }: { range: "4w" | "3m"; p: Props; detai
               minTickGap={monthAxis ? 8 : 24} />
             <YAxis tickFormatter={(v: number) => money(v)} tick={{ fill: "var(--text-2)", fontSize: 12 }}
               axisLine={false} tickLine={false} width={64} />
-            <Tooltip content={<DayTooltip />} />
-            <Area dataKey="band" stroke="none" fill="var(--series-band)" fillOpacity={0.18} connectNulls isAnimationActive={false} />
-            <Line dataKey="actual" stroke="var(--series-actual)" strokeWidth={1.8} dot={false} connectNulls isAnimationActive={false} />
-            <Line dataKey="simulated" stroke="var(--text-3)" strokeWidth={1.4} strokeDasharray="6 3 1 3" dot={false} connectNulls isAnimationActive={false} />
-            <Line dataKey="forecast" stroke="var(--series-forecast)" strokeWidth={2.2} strokeDasharray="6 4" dot={false} connectNulls isAnimationActive={false} />
+            <Tooltip content={<DayTooltip />} cursor={{ fill: "var(--surface-2)" }} />
+            <Area dataKey="band" stroke="none" fill="var(--series-band)" fillOpacity={0.22} connectNulls isAnimationActive={false} />
+            {/* actual (past) and forecast (future) never share a day, so stacking keeps one centred bar per slot. */}
+            <Bar dataKey="actual" stackId="day" fill="var(--series-actual)" fillOpacity={0.8} radius={[2, 2, 0, 0]} maxBarSize={18} isAnimationActive={false} />
+            <Bar dataKey="forecast" stackId="day" fill="var(--series-forecast)" fillOpacity={0.6} radius={[2, 2, 0, 0]} maxBarSize={18} isAnimationActive={false} />
+            {/* Details: what actually happened (or synthetic sales) as a short tick over that day's forecast bar. */}
+            <Scatter dataKey="laterActual" shape={<DayTick color="var(--series-actual)" />} isAnimationActive={false} />
+            <Scatter dataKey="simulated" shape={<DayTick color="var(--text-3)" />} isAnimationActive={false} />
             <ReferenceLine x={asOf} stroke="var(--text-3)" strokeDasharray="3 3"
               label={{ value: "วันนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
             {gaps.filter((g) => inRange(g.date)).map((g) => <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={2} />)}
@@ -347,8 +361,8 @@ export function SalesChart(props: Props) {
       {range === "1y" ? <MonthlyChart p={props} /> : <DailyChart range={range} p={props} details={details} />}
       {details && range !== "1y" && (
         <p className="muted small chart-note">
-          รายละเอียด: แถบเขียว = วันโปรโมชัน · เส้นประเทา = วันหยุดนักขัตฤกษ์ · หลังวันนี้แสดงยอดขายจริงถึง 31 ก.ค. 2558 (ข้อมูลจบแค่นั้น)
-          แล้วต่อด้วย<b>ยอดขายจำลอง</b> (เส้นเทาจุดขีด ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)
+          รายละเอียด: แถบเขียว = วันโปรโมชัน · เส้นประเทา = วันหยุดนักขัตฤกษ์ · หลังวันนี้ ขีดดำบนแท่ง = ยอดขายจริงถึง 31 ก.ค. 2558
+          (ข้อมูลจบแค่นั้น) แล้วต่อด้วยขีดเทา = <b>ยอดขายจำลอง</b> (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)
           {range === "3m" && " · แรเงาเทา = ตารางโปรโมชันจำลองแบบเดียวกับปีก่อน"}
         </p>
       )}
