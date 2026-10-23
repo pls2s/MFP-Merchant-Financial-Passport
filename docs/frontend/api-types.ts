@@ -31,6 +31,81 @@ export interface Forecast {
   metrics: { wape: number; mae: number; rmse: number };
 }
 
+// GET /api/v1/merchants/{id}/sales-history?days=  (dashboard extension, max 365)
+export interface HistoryPoint {
+  date: IsoDate;
+  sales: number | null; // actual; null when missing or after as_of
+  open: boolean;
+  promo: boolean;
+  holiday: boolean;
+  school_holiday: boolean;
+}
+
+export interface SalesHistory {
+  merchant_id: number;
+  as_of: IsoDate;
+  points: HistoryPoint[]; // through 2015-07-31 (flags are known in advance)
+  // ข้อมูลจำลอง after the real data ends (?synthetic_days=, default 366, max 1096). Never show as actual sales.
+  synthetic: { label: string; method: string; is_real: false; points: { date: IsoDate; sales: number }[] };
+}
+
+// GET /api/v1/merchants/{id}/long-forecast  (dashboard extension)
+export interface LongForecast {
+  merchant_id: number;
+  method: string;
+  points: { date: IsoDate; forecast: number; lower: number; upper: number; synthetic_inputs: boolean }[]; // 84 days
+  backtest: {
+    origin: IsoDate; // 2015-05-08, end of Train
+    days: number;
+    wape_store: number | null;
+    wape_all_stores: number;
+    wape_by_block: Record<string, number>; // "1-14": 0.0645, ...
+    points: { date: IsoDate; forecast: number; actual: number }[];
+  };
+}
+
+// GET /api/v1/merchants/{id}/seasonal-outlook  (dashboard extension, NOT a model forecast)
+export interface SeasonalOutlook {
+  merchant_id: number;
+  method: string;
+  is_model_forecast: false;
+  // 24 months from "2015-08"; months 13+ are untested (backtested: false) and have wider bands
+  months: { month: string; outlook: number | null; lower: number | null; upper: number | null; backtested: boolean }[];
+  backtest: {
+    origin: IsoDate;
+    wape_store: number | null;
+    wape_all_stores: number;
+    months: { month: string; outlook: number | null; actual: number | null }[];
+  };
+}
+
+// GET /api/v1/merchants/{id}/cash-balance  (dashboard extension)
+export interface BalancePoint {
+  date: IsoDate;
+  sales: number; // actual up to as_of, forecast after
+  expenses: number; // synthetic
+  balance: number; // synthetic
+  is_forecast: boolean;
+  horizon: BalanceHorizon;
+}
+
+// actual sales · 14-day forecast · 3-month rollout · monthly outlook spread over days
+export type BalanceHorizon = "actual" | "14d" | "3m" | "1y";
+
+// A possible shortfall after the 14-day window — less certain, not part of cash-flow-gaps
+export interface LongGap extends Gap {
+  horizon: "3m" | "1y";
+}
+
+export interface CashBalance {
+  merchant_id: number;
+  opening_balance: number; // on 2015-01-01 (= the store's cash reserve target)
+  points: BalancePoint[]; // 2015-01-01 .. 2016-07-31 (after 2015-07-31: longer projection)
+  past_gaps: Gap[]; // shortfalls before as_of (synthetic expenses, actual sales)
+  long_gaps: LongGap[]; // possible shortfalls from 2015-08-01 (3-month rollout / monthly outlook)
+  is_synthetic_expense: true;
+}
+
 // GET /api/v1/merchants/{id}/cash-flow-gaps?min_buffer=
 export interface Contributor {
   type: "supplier_invoice" | "rent" | "payroll" | "utilities" | string;
@@ -71,8 +146,14 @@ export interface CreditSignal {
 }
 
 // POST /api/v1/merchants/{id}/copilot  body: CopilotRequest
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 export interface CopilotRequest {
   question?: string | null; // max 500 chars
+  history?: ChatMessage[]; // earlier turns, oldest first (max 20)
 }
 
 export interface CopilotResponse {

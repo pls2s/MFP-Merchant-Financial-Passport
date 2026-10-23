@@ -59,6 +59,32 @@ def forecast(merchant_id: int):
     return store.forecasts[merchant_id]
 
 
+@app.get("/api/v1/merchants/{merchant_id}/sales-history", response_model=schemas.SalesHistory)
+def sales_history(merchant_id: int, days: int = Query(default=90, ge=7, le=365),
+                  synthetic_days: int = Query(default=366, ge=0, le=1096,
+                                              description="Days of synthetic sales after the real data ends")):
+    _require(merchant_id)
+    return store.sales_history(merchant_id, days, synthetic_days)
+
+
+@app.get("/api/v1/merchants/{merchant_id}/long-forecast", response_model=schemas.LongForecast)
+def long_forecast(merchant_id: int):
+    _require(merchant_id)
+    return store.long_forecast(merchant_id)
+
+
+@app.get("/api/v1/merchants/{merchant_id}/seasonal-outlook", response_model=schemas.SeasonalOutlook)
+def seasonal_outlook(merchant_id: int):
+    _require(merchant_id)
+    return store.seasonal_outlook(merchant_id)
+
+
+@app.get("/api/v1/merchants/{merchant_id}/cash-balance", response_model=schemas.CashBalance)
+def cash_balance(merchant_id: int):
+    _require(merchant_id)
+    return store.cash_balance(merchant_id)
+
+
 @app.get("/api/v1/merchants/{merchant_id}/cash-flow-gaps", response_model=schemas.CashFlowGaps)
 def cash_flow_gaps(merchant_id: int, min_buffer: float = Query(default=0.0, ge=0)):
     _require(merchant_id)
@@ -74,7 +100,8 @@ def credit_signal(merchant_id: int):
 @app.post("/api/v1/merchants/{merchant_id}/copilot", response_model=schemas.CopilotResponse)
 def copilot(merchant_id: int, body: schemas.CopilotRequest | None = None):
     _require(merchant_id)
-    return store.copilot(merchant_id, body.question if body else None)
+    body = body or schemas.CopilotRequest()
+    return store.copilot(merchant_id, body.question, [m.model_dump() for m in body.history])
 
 
 @app.get("/api/v1/model-results", response_model=list[schemas.ModelResult])

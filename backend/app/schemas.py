@@ -48,6 +48,134 @@ class Forecast(BaseModel):
     metrics: ForecastMetrics
 
 
+# --- GET /api/v1/merchants/{id}/sales-history (dashboard extension) -----------
+
+
+class HistoryPoint(BaseModel):
+    date: IsoDate
+    sales: float | None = Field(description="Actual sales; null when missing or after the demo date")
+    open: bool
+    promo: bool
+    holiday: bool
+    school_holiday: bool
+
+
+class SyntheticSalesPoint(BaseModel):
+    date: IsoDate
+    sales: float
+
+
+class SyntheticSales(BaseModel):
+    label: str
+    method: str
+    is_real: Literal[False] = False
+    points: list[SyntheticSalesPoint]
+
+
+class SalesHistory(BaseModel):
+    merchant_id: int
+    as_of: IsoDate
+    points: list[HistoryPoint]
+    synthetic: SyntheticSales = Field(description="ข้อมูลจำลอง after the real data ends — never use as actual sales")
+
+
+# --- GET /api/v1/merchants/{id}/long-forecast (dashboard extension) -----------
+
+
+class LongPoint(BaseModel):
+    date: IsoDate
+    forecast: float
+    lower: float
+    upper: float
+    synthetic_inputs: bool = Field(description="Promo/open days assumed from last year (after the data ends)")
+
+
+class BacktestPoint(BaseModel):
+    date: IsoDate
+    forecast: float
+    actual: float
+
+
+class LongBacktest(BaseModel):
+    origin: IsoDate
+    days: int
+    wape_store: float | None
+    wape_all_stores: float
+    wape_by_block: dict[str, float]
+    points: list[BacktestPoint]
+
+
+class LongForecast(BaseModel):
+    merchant_id: int
+    method: str
+    points: list[LongPoint]
+    backtest: LongBacktest
+
+
+# --- GET /api/v1/merchants/{id}/seasonal-outlook (dashboard extension) --------
+
+
+class OutlookMonth(BaseModel):
+    month: str = Field(description="YYYY-MM")
+    outlook: float | None
+    lower: float | None
+    upper: float | None
+    backtested: bool = Field(description="Within the 12 months covered by the backtest; later months are untested")
+
+
+class OutlookBacktestMonth(BaseModel):
+    month: str
+    outlook: float | None
+    actual: float | None
+
+
+class SeasonalBacktest(BaseModel):
+    origin: IsoDate
+    wape_store: float | None
+    wape_all_stores: float
+    months: list[OutlookBacktestMonth]
+
+
+class SeasonalOutlook(BaseModel):
+    merchant_id: int
+    method: str
+    is_model_forecast: Literal[False] = False
+    months: list[OutlookMonth]
+    backtest: SeasonalBacktest
+
+
+# --- GET /api/v1/merchants/{id}/cash-balance (dashboard extension) ------------
+
+
+class BalancePoint(BaseModel):
+    date: IsoDate
+    sales: float
+    expenses: float
+    balance: float
+    is_forecast: bool
+    horizon: Literal["actual", "14d", "3m", "1y"] = Field(
+        description="Where the day's sales come from: actual, 14-day forecast, 3-month rollout, monthly outlook")
+
+
+class LongGap(BaseModel):
+    date: IsoDate
+    shortfall: float
+    balance_after: float
+    contributors: list["Contributor"]
+    horizon: Literal["3m", "1y"]
+
+
+class CashBalance(BaseModel):
+    merchant_id: int
+    opening_balance: float
+    points: list[BalancePoint]
+    past_gaps: list["Gap"] = Field(description="Shortfalls in the actual-sales history (before as_of)")
+    long_gaps: list[LongGap] = Field(
+        description="Possible shortfalls after the 14-day window (3-month rollout / monthly outlook) — less certain, "
+                    "not part of cash-flow-gaps")
+    is_synthetic_expense: Literal[True] = True
+
+
 # --- GET /api/v1/merchants/{id}/cash-flow-gaps ---------------------------------
 
 
@@ -102,8 +230,15 @@ class CreditSignal(BaseModel):
 # --- POST /api/v1/merchants/{id}/copilot (optional) ----------------------------
 
 
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(max_length=4000)
+
+
 class CopilotRequest(BaseModel):
     question: str | None = Field(default=None, max_length=500)
+    history: list[ChatMessage] = Field(default_factory=list, max_length=20,
+                                       description="Earlier turns of this conversation, oldest first")
 
 
 class CopilotResponse(BaseModel):
@@ -125,3 +260,6 @@ class ModelResult(BaseModel):
     mae: float
     rmse: float
     n_days: int
+
+
+CashBalance.model_rebuild()

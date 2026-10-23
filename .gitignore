@@ -36,6 +36,13 @@ models/lightgbm/
 models/predictions/
 models/forecasts/*
 !models/forecasts/ensemble.json
+!models/forecasts/sales_history.parquet
+!models/forecasts/long_forecast.parquet
+!models/forecasts/long_backtest.parquet
+!models/forecasts/seasonal_outlook.parquet
+!models/forecasts/seasonal_backtest.parquet
+!models/forecasts/long_range_metrics.json
+!models/forecasts/synthetic_sales.parquet
 models/favorita/*
 !models/favorita/results.csv
 models/experiments/*

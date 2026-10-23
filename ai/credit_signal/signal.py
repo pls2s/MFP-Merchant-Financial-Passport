@@ -45,7 +45,7 @@ def components(history: pd.DataFrame, as_of: pd.Timestamp, lowest_balance: float
 
 
 def factors(comp: dict[str, float], gaps: list[dict], lowest_balance: float, lowest_date: pd.Timestamp,
-            avg_monthly_expenses: float) -> tuple[list[str], list[str]]:
+            avg_monthly_expenses: float, past_gaps: list[dict] | None = None) -> tuple[list[str], list[str]]:
     """Thai positive factors and risk indicators from per-component thresholds.
     Cash warnings always carry a date and an amount."""
     positive, risk = [], []
@@ -72,14 +72,20 @@ def factors(comp: dict[str, float], gaps: list[dict], lowest_balance: float, low
         positive.append("ไม่พบช่วงที่เงินสดอาจไม่พอใน 14 วันข้างหน้า")
     for gap in gaps:
         risk.append(f"เงินสดอาจไม่พอวันที่ {gap['date']} ขาดประมาณ {gap['shortfall']:,.0f}")
+    if past_gaps:
+        last = past_gaps[-1]
+        risk.append(f"ที่ผ่านมาเงินสดเคยไม่พอ {len(past_gaps)} ครั้ง ล่าสุดวันที่ {last['date']} "
+                    f"ขาดประมาณ {last['shortfall']:,.0f}")
     return positive, risk
 
 
 def credit_signal(merchant_id: int, history: pd.DataFrame, as_of: pd.Timestamp, lowest_balance: float,
-                  lowest_date: pd.Timestamp, avg_monthly_expenses: float, gaps: list[dict]) -> dict:
-    """`credit-signal` contract object."""
+                  lowest_date: pd.Timestamp, avg_monthly_expenses: float, gaps: list[dict],
+                  past_gaps: list[dict] | None = None) -> dict:
+    """`credit-signal` contract object. Past gaps add a risk indicator but do not change the score
+    (CLAUDE.md: gap frequency counts the forecast window)."""
     comp = components(history, as_of, lowest_balance, avg_monthly_expenses, len(gaps))
-    positive, risk = factors(comp, gaps, lowest_balance, lowest_date, avg_monthly_expenses)
+    positive, risk = factors(comp, gaps, lowest_balance, lowest_date, avg_monthly_expenses, past_gaps)
     observed = history[(history["date"] <= as_of) & history["sales"].notna()]
     return {
         "merchant_id": int(merchant_id),

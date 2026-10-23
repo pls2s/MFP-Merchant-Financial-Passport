@@ -1,0 +1,8922 @@
+[
+  {
+    "merchant_id": 1,
+    "name": "ร้านตัวอย่าง #1",
+    "is_demo": true,
+    "gap_count": 2,
+    "score": 58,
+    "forecast_wape": 0.0643
+  },
+  {
+    "merchant_id": 2,
+    "name": "ร้านตัวอย่าง #2",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0954
+  },
+  {
+    "merchant_id": 3,
+    "name": "ร้านตัวอย่าง #3",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0783
+  },
+  {
+    "merchant_id": 4,
+    "name": "ร้านตัวอย่าง #4",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.0785
+  },
+  {
+    "merchant_id": 5,
+    "name": "ร้านตัวอย่าง #5",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0658
+  },
+  {
+    "merchant_id": 6,
+    "name": "ร้านตัวอย่าง #6",
+    "is_demo": false,
+    "gap_count": 1,
+    "score": 63,
+    "forecast_wape": 0.0876
+  },
+  {
+    "merchant_id": 7,
+    "name": "ร้านตัวอย่าง #7",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0824
+  },
+  {
+    "merchant_id": 8,
+    "name": "ร้านตัวอย่าง #8",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0822
+  },
+  {
+    "merchant_id": 9,
+    "name": "ร้านตัวอย่าง #9",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0861
+  },
+  {
+    "merchant_id": 10,
+    "name": "ร้านตัวอย่าง #10",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0974
+  },
+  {
+    "merchant_id": 11,
+    "name": "ร้านตัวอย่าง #11",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0957
+  },
+  {
+    "merchant_id": 12,
+    "name": "ร้านตัวอย่าง #12",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0914
+  },
+  {
+    "merchant_id": 13,
+    "name": "ร้านตัวอย่าง #13",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1447
+  },
+  {
+    "merchant_id": 14,
+    "name": "ร้านตัวอย่าง #14",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0708
+  },
+  {
+    "merchant_id": 15,
+    "name": "ร้านตัวอย่าง #15",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0888
+  },
+  {
+    "merchant_id": 16,
+    "name": "ร้านตัวอย่าง #16",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.075
+  },
+  {
+    "merchant_id": 17,
+    "name": "ร้านตัวอย่าง #17",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1024
+  },
+  {
+    "merchant_id": 18,
+    "name": "ร้านตัวอย่าง #18",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0656
+  },
+  {
+    "merchant_id": 19,
+    "name": "ร้านตัวอย่าง #19",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.077
+  },
+  {
+    "merchant_id": 20,
+    "name": "ร้านตัวอย่าง #20",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.082
+  },
+  {
+    "merchant_id": 21,
+    "name": "ร้านตัวอย่าง #21",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.1168
+  },
+  {
+    "merchant_id": 22,
+    "name": "ร้านตัวอย่าง #22",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0943
+  },
+  {
+    "merchant_id": 23,
+    "name": "ร้านตัวอย่าง #23",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0863
+  },
+  {
+    "merchant_id": 24,
+    "name": "ร้านตัวอย่าง #24",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0953
+  },
+  {
+    "merchant_id": 25,
+    "name": "ร้านตัวอย่าง #25",
+    "is_demo": true,
+    "gap_count": 1,
+    "score": 64,
+    "forecast_wape": 0.0825
+  },
+  {
+    "merchant_id": 26,
+    "name": "ร้านตัวอย่าง #26",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.079
+  },
+  {
+    "merchant_id": 27,
+    "name": "ร้านตัวอย่าง #27",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1115
+  },
+  {
+    "merchant_id": 28,
+    "name": "ร้านตัวอย่าง #28",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0802
+  },
+  {
+    "merchant_id": 29,
+    "name": "ร้านตัวอย่าง #29",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0876
+  },
+  {
+    "merchant_id": 30,
+    "name": "ร้านตัวอย่าง #30",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.0959
+  },
+  {
+    "merchant_id": 31,
+    "name": "ร้านตัวอย่าง #31",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0697
+  },
+  {
+    "merchant_id": 32,
+    "name": "ร้านตัวอย่าง #32",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0816
+  },
+  {
+    "merchant_id": 33,
+    "name": "ร้านตัวอย่าง #33",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.084
+  },
+  {
+    "merchant_id": 34,
+    "name": "ร้านตัวอย่าง #34",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.056
+  },
+  {
+    "merchant_id": 35,
+    "name": "ร้านตัวอย่าง #35",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 92,
+    "forecast_wape": 0.1015
+  },
+  {
+    "merchant_id": 36,
+    "name": "ร้านตัวอย่าง #36",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0839
+  },
+  {
+    "merchant_id": 37,
+    "name": "ร้านตัวอย่าง #37",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0657
+  },
+  {
+    "merchant_id": 38,
+    "name": "ร้านตัวอย่าง #38",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0685
+  },
+  {
+    "merchant_id": 39,
+    "name": "ร้านตัวอย่าง #39",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0974
+  },
+  {
+    "merchant_id": 40,
+    "name": "ร้านตัวอย่าง #40",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0941
+  },
+  {
+    "merchant_id": 41,
+    "name": "ร้านตัวอย่าง #41",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1162
+  },
+  {
+    "merchant_id": 42,
+    "name": "ร้านตัวอย่าง #42",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0974
+  },
+  {
+    "merchant_id": 43,
+    "name": "ร้านตัวอย่าง #43",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0968
+  },
+  {
+    "merchant_id": 44,
+    "name": "ร้านตัวอย่าง #44",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0759
+  },
+  {
+    "merchant_id": 45,
+    "name": "ร้านตัวอย่าง #45",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0812
+  },
+  {
+    "merchant_id": 46,
+    "name": "ร้านตัวอย่าง #46",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.1366
+  },
+  {
+    "merchant_id": 47,
+    "name": "ร้านตัวอย่าง #47",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0789
+  },
+  {
+    "merchant_id": 48,
+    "name": "ร้านตัวอย่าง #48",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0922
+  },
+  {
+    "merchant_id": 49,
+    "name": "ร้านตัวอย่าง #49",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0568
+  },
+  {
+    "merchant_id": 50,
+    "name": "ร้านตัวอย่าง #50",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0757
+  },
+  {
+    "merchant_id": 51,
+    "name": "ร้านตัวอย่าง #51",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0736
+  },
+  {
+    "merchant_id": 52,
+    "name": "ร้านตัวอย่าง #52",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0893
+  },
+  {
+    "merchant_id": 53,
+    "name": "ร้านตัวอย่าง #53",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0796
+  },
+  {
+    "merchant_id": 54,
+    "name": "ร้านตัวอย่าง #54",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0659
+  },
+  {
+    "merchant_id": 55,
+    "name": "ร้านตัวอย่าง #55",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0725
+  },
+  {
+    "merchant_id": 56,
+    "name": "ร้านตัวอย่าง #56",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0693
+  },
+  {
+    "merchant_id": 57,
+    "name": "ร้านตัวอย่าง #57",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 67,
+    "forecast_wape": 0.0673
+  },
+  {
+    "merchant_id": 58,
+    "name": "ร้านตัวอย่าง #58",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1341
+  },
+  {
+    "merchant_id": 59,
+    "name": "ร้านตัวอย่าง #59",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0956
+  },
+  {
+    "merchant_id": 60,
+    "name": "ร้านตัวอย่าง #60",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0776
+  },
+  {
+    "merchant_id": 61,
+    "name": "ร้านตัวอย่าง #61",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1217
+  },
+  {
+    "merchant_id": 62,
+    "name": "ร้านตัวอย่าง #62",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0656
+  },
+  {
+    "merchant_id": 63,
+    "name": "ร้านตัวอย่าง #63",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0824
+  },
+  {
+    "merchant_id": 64,
+    "name": "ร้านตัวอย่าง #64",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.063
+  },
+  {
+    "merchant_id": 65,
+    "name": "ร้านตัวอย่าง #65",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0665
+  },
+  {
+    "merchant_id": 66,
+    "name": "ร้านตัวอย่าง #66",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0729
+  },
+  {
+    "merchant_id": 67,
+    "name": "ร้านตัวอย่าง #67",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0824
+  },
+  {
+    "merchant_id": 68,
+    "name": "ร้านตัวอย่าง #68",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.1118
+  },
+  {
+    "merchant_id": 69,
+    "name": "ร้านตัวอย่าง #69",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0703
+  },
+  {
+    "merchant_id": 70,
+    "name": "ร้านตัวอย่าง #70",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0803
+  },
+  {
+    "merchant_id": 71,
+    "name": "ร้านตัวอย่าง #71",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0641
+  },
+  {
+    "merchant_id": 72,
+    "name": "ร้านตัวอย่าง #72",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0907
+  },
+  {
+    "merchant_id": 73,
+    "name": "ร้านตัวอย่าง #73",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.058
+  },
+  {
+    "merchant_id": 74,
+    "name": "ร้านตัวอย่าง #74",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0875
+  },
+  {
+    "merchant_id": 75,
+    "name": "ร้านตัวอย่าง #75",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0711
+  },
+  {
+    "merchant_id": 76,
+    "name": "ร้านตัวอย่าง #76",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0731
+  },
+  {
+    "merchant_id": 77,
+    "name": "ร้านตัวอย่าง #77",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.077
+  },
+  {
+    "merchant_id": 78,
+    "name": "ร้านตัวอย่าง #78",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.085
+  },
+  {
+    "merchant_id": 79,
+    "name": "ร้านตัวอย่าง #79",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0745
+  },
+  {
+    "merchant_id": 80,
+    "name": "ร้านตัวอย่าง #80",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0614
+  },
+  {
+    "merchant_id": 81,
+    "name": "ร้านตัวอย่าง #81",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0752
+  },
+  {
+    "merchant_id": 82,
+    "name": "ร้านตัวอย่าง #82",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0797
+  },
+  {
+    "merchant_id": 83,
+    "name": "ร้านตัวอย่าง #83",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.104
+  },
+  {
+    "merchant_id": 84,
+    "name": "ร้านตัวอย่าง #84",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0672
+  },
+  {
+    "merchant_id": 85,
+    "name": "ร้านตัวอย่าง #85",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.072
+  },
+  {
+    "merchant_id": 86,
+    "name": "ร้านตัวอย่าง #86",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1097
+  },
+  {
+    "merchant_id": 87,
+    "name": "ร้านตัวอย่าง #87",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1028
+  },
+  {
+    "merchant_id": 88,
+    "name": "ร้านตัวอย่าง #88",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0644
+  },
+  {
+    "merchant_id": 89,
+    "name": "ร้านตัวอย่าง #89",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.067
+  },
+  {
+    "merchant_id": 90,
+    "name": "ร้านตัวอย่าง #90",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0766
+  },
+  {
+    "merchant_id": 91,
+    "name": "ร้านตัวอย่าง #91",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0949
+  },
+  {
+    "merchant_id": 92,
+    "name": "ร้านตัวอย่าง #92",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.065
+  },
+  {
+    "merchant_id": 93,
+    "name": "ร้านตัวอย่าง #93",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0873
+  },
+  {
+    "merchant_id": 94,
+    "name": "ร้านตัวอย่าง #94",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0531
+  },
+  {
+    "merchant_id": 95,
+    "name": "ร้านตัวอย่าง #95",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0629
+  },
+  {
+    "merchant_id": 96,
+    "name": "ร้านตัวอย่าง #96",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0921
+  },
+  {
+    "merchant_id": 97,
+    "name": "ร้านตัวอย่าง #97",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0565
+  },
+  {
+    "merchant_id": 98,
+    "name": "ร้านตัวอย่าง #98",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0804
+  },
+  {
+    "merchant_id": 99,
+    "name": "ร้านตัวอย่าง #99",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0828
+  },
+  {
+    "merchant_id": 100,
+    "name": "ร้านตัวอย่าง #100",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0702
+  },
+  {
+    "merchant_id": 101,
+    "name": "ร้านตัวอย่าง #101",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0871
+  },
+  {
+    "merchant_id": 102,
+    "name": "ร้านตัวอย่าง #102",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1178
+  },
+  {
+    "merchant_id": 103,
+    "name": "ร้านตัวอย่าง #103",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0769
+  },
+  {
+    "merchant_id": 104,
+    "name": "ร้านตัวอย่าง #104",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0562
+  },
+  {
+    "merchant_id": 105,
+    "name": "ร้านตัวอย่าง #105",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0815
+  },
+  {
+    "merchant_id": 106,
+    "name": "ร้านตัวอย่าง #106",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.066
+  },
+  {
+    "merchant_id": 107,
+    "name": "ร้านตัวอย่าง #107",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0744
+  },
+  {
+    "merchant_id": 108,
+    "name": "ร้านตัวอย่าง #108",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0621
+  },
+  {
+    "merchant_id": 109,
+    "name": "ร้านตัวอย่าง #109",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0857
+  },
+  {
+    "merchant_id": 110,
+    "name": "ร้านตัวอย่าง #110",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.075
+  },
+  {
+    "merchant_id": 111,
+    "name": "ร้านตัวอย่าง #111",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0645
+  },
+  {
+    "merchant_id": 112,
+    "name": "ร้านตัวอย่าง #112",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0898
+  },
+  {
+    "merchant_id": 113,
+    "name": "ร้านตัวอย่าง #113",
+    "is_demo": false,
+    "gap_count": 1,
+    "score": 64,
+    "forecast_wape": 0.0933
+  },
+  {
+    "merchant_id": 114,
+    "name": "ร้านตัวอย่าง #114",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0796
+  },
+  {
+    "merchant_id": 115,
+    "name": "ร้านตัวอย่าง #115",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0772
+  },
+  {
+    "merchant_id": 116,
+    "name": "ร้านตัวอย่าง #116",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0671
+  },
+  {
+    "merchant_id": 117,
+    "name": "ร้านตัวอย่าง #117",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0716
+  },
+  {
+    "merchant_id": 118,
+    "name": "ร้านตัวอย่าง #118",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0645
+  },
+  {
+    "merchant_id": 119,
+    "name": "ร้านตัวอย่าง #119",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0654
+  },
+  {
+    "merchant_id": 120,
+    "name": "ร้านตัวอย่าง #120",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0969
+  },
+  {
+    "merchant_id": 121,
+    "name": "ร้านตัวอย่าง #121",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.075
+  },
+  {
+    "merchant_id": 122,
+    "name": "ร้านตัวอย่าง #122",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 94,
+    "forecast_wape": 0.1192
+  },
+  {
+    "merchant_id": 123,
+    "name": "ร้านตัวอย่าง #123",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0633
+  },
+  {
+    "merchant_id": 124,
+    "name": "ร้านตัวอย่าง #124",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1264
+  },
+  {
+    "merchant_id": 125,
+    "name": "ร้านตัวอย่าง #125",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0882
+  },
+  {
+    "merchant_id": 126,
+    "name": "ร้านตัวอย่าง #126",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0867
+  },
+  {
+    "merchant_id": 127,
+    "name": "ร้านตัวอย่าง #127",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.1404
+  },
+  {
+    "merchant_id": 128,
+    "name": "ร้านตัวอย่าง #128",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0739
+  },
+  {
+    "merchant_id": 129,
+    "name": "ร้านตัวอย่าง #129",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.1201
+  },
+  {
+    "merchant_id": 130,
+    "name": "ร้านตัวอย่าง #130",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0818
+  },
+  {
+    "merchant_id": 131,
+    "name": "ร้านตัวอย่าง #131",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.1066
+  },
+  {
+    "merchant_id": 132,
+    "name": "ร้านตัวอย่าง #132",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0755
+  },
+  {
+    "merchant_id": 133,
+    "name": "ร้านตัวอย่าง #133",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0833
+  },
+  {
+    "merchant_id": 134,
+    "name": "ร้านตัวอย่าง #134",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.058
+  },
+  {
+    "merchant_id": 135,
+    "name": "ร้านตัวอย่าง #135",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0838
+  },
+  {
+    "merchant_id": 136,
+    "name": "ร้านตัวอย่าง #136",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0837
+  },
+  {
+    "merchant_id": 137,
+    "name": "ร้านตัวอย่าง #137",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1312
+  },
+  {
+    "merchant_id": 138,
+    "name": "ร้านตัวอย่าง #138",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0538
+  },
+  {
+    "merchant_id": 139,
+    "name": "ร้านตัวอย่าง #139",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1237
+  },
+  {
+    "merchant_id": 140,
+    "name": "ร้านตัวอย่าง #140",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0789
+  },
+  {
+    "merchant_id": 141,
+    "name": "ร้านตัวอย่าง #141",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0662
+  },
+  {
+    "merchant_id": 142,
+    "name": "ร้านตัวอย่าง #142",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0739
+  },
+  {
+    "merchant_id": 143,
+    "name": "ร้านตัวอย่าง #143",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.075
+  },
+  {
+    "merchant_id": 144,
+    "name": "ร้านตัวอย่าง #144",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0704
+  },
+  {
+    "merchant_id": 145,
+    "name": "ร้านตัวอย่าง #145",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.061
+  },
+  {
+    "merchant_id": 146,
+    "name": "ร้านตัวอย่าง #146",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0693
+  },
+  {
+    "merchant_id": 147,
+    "name": "ร้านตัวอย่าง #147",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.064
+  },
+  {
+    "merchant_id": 148,
+    "name": "ร้านตัวอย่าง #148",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0534
+  },
+  {
+    "merchant_id": 149,
+    "name": "ร้านตัวอย่าง #149",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.1321
+  },
+  {
+    "merchant_id": 150,
+    "name": "ร้านตัวอย่าง #150",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0656
+  },
+  {
+    "merchant_id": 151,
+    "name": "ร้านตัวอย่าง #151",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0609
+  },
+  {
+    "merchant_id": 152,
+    "name": "ร้านตัวอย่าง #152",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0662
+  },
+  {
+    "merchant_id": 153,
+    "name": "ร้านตัวอย่าง #153",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.1016
+  },
+  {
+    "merchant_id": 154,
+    "name": "ร้านตัวอย่าง #154",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0621
+  },
+  {
+    "merchant_id": 155,
+    "name": "ร้านตัวอย่าง #155",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1421
+  },
+  {
+    "merchant_id": 156,
+    "name": "ร้านตัวอย่าง #156",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0779
+  },
+  {
+    "merchant_id": 157,
+    "name": "ร้านตัวอย่าง #157",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0713
+  },
+  {
+    "merchant_id": 158,
+    "name": "ร้านตัวอย่าง #158",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0596
+  },
+  {
+    "merchant_id": 159,
+    "name": "ร้านตัวอย่าง #159",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.049
+  },
+  {
+    "merchant_id": 160,
+    "name": "ร้านตัวอย่าง #160",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0777
+  },
+  {
+    "merchant_id": 161,
+    "name": "ร้านตัวอย่าง #161",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0663
+  },
+  {
+    "merchant_id": 162,
+    "name": "ร้านตัวอย่าง #162",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.077
+  },
+  {
+    "merchant_id": 163,
+    "name": "ร้านตัวอย่าง #163",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0762
+  },
+  {
+    "merchant_id": 164,
+    "name": "ร้านตัวอย่าง #164",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0989
+  },
+  {
+    "merchant_id": 165,
+    "name": "ร้านตัวอย่าง #165",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0859
+  },
+  {
+    "merchant_id": 166,
+    "name": "ร้านตัวอย่าง #166",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.1001
+  },
+  {
+    "merchant_id": 167,
+    "name": "ร้านตัวอย่าง #167",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0652
+  },
+  {
+    "merchant_id": 168,
+    "name": "ร้านตัวอย่าง #168",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.061
+  },
+  {
+    "merchant_id": 169,
+    "name": "ร้านตัวอย่าง #169",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0811
+  },
+  {
+    "merchant_id": 170,
+    "name": "ร้านตัวอย่าง #170",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0999
+  },
+  {
+    "merchant_id": 171,
+    "name": "ร้านตัวอย่าง #171",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0829
+  },
+  {
+    "merchant_id": 172,
+    "name": "ร้านตัวอย่าง #172",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0531
+  },
+  {
+    "merchant_id": 173,
+    "name": "ร้านตัวอย่าง #173",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0793
+  },
+  {
+    "merchant_id": 174,
+    "name": "ร้านตัวอย่าง #174",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0768
+  },
+  {
+    "merchant_id": 175,
+    "name": "ร้านตัวอย่าง #175",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0809
+  },
+  {
+    "merchant_id": 176,
+    "name": "ร้านตัวอย่าง #176",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0922
+  },
+  {
+    "merchant_id": 177,
+    "name": "ร้านตัวอย่าง #177",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0938
+  },
+  {
+    "merchant_id": 178,
+    "name": "ร้านตัวอย่าง #178",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0505
+  },
+  {
+    "merchant_id": 179,
+    "name": "ร้านตัวอย่าง #179",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0996
+  },
+  {
+    "merchant_id": 180,
+    "name": "ร้านตัวอย่าง #180",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0714
+  },
+  {
+    "merchant_id": 181,
+    "name": "ร้านตัวอย่าง #181",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0848
+  },
+  {
+    "merchant_id": 182,
+    "name": "ร้านตัวอย่าง #182",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0807
+  },
+  {
+    "merchant_id": 183,
+    "name": "ร้านตัวอย่าง #183",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.2663
+  },
+  {
+    "merchant_id": 184,
+    "name": "ร้านตัวอย่าง #184",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0721
+  },
+  {
+    "merchant_id": 185,
+    "name": "ร้านตัวอย่าง #185",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0968
+  },
+  {
+    "merchant_id": 186,
+    "name": "ร้านตัวอย่าง #186",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0869
+  },
+  {
+    "merchant_id": 187,
+    "name": "ร้านตัวอย่าง #187",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.078
+  },
+  {
+    "merchant_id": 188,
+    "name": "ร้านตัวอย่าง #188",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1151
+  },
+  {
+    "merchant_id": 189,
+    "name": "ร้านตัวอย่าง #189",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0653
+  },
+  {
+    "merchant_id": 190,
+    "name": "ร้านตัวอย่าง #190",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0699
+  },
+  {
+    "merchant_id": 191,
+    "name": "ร้านตัวอย่าง #191",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0662
+  },
+  {
+    "merchant_id": 192,
+    "name": "ร้านตัวอย่าง #192",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0856
+  },
+  {
+    "merchant_id": 193,
+    "name": "ร้านตัวอย่าง #193",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0781
+  },
+  {
+    "merchant_id": 194,
+    "name": "ร้านตัวอย่าง #194",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0775
+  },
+  {
+    "merchant_id": 195,
+    "name": "ร้านตัวอย่าง #195",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0791
+  },
+  {
+    "merchant_id": 196,
+    "name": "ร้านตัวอย่าง #196",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0737
+  },
+  {
+    "merchant_id": 197,
+    "name": "ร้านตัวอย่าง #197",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0741
+  },
+  {
+    "merchant_id": 198,
+    "name": "ร้านตัวอย่าง #198",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1187
+  },
+  {
+    "merchant_id": 199,
+    "name": "ร้านตัวอย่าง #199",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0651
+  },
+  {
+    "merchant_id": 200,
+    "name": "ร้านตัวอย่าง #200",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0972
+  },
+  {
+    "merchant_id": 201,
+    "name": "ร้านตัวอย่าง #201",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0821
+  },
+  {
+    "merchant_id": 202,
+    "name": "ร้านตัวอย่าง #202",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0648
+  },
+  {
+    "merchant_id": 203,
+    "name": "ร้านตัวอย่าง #203",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0759
+  },
+  {
+    "merchant_id": 204,
+    "name": "ร้านตัวอย่าง #204",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0574
+  },
+  {
+    "merchant_id": 205,
+    "name": "ร้านตัวอย่าง #205",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0792
+  },
+  {
+    "merchant_id": 206,
+    "name": "ร้านตัวอย่าง #206",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1042
+  },
+  {
+    "merchant_id": 207,
+    "name": "ร้านตัวอย่าง #207",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0482
+  },
+  {
+    "merchant_id": 208,
+    "name": "ร้านตัวอย่าง #208",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.086
+  },
+  {
+    "merchant_id": 209,
+    "name": "ร้านตัวอย่าง #209",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 93,
+    "forecast_wape": 0.1073
+  },
+  {
+    "merchant_id": 210,
+    "name": "ร้านตัวอย่าง #210",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0887
+  },
+  {
+    "merchant_id": 211,
+    "name": "ร้านตัวอย่าง #211",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0727
+  },
+  {
+    "merchant_id": 212,
+    "name": "ร้านตัวอย่าง #212",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1033
+  },
+  {
+    "merchant_id": 213,
+    "name": "ร้านตัวอย่าง #213",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.083
+  },
+  {
+    "merchant_id": 214,
+    "name": "ร้านตัวอย่าง #214",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0736
+  },
+  {
+    "merchant_id": 215,
+    "name": "ร้านตัวอย่าง #215",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1082
+  },
+  {
+    "merchant_id": 216,
+    "name": "ร้านตัวอย่าง #216",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0797
+  },
+  {
+    "merchant_id": 217,
+    "name": "ร้านตัวอย่าง #217",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0833
+  },
+  {
+    "merchant_id": 218,
+    "name": "ร้านตัวอย่าง #218",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0602
+  },
+  {
+    "merchant_id": 219,
+    "name": "ร้านตัวอย่าง #219",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0886
+  },
+  {
+    "merchant_id": 220,
+    "name": "ร้านตัวอย่าง #220",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0926
+  },
+  {
+    "merchant_id": 221,
+    "name": "ร้านตัวอย่าง #221",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0643
+  },
+  {
+    "merchant_id": 222,
+    "name": "ร้านตัวอย่าง #222",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0907
+  },
+  {
+    "merchant_id": 223,
+    "name": "ร้านตัวอย่าง #223",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1008
+  },
+  {
+    "merchant_id": 224,
+    "name": "ร้านตัวอย่าง #224",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0781
+  },
+  {
+    "merchant_id": 225,
+    "name": "ร้านตัวอย่าง #225",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.096
+  },
+  {
+    "merchant_id": 226,
+    "name": "ร้านตัวอย่าง #226",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0734
+  },
+  {
+    "merchant_id": 227,
+    "name": "ร้านตัวอย่าง #227",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0662
+  },
+  {
+    "merchant_id": 228,
+    "name": "ร้านตัวอย่าง #228",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0625
+  },
+  {
+    "merchant_id": 229,
+    "name": "ร้านตัวอย่าง #229",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0662
+  },
+  {
+    "merchant_id": 230,
+    "name": "ร้านตัวอย่าง #230",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.092
+  },
+  {
+    "merchant_id": 231,
+    "name": "ร้านตัวอย่าง #231",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1015
+  },
+  {
+    "merchant_id": 232,
+    "name": "ร้านตัวอย่าง #232",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 91,
+    "forecast_wape": 0.0912
+  },
+  {
+    "merchant_id": 233,
+    "name": "ร้านตัวอย่าง #233",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.069
+  },
+  {
+    "merchant_id": 234,
+    "name": "ร้านตัวอย่าง #234",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1
+  },
+  {
+    "merchant_id": 235,
+    "name": "ร้านตัวอย่าง #235",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1138
+  },
+  {
+    "merchant_id": 236,
+    "name": "ร้านตัวอย่าง #236",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0737
+  },
+  {
+    "merchant_id": 237,
+    "name": "ร้านตัวอย่าง #237",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0686
+  },
+  {
+    "merchant_id": 238,
+    "name": "ร้านตัวอย่าง #238",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0903
+  },
+  {
+    "merchant_id": 239,
+    "name": "ร้านตัวอย่าง #239",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0706
+  },
+  {
+    "merchant_id": 240,
+    "name": "ร้านตัวอย่าง #240",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0712
+  },
+  {
+    "merchant_id": 241,
+    "name": "ร้านตัวอย่าง #241",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.075
+  },
+  {
+    "merchant_id": 242,
+    "name": "ร้านตัวอย่าง #242",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1094
+  },
+  {
+    "merchant_id": 243,
+    "name": "ร้านตัวอย่าง #243",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0882
+  },
+  {
+    "merchant_id": 244,
+    "name": "ร้านตัวอย่าง #244",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1291
+  },
+  {
+    "merchant_id": 245,
+    "name": "ร้านตัวอย่าง #245",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.054
+  },
+  {
+    "merchant_id": 246,
+    "name": "ร้านตัวอย่าง #246",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0747
+  },
+  {
+    "merchant_id": 247,
+    "name": "ร้านตัวอย่าง #247",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0792
+  },
+  {
+    "merchant_id": 248,
+    "name": "ร้านตัวอย่าง #248",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0933
+  },
+  {
+    "merchant_id": 249,
+    "name": "ร้านตัวอย่าง #249",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.082
+  },
+  {
+    "merchant_id": 250,
+    "name": "ร้านตัวอย่าง #250",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.076
+  },
+  {
+    "merchant_id": 251,
+    "name": "ร้านตัวอย่าง #251",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0725
+  },
+  {
+    "merchant_id": 252,
+    "name": "ร้านตัวอย่าง #252",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0619
+  },
+  {
+    "merchant_id": 253,
+    "name": "ร้านตัวอย่าง #253",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0834
+  },
+  {
+    "merchant_id": 254,
+    "name": "ร้านตัวอย่าง #254",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0955
+  },
+  {
+    "merchant_id": 255,
+    "name": "ร้านตัวอย่าง #255",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0587
+  },
+  {
+    "merchant_id": 256,
+    "name": "ร้านตัวอย่าง #256",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1105
+  },
+  {
+    "merchant_id": 257,
+    "name": "ร้านตัวอย่าง #257",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.0958
+  },
+  {
+    "merchant_id": 258,
+    "name": "ร้านตัวอย่าง #258",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0864
+  },
+  {
+    "merchant_id": 259,
+    "name": "ร้านตัวอย่าง #259",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.039
+  },
+  {
+    "merchant_id": 260,
+    "name": "ร้านตัวอย่าง #260",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0489
+  },
+  {
+    "merchant_id": 261,
+    "name": "ร้านตัวอย่าง #261",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0691
+  },
+  {
+    "merchant_id": 262,
+    "name": "ร้านตัวอย่าง #262",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0736
+  },
+  {
+    "merchant_id": 263,
+    "name": "ร้านตัวอย่าง #263",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0689
+  },
+  {
+    "merchant_id": 264,
+    "name": "ร้านตัวอย่าง #264",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0841
+  },
+  {
+    "merchant_id": 265,
+    "name": "ร้านตัวอย่าง #265",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0885
+  },
+  {
+    "merchant_id": 266,
+    "name": "ร้านตัวอย่าง #266",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0793
+  },
+  {
+    "merchant_id": 267,
+    "name": "ร้านตัวอย่าง #267",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.1168
+  },
+  {
+    "merchant_id": 268,
+    "name": "ร้านตัวอย่าง #268",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1337
+  },
+  {
+    "merchant_id": 269,
+    "name": "ร้านตัวอย่าง #269",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1612
+  },
+  {
+    "merchant_id": 270,
+    "name": "ร้านตัวอย่าง #270",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0582
+  },
+  {
+    "merchant_id": 271,
+    "name": "ร้านตัวอย่าง #271",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0981
+  },
+  {
+    "merchant_id": 272,
+    "name": "ร้านตัวอย่าง #272",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0847
+  },
+  {
+    "merchant_id": 273,
+    "name": "ร้านตัวอย่าง #273",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0636
+  },
+  {
+    "merchant_id": 274,
+    "name": "ร้านตัวอย่าง #274",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 91,
+    "forecast_wape": 0.2542
+  },
+  {
+    "merchant_id": 275,
+    "name": "ร้านตัวอย่าง #275",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 66,
+    "forecast_wape": 0.0812
+  },
+  {
+    "merchant_id": 276,
+    "name": "ร้านตัวอย่าง #276",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0825
+  },
+  {
+    "merchant_id": 277,
+    "name": "ร้านตัวอย่าง #277",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0761
+  },
+  {
+    "merchant_id": 278,
+    "name": "ร้านตัวอย่าง #278",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0938
+  },
+  {
+    "merchant_id": 279,
+    "name": "ร้านตัวอย่าง #279",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1741
+  },
+  {
+    "merchant_id": 280,
+    "name": "ร้านตัวอย่าง #280",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0516
+  },
+  {
+    "merchant_id": 281,
+    "name": "ร้านตัวอย่าง #281",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0565
+  },
+  {
+    "merchant_id": 282,
+    "name": "ร้านตัวอย่าง #282",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0667
+  },
+  {
+    "merchant_id": 283,
+    "name": "ร้านตัวอย่าง #283",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.112
+  },
+  {
+    "merchant_id": 284,
+    "name": "ร้านตัวอย่าง #284",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0863
+  },
+  {
+    "merchant_id": 285,
+    "name": "ร้านตัวอย่าง #285",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0645
+  },
+  {
+    "merchant_id": 286,
+    "name": "ร้านตัวอย่าง #286",
+    "is_demo": false,
+    "gap_count": 2,
+    "score": 45,
+    "forecast_wape": 0.1075
+  },
+  {
+    "merchant_id": 287,
+    "name": "ร้านตัวอย่าง #287",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0668
+  },
+  {
+    "merchant_id": 288,
+    "name": "ร้านตัวอย่าง #288",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1022
+  },
+  {
+    "merchant_id": 289,
+    "name": "ร้านตัวอย่าง #289",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0964
+  },
+  {
+    "merchant_id": 290,
+    "name": "ร้านตัวอย่าง #290",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0741
+  },
+  {
+    "merchant_id": 291,
+    "name": "ร้านตัวอย่าง #291",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0505
+  },
+  {
+    "merchant_id": 292,
+    "name": "ร้านตัวอย่าง #292",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.5052
+  },
+  {
+    "merchant_id": 293,
+    "name": "ร้านตัวอย่าง #293",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0611
+  },
+  {
+    "merchant_id": 294,
+    "name": "ร้านตัวอย่าง #294",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0755
+  },
+  {
+    "merchant_id": 295,
+    "name": "ร้านตัวอย่าง #295",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 91,
+    "forecast_wape": 0.0823
+  },
+  {
+    "merchant_id": 296,
+    "name": "ร้านตัวอย่าง #296",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.067
+  },
+  {
+    "merchant_id": 297,
+    "name": "ร้านตัวอย่าง #297",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0541
+  },
+  {
+    "merchant_id": 298,
+    "name": "ร้านตัวอย่าง #298",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.075
+  },
+  {
+    "merchant_id": 299,
+    "name": "ร้านตัวอย่าง #299",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 93,
+    "forecast_wape": 0.1117
+  },
+  {
+    "merchant_id": 300,
+    "name": "ร้านตัวอย่าง #300",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0933
+  },
+  {
+    "merchant_id": 301,
+    "name": "ร้านตัวอย่าง #301",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0653
+  },
+  {
+    "merchant_id": 302,
+    "name": "ร้านตัวอย่าง #302",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0973
+  },
+  {
+    "merchant_id": 303,
+    "name": "ร้านตัวอย่าง #303",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0827
+  },
+  {
+    "merchant_id": 304,
+    "name": "ร้านตัวอย่าง #304",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1151
+  },
+  {
+    "merchant_id": 305,
+    "name": "ร้านตัวอย่าง #305",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0606
+  },
+  {
+    "merchant_id": 306,
+    "name": "ร้านตัวอย่าง #306",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0722
+  },
+  {
+    "merchant_id": 307,
+    "name": "ร้านตัวอย่าง #307",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0943
+  },
+  {
+    "merchant_id": 308,
+    "name": "ร้านตัวอย่าง #308",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0991
+  },
+  {
+    "merchant_id": 309,
+    "name": "ร้านตัวอย่าง #309",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0547
+  },
+  {
+    "merchant_id": 310,
+    "name": "ร้านตัวอย่าง #310",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0703
+  },
+  {
+    "merchant_id": 311,
+    "name": "ร้านตัวอย่าง #311",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0598
+  },
+  {
+    "merchant_id": 312,
+    "name": "ร้านตัวอย่าง #312",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0675
+  },
+  {
+    "merchant_id": 313,
+    "name": "ร้านตัวอย่าง #313",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0815
+  },
+  {
+    "merchant_id": 314,
+    "name": "ร้านตัวอย่าง #314",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0706
+  },
+  {
+    "merchant_id": 315,
+    "name": "ร้านตัวอย่าง #315",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0774
+  },
+  {
+    "merchant_id": 316,
+    "name": "ร้านตัวอย่าง #316",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0611
+  },
+  {
+    "merchant_id": 317,
+    "name": "ร้านตัวอย่าง #317",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0707
+  },
+  {
+    "merchant_id": 318,
+    "name": "ร้านตัวอย่าง #318",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0669
+  },
+  {
+    "merchant_id": 319,
+    "name": "ร้านตัวอย่าง #319",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0813
+  },
+  {
+    "merchant_id": 320,
+    "name": "ร้านตัวอย่าง #320",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.068
+  },
+  {
+    "merchant_id": 321,
+    "name": "ร้านตัวอย่าง #321",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0706
+  },
+  {
+    "merchant_id": 322,
+    "name": "ร้านตัวอย่าง #322",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0805
+  },
+  {
+    "merchant_id": 323,
+    "name": "ร้านตัวอย่าง #323",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0558
+  },
+  {
+    "merchant_id": 324,
+    "name": "ร้านตัวอย่าง #324",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1301
+  },
+  {
+    "merchant_id": 325,
+    "name": "ร้านตัวอย่าง #325",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0984
+  },
+  {
+    "merchant_id": 326,
+    "name": "ร้านตัวอย่าง #326",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0746
+  },
+  {
+    "merchant_id": 327,
+    "name": "ร้านตัวอย่าง #327",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0837
+  },
+  {
+    "merchant_id": 328,
+    "name": "ร้านตัวอย่าง #328",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0663
+  },
+  {
+    "merchant_id": 329,
+    "name": "ร้านตัวอย่าง #329",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0574
+  },
+  {
+    "merchant_id": 330,
+    "name": "ร้านตัวอย่าง #330",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0967
+  },
+  {
+    "merchant_id": 331,
+    "name": "ร้านตัวอย่าง #331",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0688
+  },
+  {
+    "merchant_id": 332,
+    "name": "ร้านตัวอย่าง #332",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0659
+  },
+  {
+    "merchant_id": 333,
+    "name": "ร้านตัวอย่าง #333",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0714
+  },
+  {
+    "merchant_id": 334,
+    "name": "ร้านตัวอย่าง #334",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0829
+  },
+  {
+    "merchant_id": 335,
+    "name": "ร้านตัวอย่าง #335",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0828
+  },
+  {
+    "merchant_id": 336,
+    "name": "ร้านตัวอย่าง #336",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0555
+  },
+  {
+    "merchant_id": 337,
+    "name": "ร้านตัวอย่าง #337",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0629
+  },
+  {
+    "merchant_id": 338,
+    "name": "ร้านตัวอย่าง #338",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0908
+  },
+  {
+    "merchant_id": 339,
+    "name": "ร้านตัวอย่าง #339",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.087
+  },
+  {
+    "merchant_id": 340,
+    "name": "ร้านตัวอย่าง #340",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0744
+  },
+  {
+    "merchant_id": 341,
+    "name": "ร้านตัวอย่าง #341",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0746
+  },
+  {
+    "merchant_id": 342,
+    "name": "ร้านตัวอย่าง #342",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0684
+  },
+  {
+    "merchant_id": 343,
+    "name": "ร้านตัวอย่าง #343",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0869
+  },
+  {
+    "merchant_id": 344,
+    "name": "ร้านตัวอย่าง #344",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.1028
+  },
+  {
+    "merchant_id": 345,
+    "name": "ร้านตัวอย่าง #345",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 68,
+    "forecast_wape": 0.0982
+  },
+  {
+    "merchant_id": 346,
+    "name": "ร้านตัวอย่าง #346",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0597
+  },
+  {
+    "merchant_id": 347,
+    "name": "ร้านตัวอย่าง #347",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.079
+  },
+  {
+    "merchant_id": 348,
+    "name": "ร้านตัวอย่าง #348",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0822
+  },
+  {
+    "merchant_id": 349,
+    "name": "ร้านตัวอย่าง #349",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0528
+  },
+  {
+    "merchant_id": 350,
+    "name": "ร้านตัวอย่าง #350",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0825
+  },
+  {
+    "merchant_id": 351,
+    "name": "ร้านตัวอย่าง #351",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0649
+  },
+  {
+    "merchant_id": 352,
+    "name": "ร้านตัวอย่าง #352",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0555
+  },
+  {
+    "merchant_id": 353,
+    "name": "ร้านตัวอย่าง #353",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0626
+  },
+  {
+    "merchant_id": 354,
+    "name": "ร้านตัวอย่าง #354",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0659
+  },
+  {
+    "merchant_id": 355,
+    "name": "ร้านตัวอย่าง #355",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0783
+  },
+  {
+    "merchant_id": 356,
+    "name": "ร้านตัวอย่าง #356",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0691
+  },
+  {
+    "merchant_id": 357,
+    "name": "ร้านตัวอย่าง #357",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.079
+  },
+  {
+    "merchant_id": 358,
+    "name": "ร้านตัวอย่าง #358",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0605
+  },
+  {
+    "merchant_id": 359,
+    "name": "ร้านตัวอย่าง #359",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0731
+  },
+  {
+    "merchant_id": 360,
+    "name": "ร้านตัวอย่าง #360",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.078
+  },
+  {
+    "merchant_id": 361,
+    "name": "ร้านตัวอย่าง #361",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.072
+  },
+  {
+    "merchant_id": 362,
+    "name": "ร้านตัวอย่าง #362",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.062
+  },
+  {
+    "merchant_id": 363,
+    "name": "ร้านตัวอย่าง #363",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0776
+  },
+  {
+    "merchant_id": 364,
+    "name": "ร้านตัวอย่าง #364",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0832
+  },
+  {
+    "merchant_id": 365,
+    "name": "ร้านตัวอย่าง #365",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0682
+  },
+  {
+    "merchant_id": 366,
+    "name": "ร้านตัวอย่าง #366",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0673
+  },
+  {
+    "merchant_id": 367,
+    "name": "ร้านตัวอย่าง #367",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0762
+  },
+  {
+    "merchant_id": 368,
+    "name": "ร้านตัวอย่าง #368",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0822
+  },
+  {
+    "merchant_id": 369,
+    "name": "ร้านตัวอย่าง #369",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0613
+  },
+  {
+    "merchant_id": 370,
+    "name": "ร้านตัวอย่าง #370",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0763
+  },
+  {
+    "merchant_id": 371,
+    "name": "ร้านตัวอย่าง #371",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0647
+  },
+  {
+    "merchant_id": 372,
+    "name": "ร้านตัวอย่าง #372",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0752
+  },
+  {
+    "merchant_id": 373,
+    "name": "ร้านตัวอย่าง #373",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0718
+  },
+  {
+    "merchant_id": 374,
+    "name": "ร้านตัวอย่าง #374",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0692
+  },
+  {
+    "merchant_id": 375,
+    "name": "ร้านตัวอย่าง #375",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.074
+  },
+  {
+    "merchant_id": 376,
+    "name": "ร้านตัวอย่าง #376",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0763
+  },
+  {
+    "merchant_id": 377,
+    "name": "ร้านตัวอย่าง #377",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.089
+  },
+  {
+    "merchant_id": 378,
+    "name": "ร้านตัวอย่าง #378",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0872
+  },
+  {
+    "merchant_id": 379,
+    "name": "ร้านตัวอย่าง #379",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0867
+  },
+  {
+    "merchant_id": 380,
+    "name": "ร้านตัวอย่าง #380",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0897
+  },
+  {
+    "merchant_id": 381,
+    "name": "ร้านตัวอย่าง #381",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0439
+  },
+  {
+    "merchant_id": 382,
+    "name": "ร้านตัวอย่าง #382",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0603
+  },
+  {
+    "merchant_id": 383,
+    "name": "ร้านตัวอย่าง #383",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0565
+  },
+  {
+    "merchant_id": 384,
+    "name": "ร้านตัวอย่าง #384",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0918
+  },
+  {
+    "merchant_id": 385,
+    "name": "ร้านตัวอย่าง #385",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0805
+  },
+  {
+    "merchant_id": 386,
+    "name": "ร้านตัวอย่าง #386",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0857
+  },
+  {
+    "merchant_id": 387,
+    "name": "ร้านตัวอย่าง #387",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0746
+  },
+  {
+    "merchant_id": 388,
+    "name": "ร้านตัวอย่าง #388",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0592
+  },
+  {
+    "merchant_id": 389,
+    "name": "ร้านตัวอย่าง #389",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0606
+  },
+  {
+    "merchant_id": 390,
+    "name": "ร้านตัวอย่าง #390",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0691
+  },
+  {
+    "merchant_id": 391,
+    "name": "ร้านตัวอย่าง #391",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0919
+  },
+  {
+    "merchant_id": 392,
+    "name": "ร้านตัวอย่าง #392",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0824
+  },
+  {
+    "merchant_id": 393,
+    "name": "ร้านตัวอย่าง #393",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0703
+  },
+  {
+    "merchant_id": 394,
+    "name": "ร้านตัวอย่าง #394",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0671
+  },
+  {
+    "merchant_id": 395,
+    "name": "ร้านตัวอย่าง #395",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0812
+  },
+  {
+    "merchant_id": 396,
+    "name": "ร้านตัวอย่าง #396",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0643
+  },
+  {
+    "merchant_id": 397,
+    "name": "ร้านตัวอย่าง #397",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0643
+  },
+  {
+    "merchant_id": 398,
+    "name": "ร้านตัวอย่าง #398",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.0956
+  },
+  {
+    "merchant_id": 399,
+    "name": "ร้านตัวอย่าง #399",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0923
+  },
+  {
+    "merchant_id": 400,
+    "name": "ร้านตัวอย่าง #400",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0967
+  },
+  {
+    "merchant_id": 401,
+    "name": "ร้านตัวอย่าง #401",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0743
+  },
+  {
+    "merchant_id": 402,
+    "name": "ร้านตัวอย่าง #402",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1015
+  },
+  {
+    "merchant_id": 403,
+    "name": "ร้านตัวอย่าง #403",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0616
+  },
+  {
+    "merchant_id": 404,
+    "name": "ร้านตัวอย่าง #404",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0668
+  },
+  {
+    "merchant_id": 405,
+    "name": "ร้านตัวอย่าง #405",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0729
+  },
+  {
+    "merchant_id": 406,
+    "name": "ร้านตัวอย่าง #406",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0682
+  },
+  {
+    "merchant_id": 407,
+    "name": "ร้านตัวอย่าง #407",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0768
+  },
+  {
+    "merchant_id": 408,
+    "name": "ร้านตัวอย่าง #408",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0755
+  },
+  {
+    "merchant_id": 409,
+    "name": "ร้านตัวอย่าง #409",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0995
+  },
+  {
+    "merchant_id": 410,
+    "name": "ร้านตัวอย่าง #410",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0667
+  },
+  {
+    "merchant_id": 411,
+    "name": "ร้านตัวอย่าง #411",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0731
+  },
+  {
+    "merchant_id": 412,
+    "name": "ร้านตัวอย่าง #412",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.088
+  },
+  {
+    "merchant_id": 413,
+    "name": "ร้านตัวอย่าง #413",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0635
+  },
+  {
+    "merchant_id": 414,
+    "name": "ร้านตัวอย่าง #414",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0739
+  },
+  {
+    "merchant_id": 415,
+    "name": "ร้านตัวอย่าง #415",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0635
+  },
+  {
+    "merchant_id": 416,
+    "name": "ร้านตัวอย่าง #416",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0492
+  },
+  {
+    "merchant_id": 417,
+    "name": "ร้านตัวอย่าง #417",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1159
+  },
+  {
+    "merchant_id": 418,
+    "name": "ร้านตัวอย่าง #418",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0636
+  },
+  {
+    "merchant_id": 419,
+    "name": "ร้านตัวอย่าง #419",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1043
+  },
+  {
+    "merchant_id": 420,
+    "name": "ร้านตัวอย่าง #420",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0767
+  },
+  {
+    "merchant_id": 421,
+    "name": "ร้านตัวอย่าง #421",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.1045
+  },
+  {
+    "merchant_id": 422,
+    "name": "ร้านตัวอย่าง #422",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0675
+  },
+  {
+    "merchant_id": 423,
+    "name": "ร้านตัวอย่าง #423",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0653
+  },
+  {
+    "merchant_id": 424,
+    "name": "ร้านตัวอย่าง #424",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.1067
+  },
+  {
+    "merchant_id": 425,
+    "name": "ร้านตัวอย่าง #425",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0994
+  },
+  {
+    "merchant_id": 426,
+    "name": "ร้านตัวอย่าง #426",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.071
+  },
+  {
+    "merchant_id": 427,
+    "name": "ร้านตัวอย่าง #427",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1615
+  },
+  {
+    "merchant_id": 428,
+    "name": "ร้านตัวอย่าง #428",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 92,
+    "forecast_wape": 0.0714
+  },
+  {
+    "merchant_id": 429,
+    "name": "ร้านตัวอย่าง #429",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0685
+  },
+  {
+    "merchant_id": 430,
+    "name": "ร้านตัวอย่าง #430",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0611
+  },
+  {
+    "merchant_id": 431,
+    "name": "ร้านตัวอย่าง #431",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0566
+  },
+  {
+    "merchant_id": 432,
+    "name": "ร้านตัวอย่าง #432",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0722
+  },
+  {
+    "merchant_id": 433,
+    "name": "ร้านตัวอย่าง #433",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0949
+  },
+  {
+    "merchant_id": 434,
+    "name": "ร้านตัวอย่าง #434",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0715
+  },
+  {
+    "merchant_id": 435,
+    "name": "ร้านตัวอย่าง #435",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0806
+  },
+  {
+    "merchant_id": 436,
+    "name": "ร้านตัวอย่าง #436",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0615
+  },
+  {
+    "merchant_id": 437,
+    "name": "ร้านตัวอย่าง #437",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1269
+  },
+  {
+    "merchant_id": 438,
+    "name": "ร้านตัวอย่าง #438",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.087
+  },
+  {
+    "merchant_id": 439,
+    "name": "ร้านตัวอย่าง #439",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0735
+  },
+  {
+    "merchant_id": 440,
+    "name": "ร้านตัวอย่าง #440",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0801
+  },
+  {
+    "merchant_id": 441,
+    "name": "ร้านตัวอย่าง #441",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0783
+  },
+  {
+    "merchant_id": 442,
+    "name": "ร้านตัวอย่าง #442",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0825
+  },
+  {
+    "merchant_id": 443,
+    "name": "ร้านตัวอย่าง #443",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0708
+  },
+  {
+    "merchant_id": 444,
+    "name": "ร้านตัวอย่าง #444",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0722
+  },
+  {
+    "merchant_id": 445,
+    "name": "ร้านตัวอย่าง #445",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0796
+  },
+  {
+    "merchant_id": 446,
+    "name": "ร้านตัวอย่าง #446",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0714
+  },
+  {
+    "merchant_id": 447,
+    "name": "ร้านตัวอย่าง #447",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.071
+  },
+  {
+    "merchant_id": 448,
+    "name": "ร้านตัวอย่าง #448",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0744
+  },
+  {
+    "merchant_id": 449,
+    "name": "ร้านตัวอย่าง #449",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0992
+  },
+  {
+    "merchant_id": 450,
+    "name": "ร้านตัวอย่าง #450",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0974
+  },
+  {
+    "merchant_id": 451,
+    "name": "ร้านตัวอย่าง #451",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0884
+  },
+  {
+    "merchant_id": 452,
+    "name": "ร้านตัวอย่าง #452",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.084
+  },
+  {
+    "merchant_id": 453,
+    "name": "ร้านตัวอย่าง #453",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.1292
+  },
+  {
+    "merchant_id": 454,
+    "name": "ร้านตัวอย่าง #454",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0712
+  },
+  {
+    "merchant_id": 455,
+    "name": "ร้านตัวอย่าง #455",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0926
+  },
+  {
+    "merchant_id": 456,
+    "name": "ร้านตัวอย่าง #456",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0806
+  },
+  {
+    "merchant_id": 457,
+    "name": "ร้านตัวอย่าง #457",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0722
+  },
+  {
+    "merchant_id": 458,
+    "name": "ร้านตัวอย่าง #458",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0893
+  },
+  {
+    "merchant_id": 459,
+    "name": "ร้านตัวอย่าง #459",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0607
+  },
+  {
+    "merchant_id": 460,
+    "name": "ร้านตัวอย่าง #460",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0858
+  },
+  {
+    "merchant_id": 461,
+    "name": "ร้านตัวอย่าง #461",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0991
+  },
+  {
+    "merchant_id": 462,
+    "name": "ร้านตัวอย่าง #462",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.097
+  },
+  {
+    "merchant_id": 463,
+    "name": "ร้านตัวอย่าง #463",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0828
+  },
+  {
+    "merchant_id": 464,
+    "name": "ร้านตัวอย่าง #464",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0512
+  },
+  {
+    "merchant_id": 465,
+    "name": "ร้านตัวอย่าง #465",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0657
+  },
+  {
+    "merchant_id": 466,
+    "name": "ร้านตัวอย่าง #466",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0831
+  },
+  {
+    "merchant_id": 467,
+    "name": "ร้านตัวอย่าง #467",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0886
+  },
+  {
+    "merchant_id": 468,
+    "name": "ร้านตัวอย่าง #468",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0829
+  },
+  {
+    "merchant_id": 469,
+    "name": "ร้านตัวอย่าง #469",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0659
+  },
+  {
+    "merchant_id": 470,
+    "name": "ร้านตัวอย่าง #470",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0731
+  },
+  {
+    "merchant_id": 471,
+    "name": "ร้านตัวอย่าง #471",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0736
+  },
+  {
+    "merchant_id": 472,
+    "name": "ร้านตัวอย่าง #472",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0817
+  },
+  {
+    "merchant_id": 473,
+    "name": "ร้านตัวอย่าง #473",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0725
+  },
+  {
+    "merchant_id": 474,
+    "name": "ร้านตัวอย่าง #474",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0744
+  },
+  {
+    "merchant_id": 475,
+    "name": "ร้านตัวอย่าง #475",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0753
+  },
+  {
+    "merchant_id": 476,
+    "name": "ร้านตัวอย่าง #476",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0521
+  },
+  {
+    "merchant_id": 477,
+    "name": "ร้านตัวอย่าง #477",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0853
+  },
+  {
+    "merchant_id": 478,
+    "name": "ร้านตัวอย่าง #478",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0702
+  },
+  {
+    "merchant_id": 479,
+    "name": "ร้านตัวอย่าง #479",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0897
+  },
+  {
+    "merchant_id": 480,
+    "name": "ร้านตัวอย่าง #480",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0776
+  },
+  {
+    "merchant_id": 481,
+    "name": "ร้านตัวอย่าง #481",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0758
+  },
+  {
+    "merchant_id": 482,
+    "name": "ร้านตัวอย่าง #482",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0635
+  },
+  {
+    "merchant_id": 483,
+    "name": "ร้านตัวอย่าง #483",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1107
+  },
+  {
+    "merchant_id": 484,
+    "name": "ร้านตัวอย่าง #484",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0719
+  },
+  {
+    "merchant_id": 485,
+    "name": "ร้านตัวอย่าง #485",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0771
+  },
+  {
+    "merchant_id": 486,
+    "name": "ร้านตัวอย่าง #486",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0936
+  },
+  {
+    "merchant_id": 487,
+    "name": "ร้านตัวอย่าง #487",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0839
+  },
+  {
+    "merchant_id": 488,
+    "name": "ร้านตัวอย่าง #488",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0757
+  },
+  {
+    "merchant_id": 489,
+    "name": "ร้านตัวอย่าง #489",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0672
+  },
+  {
+    "merchant_id": 490,
+    "name": "ร้านตัวอย่าง #490",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0576
+  },
+  {
+    "merchant_id": 491,
+    "name": "ร้านตัวอย่าง #491",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.066
+  },
+  {
+    "merchant_id": 492,
+    "name": "ร้านตัวอย่าง #492",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0679
+  },
+  {
+    "merchant_id": 493,
+    "name": "ร้านตัวอย่าง #493",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0832
+  },
+  {
+    "merchant_id": 494,
+    "name": "ร้านตัวอย่าง #494",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0656
+  },
+  {
+    "merchant_id": 495,
+    "name": "ร้านตัวอย่าง #495",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.073
+  },
+  {
+    "merchant_id": 496,
+    "name": "ร้านตัวอย่าง #496",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0766
+  },
+  {
+    "merchant_id": 497,
+    "name": "ร้านตัวอย่าง #497",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0726
+  },
+  {
+    "merchant_id": 498,
+    "name": "ร้านตัวอย่าง #498",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0566
+  },
+  {
+    "merchant_id": 499,
+    "name": "ร้านตัวอย่าง #499",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0786
+  },
+  {
+    "merchant_id": 500,
+    "name": "ร้านตัวอย่าง #500",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0897
+  },
+  {
+    "merchant_id": 501,
+    "name": "ร้านตัวอย่าง #501",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0826
+  },
+  {
+    "merchant_id": 502,
+    "name": "ร้านตัวอย่าง #502",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0932
+  },
+  {
+    "merchant_id": 503,
+    "name": "ร้านตัวอย่าง #503",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.098
+  },
+  {
+    "merchant_id": 504,
+    "name": "ร้านตัวอย่าง #504",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0872
+  },
+  {
+    "merchant_id": 505,
+    "name": "ร้านตัวอย่าง #505",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.1151
+  },
+  {
+    "merchant_id": 506,
+    "name": "ร้านตัวอย่าง #506",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0781
+  },
+  {
+    "merchant_id": 507,
+    "name": "ร้านตัวอย่าง #507",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0833
+  },
+  {
+    "merchant_id": 508,
+    "name": "ร้านตัวอย่าง #508",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0819
+  },
+  {
+    "merchant_id": 509,
+    "name": "ร้านตัวอย่าง #509",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0902
+  },
+  {
+    "merchant_id": 510,
+    "name": "ร้านตัวอย่าง #510",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0786
+  },
+  {
+    "merchant_id": 511,
+    "name": "ร้านตัวอย่าง #511",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.074
+  },
+  {
+    "merchant_id": 512,
+    "name": "ร้านตัวอย่าง #512",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 91,
+    "forecast_wape": 0.0779
+  },
+  {
+    "merchant_id": 513,
+    "name": "ร้านตัวอย่าง #513",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.065
+  },
+  {
+    "merchant_id": 514,
+    "name": "ร้านตัวอย่าง #514",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.11
+  },
+  {
+    "merchant_id": 515,
+    "name": "ร้านตัวอย่าง #515",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0669
+  },
+  {
+    "merchant_id": 516,
+    "name": "ร้านตัวอย่าง #516",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1025
+  },
+  {
+    "merchant_id": 517,
+    "name": "ร้านตัวอย่าง #517",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0799
+  },
+  {
+    "merchant_id": 518,
+    "name": "ร้านตัวอย่าง #518",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1492
+  },
+  {
+    "merchant_id": 519,
+    "name": "ร้านตัวอย่าง #519",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0943
+  },
+  {
+    "merchant_id": 520,
+    "name": "ร้านตัวอย่าง #520",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0919
+  },
+  {
+    "merchant_id": 521,
+    "name": "ร้านตัวอย่าง #521",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0807
+  },
+  {
+    "merchant_id": 522,
+    "name": "ร้านตัวอย่าง #522",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.1202
+  },
+  {
+    "merchant_id": 523,
+    "name": "ร้านตัวอย่าง #523",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0501
+  },
+  {
+    "merchant_id": 524,
+    "name": "ร้านตัวอย่าง #524",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0638
+  },
+  {
+    "merchant_id": 525,
+    "name": "ร้านตัวอย่าง #525",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.061
+  },
+  {
+    "merchant_id": 526,
+    "name": "ร้านตัวอย่าง #526",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0638
+  },
+  {
+    "merchant_id": 527,
+    "name": "ร้านตัวอย่าง #527",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.078
+  },
+  {
+    "merchant_id": 528,
+    "name": "ร้านตัวอย่าง #528",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0848
+  },
+  {
+    "merchant_id": 529,
+    "name": "ร้านตัวอย่าง #529",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0635
+  },
+  {
+    "merchant_id": 530,
+    "name": "ร้านตัวอย่าง #530",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.145
+  },
+  {
+    "merchant_id": 531,
+    "name": "ร้านตัวอย่าง #531",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0696
+  },
+  {
+    "merchant_id": 532,
+    "name": "ร้านตัวอย่าง #532",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0547
+  },
+  {
+    "merchant_id": 533,
+    "name": "ร้านตัวอย่าง #533",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0609
+  },
+  {
+    "merchant_id": 534,
+    "name": "ร้านตัวอย่าง #534",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1626
+  },
+  {
+    "merchant_id": 535,
+    "name": "ร้านตัวอย่าง #535",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0755
+  },
+  {
+    "merchant_id": 536,
+    "name": "ร้านตัวอย่าง #536",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0894
+  },
+  {
+    "merchant_id": 537,
+    "name": "ร้านตัวอย่าง #537",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1124
+  },
+  {
+    "merchant_id": 538,
+    "name": "ร้านตัวอย่าง #538",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0671
+  },
+  {
+    "merchant_id": 539,
+    "name": "ร้านตัวอย่าง #539",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0586
+  },
+  {
+    "merchant_id": 540,
+    "name": "ร้านตัวอย่าง #540",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1093
+  },
+  {
+    "merchant_id": 541,
+    "name": "ร้านตัวอย่าง #541",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0937
+  },
+  {
+    "merchant_id": 542,
+    "name": "ร้านตัวอย่าง #542",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0857
+  },
+  {
+    "merchant_id": 543,
+    "name": "ร้านตัวอย่าง #543",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.1149
+  },
+  {
+    "merchant_id": 544,
+    "name": "ร้านตัวอย่าง #544",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.079
+  },
+  {
+    "merchant_id": 545,
+    "name": "ร้านตัวอย่าง #545",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0747
+  },
+  {
+    "merchant_id": 546,
+    "name": "ร้านตัวอย่าง #546",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0825
+  },
+  {
+    "merchant_id": 547,
+    "name": "ร้านตัวอย่าง #547",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0837
+  },
+  {
+    "merchant_id": 548,
+    "name": "ร้านตัวอย่าง #548",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0891
+  },
+  {
+    "merchant_id": 549,
+    "name": "ร้านตัวอย่าง #549",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0692
+  },
+  {
+    "merchant_id": 550,
+    "name": "ร้านตัวอย่าง #550",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.2223
+  },
+  {
+    "merchant_id": 551,
+    "name": "ร้านตัวอย่าง #551",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1297
+  },
+  {
+    "merchant_id": 552,
+    "name": "ร้านตัวอย่าง #552",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1126
+  },
+  {
+    "merchant_id": 553,
+    "name": "ร้านตัวอย่าง #553",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0805
+  },
+  {
+    "merchant_id": 554,
+    "name": "ร้านตัวอย่าง #554",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1099
+  },
+  {
+    "merchant_id": 555,
+    "name": "ร้านตัวอย่าง #555",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0725
+  },
+  {
+    "merchant_id": 556,
+    "name": "ร้านตัวอย่าง #556",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0689
+  },
+  {
+    "merchant_id": 557,
+    "name": "ร้านตัวอย่าง #557",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.1011
+  },
+  {
+    "merchant_id": 558,
+    "name": "ร้านตัวอย่าง #558",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0866
+  },
+  {
+    "merchant_id": 559,
+    "name": "ร้านตัวอย่าง #559",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0866
+  },
+  {
+    "merchant_id": 560,
+    "name": "ร้านตัวอย่าง #560",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0713
+  },
+  {
+    "merchant_id": 561,
+    "name": "ร้านตัวอย่าง #561",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0863
+  },
+  {
+    "merchant_id": 562,
+    "name": "ร้านตัวอย่าง #562",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0486
+  },
+  {
+    "merchant_id": 563,
+    "name": "ร้านตัวอย่าง #563",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1241
+  },
+  {
+    "merchant_id": 564,
+    "name": "ร้านตัวอย่าง #564",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0768
+  },
+  {
+    "merchant_id": 565,
+    "name": "ร้านตัวอย่าง #565",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0625
+  },
+  {
+    "merchant_id": 566,
+    "name": "ร้านตัวอย่าง #566",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0744
+  },
+  {
+    "merchant_id": 567,
+    "name": "ร้านตัวอย่าง #567",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0971
+  },
+  {
+    "merchant_id": 568,
+    "name": "ร้านตัวอย่าง #568",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.06
+  },
+  {
+    "merchant_id": 569,
+    "name": "ร้านตัวอย่าง #569",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0735
+  },
+  {
+    "merchant_id": 570,
+    "name": "ร้านตัวอย่าง #570",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.1058
+  },
+  {
+    "merchant_id": 571,
+    "name": "ร้านตัวอย่าง #571",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0907
+  },
+  {
+    "merchant_id": 572,
+    "name": "ร้านตัวอย่าง #572",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0785
+  },
+  {
+    "merchant_id": 573,
+    "name": "ร้านตัวอย่าง #573",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0848
+  },
+  {
+    "merchant_id": 574,
+    "name": "ร้านตัวอย่าง #574",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.058
+  },
+  {
+    "merchant_id": 575,
+    "name": "ร้านตัวอย่าง #575",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.1413
+  },
+  {
+    "merchant_id": 576,
+    "name": "ร้านตัวอย่าง #576",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 62,
+    "forecast_wape": 0.0889
+  },
+  {
+    "merchant_id": 577,
+    "name": "ร้านตัวอย่าง #577",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0818
+  },
+  {
+    "merchant_id": 578,
+    "name": "ร้านตัวอย่าง #578",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 94,
+    "forecast_wape": 0.0953
+  },
+  {
+    "merchant_id": 579,
+    "name": "ร้านตัวอย่าง #579",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0779
+  },
+  {
+    "merchant_id": 580,
+    "name": "ร้านตัวอย่าง #580",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0836
+  },
+  {
+    "merchant_id": 581,
+    "name": "ร้านตัวอย่าง #581",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 64,
+    "forecast_wape": 0.0681
+  },
+  {
+    "merchant_id": 582,
+    "name": "ร้านตัวอย่าง #582",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.1187
+  },
+  {
+    "merchant_id": 583,
+    "name": "ร้านตัวอย่าง #583",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0447
+  },
+  {
+    "merchant_id": 584,
+    "name": "ร้านตัวอย่าง #584",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0946
+  },
+  {
+    "merchant_id": 585,
+    "name": "ร้านตัวอย่าง #585",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1039
+  },
+  {
+    "merchant_id": 586,
+    "name": "ร้านตัวอย่าง #586",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0725
+  },
+  {
+    "merchant_id": 587,
+    "name": "ร้านตัวอย่าง #587",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0982
+  },
+  {
+    "merchant_id": 588,
+    "name": "ร้านตัวอย่าง #588",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0497
+  },
+  {
+    "merchant_id": 589,
+    "name": "ร้านตัวอย่าง #589",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.1066
+  },
+  {
+    "merchant_id": 590,
+    "name": "ร้านตัวอย่าง #590",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0715
+  },
+  {
+    "merchant_id": 591,
+    "name": "ร้านตัวอย่าง #591",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0845
+  },
+  {
+    "merchant_id": 592,
+    "name": "ร้านตัวอย่าง #592",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0776
+  },
+  {
+    "merchant_id": 593,
+    "name": "ร้านตัวอย่าง #593",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0806
+  },
+  {
+    "merchant_id": 594,
+    "name": "ร้านตัวอย่าง #594",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0804
+  },
+  {
+    "merchant_id": 595,
+    "name": "ร้านตัวอย่าง #595",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0918
+  },
+  {
+    "merchant_id": 596,
+    "name": "ร้านตัวอย่าง #596",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0897
+  },
+  {
+    "merchant_id": 597,
+    "name": "ร้านตัวอย่าง #597",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0872
+  },
+  {
+    "merchant_id": 598,
+    "name": "ร้านตัวอย่าง #598",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0784
+  },
+  {
+    "merchant_id": 599,
+    "name": "ร้านตัวอย่าง #599",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0474
+  },
+  {
+    "merchant_id": 600,
+    "name": "ร้านตัวอย่าง #600",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0721
+  },
+  {
+    "merchant_id": 601,
+    "name": "ร้านตัวอย่าง #601",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0973
+  },
+  {
+    "merchant_id": 602,
+    "name": "ร้านตัวอย่าง #602",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0713
+  },
+  {
+    "merchant_id": 603,
+    "name": "ร้านตัวอย่าง #603",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0857
+  },
+  {
+    "merchant_id": 604,
+    "name": "ร้านตัวอย่าง #604",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.081
+  },
+  {
+    "merchant_id": 605,
+    "name": "ร้านตัวอย่าง #605",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1
+  },
+  {
+    "merchant_id": 606,
+    "name": "ร้านตัวอย่าง #606",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0779
+  },
+  {
+    "merchant_id": 607,
+    "name": "ร้านตัวอย่าง #607",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1013
+  },
+  {
+    "merchant_id": 608,
+    "name": "ร้านตัวอย่าง #608",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1007
+  },
+  {
+    "merchant_id": 609,
+    "name": "ร้านตัวอย่าง #609",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0639
+  },
+  {
+    "merchant_id": 610,
+    "name": "ร้านตัวอย่าง #610",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0695
+  },
+  {
+    "merchant_id": 611,
+    "name": "ร้านตัวอย่าง #611",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0745
+  },
+  {
+    "merchant_id": 612,
+    "name": "ร้านตัวอย่าง #612",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.1354
+  },
+  {
+    "merchant_id": 613,
+    "name": "ร้านตัวอย่าง #613",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0733
+  },
+  {
+    "merchant_id": 614,
+    "name": "ร้านตัวอย่าง #614",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.087
+  },
+  {
+    "merchant_id": 615,
+    "name": "ร้านตัวอย่าง #615",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0384
+  },
+  {
+    "merchant_id": 616,
+    "name": "ร้านตัวอย่าง #616",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0785
+  },
+  {
+    "merchant_id": 617,
+    "name": "ร้านตัวอย่าง #617",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0828
+  },
+  {
+    "merchant_id": 618,
+    "name": "ร้านตัวอย่าง #618",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0585
+  },
+  {
+    "merchant_id": 619,
+    "name": "ร้านตัวอย่าง #619",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0933
+  },
+  {
+    "merchant_id": 620,
+    "name": "ร้านตัวอย่าง #620",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0753
+  },
+  {
+    "merchant_id": 621,
+    "name": "ร้านตัวอย่าง #621",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0739
+  },
+  {
+    "merchant_id": 622,
+    "name": "ร้านตัวอย่าง #622",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0684
+  },
+  {
+    "merchant_id": 623,
+    "name": "ร้านตัวอย่าง #623",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1194
+  },
+  {
+    "merchant_id": 624,
+    "name": "ร้านตัวอย่าง #624",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0539
+  },
+  {
+    "merchant_id": 625,
+    "name": "ร้านตัวอย่าง #625",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0823
+  },
+  {
+    "merchant_id": 626,
+    "name": "ร้านตัวอย่าง #626",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0697
+  },
+  {
+    "merchant_id": 627,
+    "name": "ร้านตัวอย่าง #627",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.086
+  },
+  {
+    "merchant_id": 628,
+    "name": "ร้านตัวอย่าง #628",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.1351
+  },
+  {
+    "merchant_id": 629,
+    "name": "ร้านตัวอย่าง #629",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.1228
+  },
+  {
+    "merchant_id": 630,
+    "name": "ร้านตัวอย่าง #630",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 59,
+    "forecast_wape": 0.0817
+  },
+  {
+    "merchant_id": 631,
+    "name": "ร้านตัวอย่าง #631",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0778
+  },
+  {
+    "merchant_id": 632,
+    "name": "ร้านตัวอย่าง #632",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0457
+  },
+  {
+    "merchant_id": 633,
+    "name": "ร้านตัวอย่าง #633",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0995
+  },
+  {
+    "merchant_id": 634,
+    "name": "ร้านตัวอย่าง #634",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0498
+  },
+  {
+    "merchant_id": 635,
+    "name": "ร้านตัวอย่าง #635",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0679
+  },
+  {
+    "merchant_id": 636,
+    "name": "ร้านตัวอย่าง #636",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.2135
+  },
+  {
+    "merchant_id": 637,
+    "name": "ร้านตัวอย่าง #637",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0504
+  },
+  {
+    "merchant_id": 638,
+    "name": "ร้านตัวอย่าง #638",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0616
+  },
+  {
+    "merchant_id": 639,
+    "name": "ร้านตัวอย่าง #639",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0844
+  },
+  {
+    "merchant_id": 640,
+    "name": "ร้านตัวอย่าง #640",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0643
+  },
+  {
+    "merchant_id": 641,
+    "name": "ร้านตัวอย่าง #641",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0995
+  },
+  {
+    "merchant_id": 642,
+    "name": "ร้านตัวอย่าง #642",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0954
+  },
+  {
+    "merchant_id": 643,
+    "name": "ร้านตัวอย่าง #643",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0889
+  },
+  {
+    "merchant_id": 644,
+    "name": "ร้านตัวอย่าง #644",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0749
+  },
+  {
+    "merchant_id": 645,
+    "name": "ร้านตัวอย่าง #645",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.1005
+  },
+  {
+    "merchant_id": 646,
+    "name": "ร้านตัวอย่าง #646",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0586
+  },
+  {
+    "merchant_id": 647,
+    "name": "ร้านตัวอย่าง #647",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0813
+  },
+  {
+    "merchant_id": 648,
+    "name": "ร้านตัวอย่าง #648",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0852
+  },
+  {
+    "merchant_id": 649,
+    "name": "ร้านตัวอย่าง #649",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0984
+  },
+  {
+    "merchant_id": 650,
+    "name": "ร้านตัวอย่าง #650",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0677
+  },
+  {
+    "merchant_id": 651,
+    "name": "ร้านตัวอย่าง #651",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0597
+  },
+  {
+    "merchant_id": 652,
+    "name": "ร้านตัวอย่าง #652",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0698
+  },
+  {
+    "merchant_id": 653,
+    "name": "ร้านตัวอย่าง #653",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0664
+  },
+  {
+    "merchant_id": 654,
+    "name": "ร้านตัวอย่าง #654",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0616
+  },
+  {
+    "merchant_id": 655,
+    "name": "ร้านตัวอย่าง #655",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0618
+  },
+  {
+    "merchant_id": 656,
+    "name": "ร้านตัวอย่าง #656",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1048
+  },
+  {
+    "merchant_id": 657,
+    "name": "ร้านตัวอย่าง #657",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 66,
+    "forecast_wape": 0.1539
+  },
+  {
+    "merchant_id": 658,
+    "name": "ร้านตัวอย่าง #658",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0789
+  },
+  {
+    "merchant_id": 659,
+    "name": "ร้านตัวอย่าง #659",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0728
+  },
+  {
+    "merchant_id": 660,
+    "name": "ร้านตัวอย่าง #660",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0834
+  },
+  {
+    "merchant_id": 661,
+    "name": "ร้านตัวอย่าง #661",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0843
+  },
+  {
+    "merchant_id": 662,
+    "name": "ร้านตัวอย่าง #662",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1314
+  },
+  {
+    "merchant_id": 663,
+    "name": "ร้านตัวอย่าง #663",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0936
+  },
+  {
+    "merchant_id": 664,
+    "name": "ร้านตัวอย่าง #664",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0706
+  },
+  {
+    "merchant_id": 665,
+    "name": "ร้านตัวอย่าง #665",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0739
+  },
+  {
+    "merchant_id": 666,
+    "name": "ร้านตัวอย่าง #666",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0942
+  },
+  {
+    "merchant_id": 667,
+    "name": "ร้านตัวอย่าง #667",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0547
+  },
+  {
+    "merchant_id": 668,
+    "name": "ร้านตัวอย่าง #668",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0584
+  },
+  {
+    "merchant_id": 669,
+    "name": "ร้านตัวอย่าง #669",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0801
+  },
+  {
+    "merchant_id": 670,
+    "name": "ร้านตัวอย่าง #670",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0686
+  },
+  {
+    "merchant_id": 671,
+    "name": "ร้านตัวอย่าง #671",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0885
+  },
+  {
+    "merchant_id": 672,
+    "name": "ร้านตัวอย่าง #672",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.058
+  },
+  {
+    "merchant_id": 673,
+    "name": "ร้านตัวอย่าง #673",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0817
+  },
+  {
+    "merchant_id": 674,
+    "name": "ร้านตัวอย่าง #674",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 67,
+    "forecast_wape": 0.0681
+  },
+  {
+    "merchant_id": 675,
+    "name": "ร้านตัวอย่าง #675",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 66,
+    "forecast_wape": 0.1478
+  },
+  {
+    "merchant_id": 676,
+    "name": "ร้านตัวอย่าง #676",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.064
+  },
+  {
+    "merchant_id": 677,
+    "name": "ร้านตัวอย่าง #677",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.1042
+  },
+  {
+    "merchant_id": 678,
+    "name": "ร้านตัวอย่าง #678",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1125
+  },
+  {
+    "merchant_id": 679,
+    "name": "ร้านตัวอย่าง #679",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0595
+  },
+  {
+    "merchant_id": 680,
+    "name": "ร้านตัวอย่าง #680",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1041
+  },
+  {
+    "merchant_id": 681,
+    "name": "ร้านตัวอย่าง #681",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.1015
+  },
+  {
+    "merchant_id": 682,
+    "name": "ร้านตัวอย่าง #682",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0471
+  },
+  {
+    "merchant_id": 683,
+    "name": "ร้านตัวอย่าง #683",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0975
+  },
+  {
+    "merchant_id": 684,
+    "name": "ร้านตัวอย่าง #684",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.092
+  },
+  {
+    "merchant_id": 685,
+    "name": "ร้านตัวอย่าง #685",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1436
+  },
+  {
+    "merchant_id": 686,
+    "name": "ร้านตัวอย่าง #686",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0505
+  },
+  {
+    "merchant_id": 687,
+    "name": "ร้านตัวอย่าง #687",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0648
+  },
+  {
+    "merchant_id": 688,
+    "name": "ร้านตัวอย่าง #688",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0878
+  },
+  {
+    "merchant_id": 689,
+    "name": "ร้านตัวอย่าง #689",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0748
+  },
+  {
+    "merchant_id": 690,
+    "name": "ร้านตัวอย่าง #690",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0753
+  },
+  {
+    "merchant_id": 691,
+    "name": "ร้านตัวอย่าง #691",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1024
+  },
+  {
+    "merchant_id": 692,
+    "name": "ร้านตัวอย่าง #692",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.111
+  },
+  {
+    "merchant_id": 693,
+    "name": "ร้านตัวอย่าง #693",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1181
+  },
+  {
+    "merchant_id": 694,
+    "name": "ร้านตัวอย่าง #694",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0555
+  },
+  {
+    "merchant_id": 695,
+    "name": "ร้านตัวอย่าง #695",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1323
+  },
+  {
+    "merchant_id": 696,
+    "name": "ร้านตัวอย่าง #696",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0994
+  },
+  {
+    "merchant_id": 697,
+    "name": "ร้านตัวอย่าง #697",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0921
+  },
+  {
+    "merchant_id": 698,
+    "name": "ร้านตัวอย่าง #698",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.062
+  },
+  {
+    "merchant_id": 699,
+    "name": "ร้านตัวอย่าง #699",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0883
+  },
+  {
+    "merchant_id": 700,
+    "name": "ร้านตัวอย่าง #700",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0695
+  },
+  {
+    "merchant_id": 701,
+    "name": "ร้านตัวอย่าง #701",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1597
+  },
+  {
+    "merchant_id": 702,
+    "name": "ร้านตัวอย่าง #702",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1061
+  },
+  {
+    "merchant_id": 703,
+    "name": "ร้านตัวอย่าง #703",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0809
+  },
+  {
+    "merchant_id": 704,
+    "name": "ร้านตัวอย่าง #704",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0672
+  },
+  {
+    "merchant_id": 705,
+    "name": "ร้านตัวอย่าง #705",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1011
+  },
+  {
+    "merchant_id": 706,
+    "name": "ร้านตัวอย่าง #706",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0611
+  },
+  {
+    "merchant_id": 707,
+    "name": "ร้านตัวอย่าง #707",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0908
+  },
+  {
+    "merchant_id": 708,
+    "name": "ร้านตัวอย่าง #708",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.106
+  },
+  {
+    "merchant_id": 709,
+    "name": "ร้านตัวอย่าง #709",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0792
+  },
+  {
+    "merchant_id": 710,
+    "name": "ร้านตัวอย่าง #710",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1867
+  },
+  {
+    "merchant_id": 711,
+    "name": "ร้านตัวอย่าง #711",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1273
+  },
+  {
+    "merchant_id": 712,
+    "name": "ร้านตัวอย่าง #712",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0967
+  },
+  {
+    "merchant_id": 713,
+    "name": "ร้านตัวอย่าง #713",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.1275
+  },
+  {
+    "merchant_id": 714,
+    "name": "ร้านตัวอย่าง #714",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.087
+  },
+  {
+    "merchant_id": 715,
+    "name": "ร้านตัวอย่าง #715",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0673
+  },
+  {
+    "merchant_id": 716,
+    "name": "ร้านตัวอย่าง #716",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0959
+  },
+  {
+    "merchant_id": 717,
+    "name": "ร้านตัวอย่าง #717",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1027
+  },
+  {
+    "merchant_id": 718,
+    "name": "ร้านตัวอย่าง #718",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0794
+  },
+  {
+    "merchant_id": 719,
+    "name": "ร้านตัวอย่าง #719",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.117
+  },
+  {
+    "merchant_id": 720,
+    "name": "ร้านตัวอย่าง #720",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0732
+  },
+  {
+    "merchant_id": 721,
+    "name": "ร้านตัวอย่าง #721",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0538
+  },
+  {
+    "merchant_id": 722,
+    "name": "ร้านตัวอย่าง #722",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.2327
+  },
+  {
+    "merchant_id": 723,
+    "name": "ร้านตัวอย่าง #723",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0691
+  },
+  {
+    "merchant_id": 724,
+    "name": "ร้านตัวอย่าง #724",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0751
+  },
+  {
+    "merchant_id": 725,
+    "name": "ร้านตัวอย่าง #725",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0649
+  },
+  {
+    "merchant_id": 726,
+    "name": "ร้านตัวอย่าง #726",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0542
+  },
+  {
+    "merchant_id": 727,
+    "name": "ร้านตัวอย่าง #727",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0646
+  },
+  {
+    "merchant_id": 728,
+    "name": "ร้านตัวอย่าง #728",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0695
+  },
+  {
+    "merchant_id": 729,
+    "name": "ร้านตัวอย่าง #729",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0726
+  },
+  {
+    "merchant_id": 730,
+    "name": "ร้านตัวอย่าง #730",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0773
+  },
+  {
+    "merchant_id": 731,
+    "name": "ร้านตัวอย่าง #731",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0799
+  },
+  {
+    "merchant_id": 732,
+    "name": "ร้านตัวอย่าง #732",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 91,
+    "forecast_wape": 0.1183
+  },
+  {
+    "merchant_id": 733,
+    "name": "ร้านตัวอย่าง #733",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0433
+  },
+  {
+    "merchant_id": 734,
+    "name": "ร้านตัวอย่าง #734",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.102
+  },
+  {
+    "merchant_id": 735,
+    "name": "ร้านตัวอย่าง #735",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 68,
+    "forecast_wape": 0.0555
+  },
+  {
+    "merchant_id": 736,
+    "name": "ร้านตัวอย่าง #736",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.106
+  },
+  {
+    "merchant_id": 737,
+    "name": "ร้านตัวอย่าง #737",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.1256
+  },
+  {
+    "merchant_id": 738,
+    "name": "ร้านตัวอย่าง #738",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0657
+  },
+  {
+    "merchant_id": 739,
+    "name": "ร้านตัวอย่าง #739",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0922
+  },
+  {
+    "merchant_id": 740,
+    "name": "ร้านตัวอย่าง #740",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.083
+  },
+  {
+    "merchant_id": 741,
+    "name": "ร้านตัวอย่าง #741",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0792
+  },
+  {
+    "merchant_id": 742,
+    "name": "ร้านตัวอย่าง #742",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0506
+  },
+  {
+    "merchant_id": 743,
+    "name": "ร้านตัวอย่าง #743",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0867
+  },
+  {
+    "merchant_id": 744,
+    "name": "ร้านตัวอย่าง #744",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0658
+  },
+  {
+    "merchant_id": 745,
+    "name": "ร้านตัวอย่าง #745",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0703
+  },
+  {
+    "merchant_id": 746,
+    "name": "ร้านตัวอย่าง #746",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0731
+  },
+  {
+    "merchant_id": 747,
+    "name": "ร้านตัวอย่าง #747",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0621
+  },
+  {
+    "merchant_id": 748,
+    "name": "ร้านตัวอย่าง #748",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0808
+  },
+  {
+    "merchant_id": 749,
+    "name": "ร้านตัวอย่าง #749",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0886
+  },
+  {
+    "merchant_id": 750,
+    "name": "ร้านตัวอย่าง #750",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.1123
+  },
+  {
+    "merchant_id": 751,
+    "name": "ร้านตัวอย่าง #751",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.1216
+  },
+  {
+    "merchant_id": 752,
+    "name": "ร้านตัวอย่าง #752",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 68,
+    "forecast_wape": 0.0671
+  },
+  {
+    "merchant_id": 753,
+    "name": "ร้านตัวอย่าง #753",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0749
+  },
+  {
+    "merchant_id": 754,
+    "name": "ร้านตัวอย่าง #754",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0805
+  },
+  {
+    "merchant_id": 755,
+    "name": "ร้านตัวอย่าง #755",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0574
+  },
+  {
+    "merchant_id": 756,
+    "name": "ร้านตัวอย่าง #756",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0972
+  },
+  {
+    "merchant_id": 757,
+    "name": "ร้านตัวอย่าง #757",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0703
+  },
+  {
+    "merchant_id": 758,
+    "name": "ร้านตัวอย่าง #758",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0651
+  },
+  {
+    "merchant_id": 759,
+    "name": "ร้านตัวอย่าง #759",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.089
+  },
+  {
+    "merchant_id": 760,
+    "name": "ร้านตัวอย่าง #760",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0656
+  },
+  {
+    "merchant_id": 761,
+    "name": "ร้านตัวอย่าง #761",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0785
+  },
+  {
+    "merchant_id": 762,
+    "name": "ร้านตัวอย่าง #762",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.1006
+  },
+  {
+    "merchant_id": 763,
+    "name": "ร้านตัวอย่าง #763",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.055
+  },
+  {
+    "merchant_id": 764,
+    "name": "ร้านตัวอย่าง #764",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0853
+  },
+  {
+    "merchant_id": 765,
+    "name": "ร้านตัวอย่าง #765",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0889
+  },
+  {
+    "merchant_id": 766,
+    "name": "ร้านตัวอย่าง #766",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0738
+  },
+  {
+    "merchant_id": 767,
+    "name": "ร้านตัวอย่าง #767",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0793
+  },
+  {
+    "merchant_id": 768,
+    "name": "ร้านตัวอย่าง #768",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0607
+  },
+  {
+    "merchant_id": 769,
+    "name": "ร้านตัวอย่าง #769",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0831
+  },
+  {
+    "merchant_id": 770,
+    "name": "ร้านตัวอย่าง #770",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 66,
+    "forecast_wape": 0.1032
+  },
+  {
+    "merchant_id": 771,
+    "name": "ร้านตัวอย่าง #771",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0394
+  },
+  {
+    "merchant_id": 772,
+    "name": "ร้านตัวอย่าง #772",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0906
+  },
+  {
+    "merchant_id": 773,
+    "name": "ร้านตัวอย่าง #773",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0619
+  },
+  {
+    "merchant_id": 774,
+    "name": "ร้านตัวอย่าง #774",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0704
+  },
+  {
+    "merchant_id": 775,
+    "name": "ร้านตัวอย่าง #775",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0818
+  },
+  {
+    "merchant_id": 776,
+    "name": "ร้านตัวอย่าง #776",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1028
+  },
+  {
+    "merchant_id": 777,
+    "name": "ร้านตัวอย่าง #777",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0813
+  },
+  {
+    "merchant_id": 778,
+    "name": "ร้านตัวอย่าง #778",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0739
+  },
+  {
+    "merchant_id": 779,
+    "name": "ร้านตัวอย่าง #779",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0619
+  },
+  {
+    "merchant_id": 780,
+    "name": "ร้านตัวอย่าง #780",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0652
+  },
+  {
+    "merchant_id": 781,
+    "name": "ร้านตัวอย่าง #781",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0756
+  },
+  {
+    "merchant_id": 782,
+    "name": "ร้านตัวอย่าง #782",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.1356
+  },
+  {
+    "merchant_id": 783,
+    "name": "ร้านตัวอย่าง #783",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0596
+  },
+  {
+    "merchant_id": 784,
+    "name": "ร้านตัวอย่าง #784",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1152
+  },
+  {
+    "merchant_id": 785,
+    "name": "ร้านตัวอย่าง #785",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.078
+  },
+  {
+    "merchant_id": 786,
+    "name": "ร้านตัวอย่าง #786",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0899
+  },
+  {
+    "merchant_id": 787,
+    "name": "ร้านตัวอย่าง #787",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0615
+  },
+  {
+    "merchant_id": 788,
+    "name": "ร้านตัวอย่าง #788",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0625
+  },
+  {
+    "merchant_id": 789,
+    "name": "ร้านตัวอย่าง #789",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0787
+  },
+  {
+    "merchant_id": 790,
+    "name": "ร้านตัวอย่าง #790",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0643
+  },
+  {
+    "merchant_id": 791,
+    "name": "ร้านตัวอย่าง #791",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0774
+  },
+  {
+    "merchant_id": 792,
+    "name": "ร้านตัวอย่าง #792",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0701
+  },
+  {
+    "merchant_id": 793,
+    "name": "ร้านตัวอย่าง #793",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0759
+  },
+  {
+    "merchant_id": 794,
+    "name": "ร้านตัวอย่าง #794",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0635
+  },
+  {
+    "merchant_id": 795,
+    "name": "ร้านตัวอย่าง #795",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0709
+  },
+  {
+    "merchant_id": 796,
+    "name": "ร้านตัวอย่าง #796",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0507
+  },
+  {
+    "merchant_id": 797,
+    "name": "ร้านตัวอย่าง #797",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0747
+  },
+  {
+    "merchant_id": 798,
+    "name": "ร้านตัวอย่าง #798",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0544
+  },
+  {
+    "merchant_id": 799,
+    "name": "ร้านตัวอย่าง #799",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0625
+  },
+  {
+    "merchant_id": 800,
+    "name": "ร้านตัวอย่าง #800",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0893
+  },
+  {
+    "merchant_id": 801,
+    "name": "ร้านตัวอย่าง #801",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.1094
+  },
+  {
+    "merchant_id": 802,
+    "name": "ร้านตัวอย่าง #802",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0562
+  },
+  {
+    "merchant_id": 803,
+    "name": "ร้านตัวอย่าง #803",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0755
+  },
+  {
+    "merchant_id": 804,
+    "name": "ร้านตัวอย่าง #804",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0868
+  },
+  {
+    "merchant_id": 805,
+    "name": "ร้านตัวอย่าง #805",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0828
+  },
+  {
+    "merchant_id": 806,
+    "name": "ร้านตัวอย่าง #806",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0786
+  },
+  {
+    "merchant_id": 807,
+    "name": "ร้านตัวอย่าง #807",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0678
+  },
+  {
+    "merchant_id": 808,
+    "name": "ร้านตัวอย่าง #808",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0729
+  },
+  {
+    "merchant_id": 809,
+    "name": "ร้านตัวอย่าง #809",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.063
+  },
+  {
+    "merchant_id": 810,
+    "name": "ร้านตัวอย่าง #810",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0694
+  },
+  {
+    "merchant_id": 811,
+    "name": "ร้านตัวอย่าง #811",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 91,
+    "forecast_wape": 0.0669
+  },
+  {
+    "merchant_id": 812,
+    "name": "ร้านตัวอย่าง #812",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0501
+  },
+  {
+    "merchant_id": 813,
+    "name": "ร้านตัวอย่าง #813",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0737
+  },
+  {
+    "merchant_id": 814,
+    "name": "ร้านตัวอย่าง #814",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0597
+  },
+  {
+    "merchant_id": 815,
+    "name": "ร้านตัวอย่าง #815",
+    "is_demo": false,
+    "gap_count": 1,
+    "score": 64,
+    "forecast_wape": 0.0913
+  },
+  {
+    "merchant_id": 816,
+    "name": "ร้านตัวอย่าง #816",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1042
+  },
+  {
+    "merchant_id": 817,
+    "name": "ร้านตัวอย่าง #817",
+    "is_demo": true,
+    "gap_count": 2,
+    "score": 65,
+    "forecast_wape": 0.0432
+  },
+  {
+    "merchant_id": 818,
+    "name": "ร้านตัวอย่าง #818",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1039
+  },
+  {
+    "merchant_id": 819,
+    "name": "ร้านตัวอย่าง #819",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.064
+  },
+  {
+    "merchant_id": 820,
+    "name": "ร้านตัวอย่าง #820",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0832
+  },
+  {
+    "merchant_id": 821,
+    "name": "ร้านตัวอย่าง #821",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0946
+  },
+  {
+    "merchant_id": 822,
+    "name": "ร้านตัวอย่าง #822",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0794
+  },
+  {
+    "merchant_id": 823,
+    "name": "ร้านตัวอย่าง #823",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0592
+  },
+  {
+    "merchant_id": 824,
+    "name": "ร้านตัวอย่าง #824",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0712
+  },
+  {
+    "merchant_id": 825,
+    "name": "ร้านตัวอย่าง #825",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0833
+  },
+  {
+    "merchant_id": 826,
+    "name": "ร้านตัวอย่าง #826",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0727
+  },
+  {
+    "merchant_id": 827,
+    "name": "ร้านตัวอย่าง #827",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 93,
+    "forecast_wape": 0.0812
+  },
+  {
+    "merchant_id": 828,
+    "name": "ร้านตัวอย่าง #828",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0698
+  },
+  {
+    "merchant_id": 829,
+    "name": "ร้านตัวอย่าง #829",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0779
+  },
+  {
+    "merchant_id": 830,
+    "name": "ร้านตัวอย่าง #830",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0843
+  },
+  {
+    "merchant_id": 831,
+    "name": "ร้านตัวอย่าง #831",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0689
+  },
+  {
+    "merchant_id": 832,
+    "name": "ร้านตัวอย่าง #832",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0719
+  },
+  {
+    "merchant_id": 833,
+    "name": "ร้านตัวอย่าง #833",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0723
+  },
+  {
+    "merchant_id": 834,
+    "name": "ร้านตัวอย่าง #834",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0823
+  },
+  {
+    "merchant_id": 835,
+    "name": "ร้านตัวอย่าง #835",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0826
+  },
+  {
+    "merchant_id": 836,
+    "name": "ร้านตัวอย่าง #836",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0681
+  },
+  {
+    "merchant_id": 837,
+    "name": "ร้านตัวอย่าง #837",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0708
+  },
+  {
+    "merchant_id": 838,
+    "name": "ร้านตัวอย่าง #838",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0506
+  },
+  {
+    "merchant_id": 839,
+    "name": "ร้านตัวอย่าง #839",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.1222
+  },
+  {
+    "merchant_id": 840,
+    "name": "ร้านตัวอย่าง #840",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 65,
+    "forecast_wape": 0.1101
+  },
+  {
+    "merchant_id": 841,
+    "name": "ร้านตัวอย่าง #841",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.097
+  },
+  {
+    "merchant_id": 842,
+    "name": "ร้านตัวอย่าง #842",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0841
+  },
+  {
+    "merchant_id": 843,
+    "name": "ร้านตัวอย่าง #843",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0966
+  },
+  {
+    "merchant_id": 844,
+    "name": "ร้านตัวอย่าง #844",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1001
+  },
+  {
+    "merchant_id": 845,
+    "name": "ร้านตัวอย่าง #845",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0986
+  },
+  {
+    "merchant_id": 846,
+    "name": "ร้านตัวอย่าง #846",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.1038
+  },
+  {
+    "merchant_id": 847,
+    "name": "ร้านตัวอย่าง #847",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0677
+  },
+  {
+    "merchant_id": 848,
+    "name": "ร้านตัวอย่าง #848",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.1221
+  },
+  {
+    "merchant_id": 849,
+    "name": "ร้านตัวอย่าง #849",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0599
+  },
+  {
+    "merchant_id": 850,
+    "name": "ร้านตัวอย่าง #850",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1085
+  },
+  {
+    "merchant_id": 851,
+    "name": "ร้านตัวอย่าง #851",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0832
+  },
+  {
+    "merchant_id": 852,
+    "name": "ร้านตัวอย่าง #852",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0957
+  },
+  {
+    "merchant_id": 853,
+    "name": "ร้านตัวอย่าง #853",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0563
+  },
+  {
+    "merchant_id": 854,
+    "name": "ร้านตัวอย่าง #854",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.1165
+  },
+  {
+    "merchant_id": 855,
+    "name": "ร้านตัวอย่าง #855",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0696
+  },
+  {
+    "merchant_id": 856,
+    "name": "ร้านตัวอย่าง #856",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0615
+  },
+  {
+    "merchant_id": 857,
+    "name": "ร้านตัวอย่าง #857",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0677
+  },
+  {
+    "merchant_id": 858,
+    "name": "ร้านตัวอย่าง #858",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.055
+  },
+  {
+    "merchant_id": 859,
+    "name": "ร้านตัวอย่าง #859",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0682
+  },
+  {
+    "merchant_id": 860,
+    "name": "ร้านตัวอย่าง #860",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0832
+  },
+  {
+    "merchant_id": 861,
+    "name": "ร้านตัวอย่าง #861",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.086
+  },
+  {
+    "merchant_id": 862,
+    "name": "ร้านตัวอย่าง #862",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0716
+  },
+  {
+    "merchant_id": 863,
+    "name": "ร้านตัวอย่าง #863",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0742
+  },
+  {
+    "merchant_id": 864,
+    "name": "ร้านตัวอย่าง #864",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.077
+  },
+  {
+    "merchant_id": 865,
+    "name": "ร้านตัวอย่าง #865",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0799
+  },
+  {
+    "merchant_id": 866,
+    "name": "ร้านตัวอย่าง #866",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.071
+  },
+  {
+    "merchant_id": 867,
+    "name": "ร้านตัวอย่าง #867",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 92,
+    "forecast_wape": 0.0685
+  },
+  {
+    "merchant_id": 868,
+    "name": "ร้านตัวอย่าง #868",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0794
+  },
+  {
+    "merchant_id": 869,
+    "name": "ร้านตัวอย่าง #869",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.1035
+  },
+  {
+    "merchant_id": 870,
+    "name": "ร้านตัวอย่าง #870",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0621
+  },
+  {
+    "merchant_id": 871,
+    "name": "ร้านตัวอย่าง #871",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0737
+  },
+  {
+    "merchant_id": 872,
+    "name": "ร้านตัวอย่าง #872",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0829
+  },
+  {
+    "merchant_id": 873,
+    "name": "ร้านตัวอย่าง #873",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0578
+  },
+  {
+    "merchant_id": 874,
+    "name": "ร้านตัวอย่าง #874",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0797
+  },
+  {
+    "merchant_id": 875,
+    "name": "ร้านตัวอย่าง #875",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0824
+  },
+  {
+    "merchant_id": 876,
+    "name": "ร้านตัวอย่าง #876",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.3702
+  },
+  {
+    "merchant_id": 877,
+    "name": "ร้านตัวอย่าง #877",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0779
+  },
+  {
+    "merchant_id": 878,
+    "name": "ร้านตัวอย่าง #878",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0686
+  },
+  {
+    "merchant_id": 879,
+    "name": "ร้านตัวอย่าง #879",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0866
+  },
+  {
+    "merchant_id": 880,
+    "name": "ร้านตัวอย่าง #880",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0659
+  },
+  {
+    "merchant_id": 881,
+    "name": "ร้านตัวอย่าง #881",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1231
+  },
+  {
+    "merchant_id": 882,
+    "name": "ร้านตัวอย่าง #882",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0518
+  },
+  {
+    "merchant_id": 883,
+    "name": "ร้านตัวอย่าง #883",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0797
+  },
+  {
+    "merchant_id": 884,
+    "name": "ร้านตัวอย่าง #884",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0617
+  },
+  {
+    "merchant_id": 885,
+    "name": "ร้านตัวอย่าง #885",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0686
+  },
+  {
+    "merchant_id": 886,
+    "name": "ร้านตัวอย่าง #886",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0706
+  },
+  {
+    "merchant_id": 887,
+    "name": "ร้านตัวอย่าง #887",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0707
+  },
+  {
+    "merchant_id": 888,
+    "name": "ร้านตัวอย่าง #888",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.069
+  },
+  {
+    "merchant_id": 889,
+    "name": "ร้านตัวอย่าง #889",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0629
+  },
+  {
+    "merchant_id": 890,
+    "name": "ร้านตัวอย่าง #890",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0915
+  },
+  {
+    "merchant_id": 891,
+    "name": "ร้านตัวอย่าง #891",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0968
+  },
+  {
+    "merchant_id": 892,
+    "name": "ร้านตัวอย่าง #892",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0566
+  },
+  {
+    "merchant_id": 893,
+    "name": "ร้านตัวอย่าง #893",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0682
+  },
+  {
+    "merchant_id": 894,
+    "name": "ร้านตัวอย่าง #894",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0713
+  },
+  {
+    "merchant_id": 895,
+    "name": "ร้านตัวอย่าง #895",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.074
+  },
+  {
+    "merchant_id": 896,
+    "name": "ร้านตัวอย่าง #896",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0651
+  },
+  {
+    "merchant_id": 897,
+    "name": "ร้านตัวอย่าง #897",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.069
+  },
+  {
+    "merchant_id": 898,
+    "name": "ร้านตัวอย่าง #898",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1005
+  },
+  {
+    "merchant_id": 899,
+    "name": "ร้านตัวอย่าง #899",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0901
+  },
+  {
+    "merchant_id": 900,
+    "name": "ร้านตัวอย่าง #900",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.093
+  },
+  {
+    "merchant_id": 901,
+    "name": "ร้านตัวอย่าง #901",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0726
+  },
+  {
+    "merchant_id": 902,
+    "name": "ร้านตัวอย่าง #902",
+    "is_demo": false,
+    "gap_count": 1,
+    "score": 55,
+    "forecast_wape": 0.0803
+  },
+  {
+    "merchant_id": 903,
+    "name": "ร้านตัวอย่าง #903",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0643
+  },
+  {
+    "merchant_id": 904,
+    "name": "ร้านตัวอย่าง #904",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0867
+  },
+  {
+    "merchant_id": 905,
+    "name": "ร้านตัวอย่าง #905",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 67,
+    "forecast_wape": 0.0956
+  },
+  {
+    "merchant_id": 906,
+    "name": "ร้านตัวอย่าง #906",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0777
+  },
+  {
+    "merchant_id": 907,
+    "name": "ร้านตัวอย่าง #907",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0848
+  },
+  {
+    "merchant_id": 908,
+    "name": "ร้านตัวอย่าง #908",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.128
+  },
+  {
+    "merchant_id": 909,
+    "name": "ร้านตัวอย่าง #909",
+    "is_demo": false,
+    "gap_count": 2,
+    "score": 46,
+    "forecast_wape": 0.4787
+  },
+  {
+    "merchant_id": 910,
+    "name": "ร้านตัวอย่าง #910",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0787
+  },
+  {
+    "merchant_id": 911,
+    "name": "ร้านตัวอย่าง #911",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0493
+  },
+  {
+    "merchant_id": 912,
+    "name": "ร้านตัวอย่าง #912",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0656
+  },
+  {
+    "merchant_id": 913,
+    "name": "ร้านตัวอย่าง #913",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0742
+  },
+  {
+    "merchant_id": 914,
+    "name": "ร้านตัวอย่าง #914",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0631
+  },
+  {
+    "merchant_id": 915,
+    "name": "ร้านตัวอย่าง #915",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0928
+  },
+  {
+    "merchant_id": 916,
+    "name": "ร้านตัวอย่าง #916",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.1088
+  },
+  {
+    "merchant_id": 917,
+    "name": "ร้านตัวอย่าง #917",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0788
+  },
+  {
+    "merchant_id": 918,
+    "name": "ร้านตัวอย่าง #918",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0811
+  },
+  {
+    "merchant_id": 919,
+    "name": "ร้านตัวอย่าง #919",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0769
+  },
+  {
+    "merchant_id": 920,
+    "name": "ร้านตัวอย่าง #920",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0788
+  },
+  {
+    "merchant_id": 921,
+    "name": "ร้านตัวอย่าง #921",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0899
+  },
+  {
+    "merchant_id": 922,
+    "name": "ร้านตัวอย่าง #922",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0649
+  },
+  {
+    "merchant_id": 923,
+    "name": "ร้านตัวอย่าง #923",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0554
+  },
+  {
+    "merchant_id": 924,
+    "name": "ร้านตัวอย่าง #924",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1141
+  },
+  {
+    "merchant_id": 925,
+    "name": "ร้านตัวอย่าง #925",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.1013
+  },
+  {
+    "merchant_id": 926,
+    "name": "ร้านตัวอย่าง #926",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.1336
+  },
+  {
+    "merchant_id": 927,
+    "name": "ร้านตัวอย่าง #927",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0935
+  },
+  {
+    "merchant_id": 928,
+    "name": "ร้านตัวอย่าง #928",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0702
+  },
+  {
+    "merchant_id": 929,
+    "name": "ร้านตัวอย่าง #929",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0708
+  },
+  {
+    "merchant_id": 930,
+    "name": "ร้านตัวอย่าง #930",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1007
+  },
+  {
+    "merchant_id": 931,
+    "name": "ร้านตัวอย่าง #931",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1115
+  },
+  {
+    "merchant_id": 932,
+    "name": "ร้านตัวอย่าง #932",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.1017
+  },
+  {
+    "merchant_id": 933,
+    "name": "ร้านตัวอย่าง #933",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0735
+  },
+  {
+    "merchant_id": 934,
+    "name": "ร้านตัวอย่าง #934",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.096
+  },
+  {
+    "merchant_id": 935,
+    "name": "ร้านตัวอย่าง #935",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0698
+  },
+  {
+    "merchant_id": 936,
+    "name": "ร้านตัวอย่าง #936",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0651
+  },
+  {
+    "merchant_id": 937,
+    "name": "ร้านตัวอย่าง #937",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0785
+  },
+  {
+    "merchant_id": 938,
+    "name": "ร้านตัวอย่าง #938",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.071
+  },
+  {
+    "merchant_id": 939,
+    "name": "ร้านตัวอย่าง #939",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0666
+  },
+  {
+    "merchant_id": 940,
+    "name": "ร้านตัวอย่าง #940",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0683
+  },
+  {
+    "merchant_id": 941,
+    "name": "ร้านตัวอย่าง #941",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0976
+  },
+  {
+    "merchant_id": 942,
+    "name": "ร้านตัวอย่าง #942",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1003
+  },
+  {
+    "merchant_id": 943,
+    "name": "ร้านตัวอย่าง #943",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0673
+  },
+  {
+    "merchant_id": 944,
+    "name": "ร้านตัวอย่าง #944",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0795
+  },
+  {
+    "merchant_id": 945,
+    "name": "ร้านตัวอย่าง #945",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0798
+  },
+  {
+    "merchant_id": 946,
+    "name": "ร้านตัวอย่าง #946",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0572
+  },
+  {
+    "merchant_id": 947,
+    "name": "ร้านตัวอย่าง #947",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.1124
+  },
+  {
+    "merchant_id": 948,
+    "name": "ร้านตัวอย่าง #948",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0655
+  },
+  {
+    "merchant_id": 949,
+    "name": "ร้านตัวอย่าง #949",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0618
+  },
+  {
+    "merchant_id": 950,
+    "name": "ร้านตัวอย่าง #950",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0768
+  },
+  {
+    "merchant_id": 951,
+    "name": "ร้านตัวอย่าง #951",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1042
+  },
+  {
+    "merchant_id": 952,
+    "name": "ร้านตัวอย่าง #952",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0788
+  },
+  {
+    "merchant_id": 953,
+    "name": "ร้านตัวอย่าง #953",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.068
+  },
+  {
+    "merchant_id": 954,
+    "name": "ร้านตัวอย่าง #954",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.1162
+  },
+  {
+    "merchant_id": 955,
+    "name": "ร้านตัวอย่าง #955",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0622
+  },
+  {
+    "merchant_id": 956,
+    "name": "ร้านตัวอย่าง #956",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1336
+  },
+  {
+    "merchant_id": 957,
+    "name": "ร้านตัวอย่าง #957",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0806
+  },
+  {
+    "merchant_id": 958,
+    "name": "ร้านตัวอย่าง #958",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 68,
+    "forecast_wape": 0.0837
+  },
+  {
+    "merchant_id": 959,
+    "name": "ร้านตัวอย่าง #959",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0819
+  },
+  {
+    "merchant_id": 960,
+    "name": "ร้านตัวอย่าง #960",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0884
+  },
+  {
+    "merchant_id": 961,
+    "name": "ร้านตัวอย่าง #961",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0691
+  },
+  {
+    "merchant_id": 962,
+    "name": "ร้านตัวอย่าง #962",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0727
+  },
+  {
+    "merchant_id": 963,
+    "name": "ร้านตัวอย่าง #963",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0686
+  },
+  {
+    "merchant_id": 964,
+    "name": "ร้านตัวอย่าง #964",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0902
+  },
+  {
+    "merchant_id": 965,
+    "name": "ร้านตัวอย่าง #965",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0949
+  },
+  {
+    "merchant_id": 966,
+    "name": "ร้านตัวอย่าง #966",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0533
+  },
+  {
+    "merchant_id": 967,
+    "name": "ร้านตัวอย่าง #967",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0942
+  },
+  {
+    "merchant_id": 968,
+    "name": "ร้านตัวอย่าง #968",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0716
+  },
+  {
+    "merchant_id": 969,
+    "name": "ร้านตัวอย่าง #969",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0958
+  },
+  {
+    "merchant_id": 970,
+    "name": "ร้านตัวอย่าง #970",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.1299
+  },
+  {
+    "merchant_id": 971,
+    "name": "ร้านตัวอย่าง #971",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0613
+  },
+  {
+    "merchant_id": 972,
+    "name": "ร้านตัวอย่าง #972",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0851
+  },
+  {
+    "merchant_id": 973,
+    "name": "ร้านตัวอย่าง #973",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1104
+  },
+  {
+    "merchant_id": 974,
+    "name": "ร้านตัวอย่าง #974",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0605
+  },
+  {
+    "merchant_id": 975,
+    "name": "ร้านตัวอย่าง #975",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0872
+  },
+  {
+    "merchant_id": 976,
+    "name": "ร้านตัวอย่าง #976",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0719
+  },
+  {
+    "merchant_id": 977,
+    "name": "ร้านตัวอย่าง #977",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.1455
+  },
+  {
+    "merchant_id": 978,
+    "name": "ร้านตัวอย่าง #978",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0836
+  },
+  {
+    "merchant_id": 979,
+    "name": "ร้านตัวอย่าง #979",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0845
+  },
+  {
+    "merchant_id": 980,
+    "name": "ร้านตัวอย่าง #980",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0791
+  },
+  {
+    "merchant_id": 981,
+    "name": "ร้านตัวอย่าง #981",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0517
+  },
+  {
+    "merchant_id": 982,
+    "name": "ร้านตัวอย่าง #982",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.0689
+  },
+  {
+    "merchant_id": 983,
+    "name": "ร้านตัวอย่าง #983",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1063
+  },
+  {
+    "merchant_id": 984,
+    "name": "ร้านตัวอย่าง #984",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1258
+  },
+  {
+    "merchant_id": 985,
+    "name": "ร้านตัวอย่าง #985",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0935
+  },
+  {
+    "merchant_id": 986,
+    "name": "ร้านตัวอย่าง #986",
+    "is_demo": false,
+    "gap_count": 1,
+    "score": 64,
+    "forecast_wape": 0.1186
+  },
+  {
+    "merchant_id": 987,
+    "name": "ร้านตัวอย่าง #987",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.1064
+  },
+  {
+    "merchant_id": 988,
+    "name": "ร้านตัวอย่าง #988",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 94,
+    "forecast_wape": 0.1201
+  },
+  {
+    "merchant_id": 989,
+    "name": "ร้านตัวอย่าง #989",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.067
+  },
+  {
+    "merchant_id": 990,
+    "name": "ร้านตัวอย่าง #990",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0539
+  },
+  {
+    "merchant_id": 991,
+    "name": "ร้านตัวอย่าง #991",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0721
+  },
+  {
+    "merchant_id": 992,
+    "name": "ร้านตัวอย่าง #992",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 70,
+    "forecast_wape": 0.0883
+  },
+  {
+    "merchant_id": 993,
+    "name": "ร้านตัวอย่าง #993",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0702
+  },
+  {
+    "merchant_id": 994,
+    "name": "ร้านตัวอย่าง #994",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1211
+  },
+  {
+    "merchant_id": 995,
+    "name": "ร้านตัวอย่าง #995",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0514
+  },
+  {
+    "merchant_id": 996,
+    "name": "ร้านตัวอย่าง #996",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1091
+  },
+  {
+    "merchant_id": 997,
+    "name": "ร้านตัวอย่าง #997",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0904
+  },
+  {
+    "merchant_id": 998,
+    "name": "ร้านตัวอย่าง #998",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0705
+  },
+  {
+    "merchant_id": 999,
+    "name": "ร้านตัวอย่าง #999",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0829
+  },
+  {
+    "merchant_id": 1000,
+    "name": "ร้านตัวอย่าง #1000",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0887
+  },
+  {
+    "merchant_id": 1001,
+    "name": "ร้านตัวอย่าง #1001",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0771
+  },
+  {
+    "merchant_id": 1002,
+    "name": "ร้านตัวอย่าง #1002",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0853
+  },
+  {
+    "merchant_id": 1003,
+    "name": "ร้านตัวอย่าง #1003",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1433
+  },
+  {
+    "merchant_id": 1004,
+    "name": "ร้านตัวอย่าง #1004",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0645
+  },
+  {
+    "merchant_id": 1005,
+    "name": "ร้านตัวอย่าง #1005",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0768
+  },
+  {
+    "merchant_id": 1006,
+    "name": "ร้านตัวอย่าง #1006",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0853
+  },
+  {
+    "merchant_id": 1007,
+    "name": "ร้านตัวอย่าง #1007",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.069
+  },
+  {
+    "merchant_id": 1008,
+    "name": "ร้านตัวอย่าง #1008",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0777
+  },
+  {
+    "merchant_id": 1009,
+    "name": "ร้านตัวอย่าง #1009",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0707
+  },
+  {
+    "merchant_id": 1010,
+    "name": "ร้านตัวอย่าง #1010",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0872
+  },
+  {
+    "merchant_id": 1011,
+    "name": "ร้านตัวอย่าง #1011",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1076
+  },
+  {
+    "merchant_id": 1012,
+    "name": "ร้านตัวอย่าง #1012",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0933
+  },
+  {
+    "merchant_id": 1013,
+    "name": "ร้านตัวอย่าง #1013",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.0869
+  },
+  {
+    "merchant_id": 1014,
+    "name": "ร้านตัวอย่าง #1014",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 68,
+    "forecast_wape": 0.1374
+  },
+  {
+    "merchant_id": 1015,
+    "name": "ร้านตัวอย่าง #1015",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0704
+  },
+  {
+    "merchant_id": 1016,
+    "name": "ร้านตัวอย่าง #1016",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0763
+  },
+  {
+    "merchant_id": 1017,
+    "name": "ร้านตัวอย่าง #1017",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0703
+  },
+  {
+    "merchant_id": 1018,
+    "name": "ร้านตัวอย่าง #1018",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0593
+  },
+  {
+    "merchant_id": 1019,
+    "name": "ร้านตัวอย่าง #1019",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.1506
+  },
+  {
+    "merchant_id": 1020,
+    "name": "ร้านตัวอย่าง #1020",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0642
+  },
+  {
+    "merchant_id": 1021,
+    "name": "ร้านตัวอย่าง #1021",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 91,
+    "forecast_wape": 0.0587
+  },
+  {
+    "merchant_id": 1022,
+    "name": "ร้านตัวอย่าง #1022",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0627
+  },
+  {
+    "merchant_id": 1023,
+    "name": "ร้านตัวอย่าง #1023",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.084
+  },
+  {
+    "merchant_id": 1024,
+    "name": "ร้านตัวอย่าง #1024",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0705
+  },
+  {
+    "merchant_id": 1025,
+    "name": "ร้านตัวอย่าง #1025",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.059
+  },
+  {
+    "merchant_id": 1026,
+    "name": "ร้านตัวอย่าง #1026",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0614
+  },
+  {
+    "merchant_id": 1027,
+    "name": "ร้านตัวอย่าง #1027",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1403
+  },
+  {
+    "merchant_id": 1028,
+    "name": "ร้านตัวอย่าง #1028",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.1039
+  },
+  {
+    "merchant_id": 1029,
+    "name": "ร้านตัวอย่าง #1029",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0837
+  },
+  {
+    "merchant_id": 1030,
+    "name": "ร้านตัวอย่าง #1030",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0958
+  },
+  {
+    "merchant_id": 1031,
+    "name": "ร้านตัวอย่าง #1031",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0701
+  },
+  {
+    "merchant_id": 1032,
+    "name": "ร้านตัวอย่าง #1032",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0747
+  },
+  {
+    "merchant_id": 1033,
+    "name": "ร้านตัวอย่าง #1033",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0714
+  },
+  {
+    "merchant_id": 1034,
+    "name": "ร้านตัวอย่าง #1034",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0553
+  },
+  {
+    "merchant_id": 1035,
+    "name": "ร้านตัวอย่าง #1035",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0517
+  },
+  {
+    "merchant_id": 1036,
+    "name": "ร้านตัวอย่าง #1036",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0783
+  },
+  {
+    "merchant_id": 1037,
+    "name": "ร้านตัวอย่าง #1037",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.1032
+  },
+  {
+    "merchant_id": 1038,
+    "name": "ร้านตัวอย่าง #1038",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.093
+  },
+  {
+    "merchant_id": 1039,
+    "name": "ร้านตัวอย่าง #1039",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0851
+  },
+  {
+    "merchant_id": 1040,
+    "name": "ร้านตัวอย่าง #1040",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0617
+  },
+  {
+    "merchant_id": 1041,
+    "name": "ร้านตัวอย่าง #1041",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.063
+  },
+  {
+    "merchant_id": 1042,
+    "name": "ร้านตัวอย่าง #1042",
+    "is_demo": false,
+    "gap_count": 1,
+    "score": 63,
+    "forecast_wape": 0.1036
+  },
+  {
+    "merchant_id": 1043,
+    "name": "ร้านตัวอย่าง #1043",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0669
+  },
+  {
+    "merchant_id": 1044,
+    "name": "ร้านตัวอย่าง #1044",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.1253
+  },
+  {
+    "merchant_id": 1045,
+    "name": "ร้านตัวอย่าง #1045",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 95,
+    "forecast_wape": 0.1173
+  },
+  {
+    "merchant_id": 1046,
+    "name": "ร้านตัวอย่าง #1046",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0732
+  },
+  {
+    "merchant_id": 1047,
+    "name": "ร้านตัวอย่าง #1047",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0882
+  },
+  {
+    "merchant_id": 1048,
+    "name": "ร้านตัวอย่าง #1048",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.1035
+  },
+  {
+    "merchant_id": 1049,
+    "name": "ร้านตัวอย่าง #1049",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.1082
+  },
+  {
+    "merchant_id": 1050,
+    "name": "ร้านตัวอย่าง #1050",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0747
+  },
+  {
+    "merchant_id": 1051,
+    "name": "ร้านตัวอย่าง #1051",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0937
+  },
+  {
+    "merchant_id": 1052,
+    "name": "ร้านตัวอย่าง #1052",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0711
+  },
+  {
+    "merchant_id": 1053,
+    "name": "ร้านตัวอย่าง #1053",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0988
+  },
+  {
+    "merchant_id": 1054,
+    "name": "ร้านตัวอย่าง #1054",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.0721
+  },
+  {
+    "merchant_id": 1055,
+    "name": "ร้านตัวอย่าง #1055",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0706
+  },
+  {
+    "merchant_id": 1056,
+    "name": "ร้านตัวอย่าง #1056",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.1272
+  },
+  {
+    "merchant_id": 1057,
+    "name": "ร้านตัวอย่าง #1057",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0876
+  },
+  {
+    "merchant_id": 1058,
+    "name": "ร้านตัวอย่าง #1058",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0699
+  },
+  {
+    "merchant_id": 1059,
+    "name": "ร้านตัวอย่าง #1059",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 73,
+    "forecast_wape": 0.0617
+  },
+  {
+    "merchant_id": 1060,
+    "name": "ร้านตัวอย่าง #1060",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0845
+  },
+  {
+    "merchant_id": 1061,
+    "name": "ร้านตัวอย่าง #1061",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0611
+  },
+  {
+    "merchant_id": 1062,
+    "name": "ร้านตัวอย่าง #1062",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0731
+  },
+  {
+    "merchant_id": 1063,
+    "name": "ร้านตัวอย่าง #1063",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0656
+  },
+  {
+    "merchant_id": 1064,
+    "name": "ร้านตัวอย่าง #1064",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0766
+  },
+  {
+    "merchant_id": 1065,
+    "name": "ร้านตัวอย่าง #1065",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0772
+  },
+  {
+    "merchant_id": 1066,
+    "name": "ร้านตัวอย่าง #1066",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.1196
+  },
+  {
+    "merchant_id": 1067,
+    "name": "ร้านตัวอย่าง #1067",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.049
+  },
+  {
+    "merchant_id": 1068,
+    "name": "ร้านตัวอย่าง #1068",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0662
+  },
+  {
+    "merchant_id": 1069,
+    "name": "ร้านตัวอย่าง #1069",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.1074
+  },
+  {
+    "merchant_id": 1070,
+    "name": "ร้านตัวอย่าง #1070",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 71,
+    "forecast_wape": 0.093
+  },
+  {
+    "merchant_id": 1071,
+    "name": "ร้านตัวอย่าง #1071",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0676
+  },
+  {
+    "merchant_id": 1072,
+    "name": "ร้านตัวอย่าง #1072",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 81,
+    "forecast_wape": 0.0488
+  },
+  {
+    "merchant_id": 1073,
+    "name": "ร้านตัวอย่าง #1073",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 94,
+    "forecast_wape": 0.1644
+  },
+  {
+    "merchant_id": 1074,
+    "name": "ร้านตัวอย่าง #1074",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 72,
+    "forecast_wape": 0.1137
+  },
+  {
+    "merchant_id": 1075,
+    "name": "ร้านตัวอย่าง #1075",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0456
+  },
+  {
+    "merchant_id": 1076,
+    "name": "ร้านตัวอย่าง #1076",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.127
+  },
+  {
+    "merchant_id": 1077,
+    "name": "ร้านตัวอย่าง #1077",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.0589
+  },
+  {
+    "merchant_id": 1078,
+    "name": "ร้านตัวอย่าง #1078",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0994
+  },
+  {
+    "merchant_id": 1079,
+    "name": "ร้านตัวอย่าง #1079",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0773
+  },
+  {
+    "merchant_id": 1080,
+    "name": "ร้านตัวอย่าง #1080",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0602
+  },
+  {
+    "merchant_id": 1081,
+    "name": "ร้านตัวอย่าง #1081",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 94,
+    "forecast_wape": 0.0746
+  },
+  {
+    "merchant_id": 1082,
+    "name": "ร้านตัวอย่าง #1082",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0646
+  },
+  {
+    "merchant_id": 1083,
+    "name": "ร้านตัวอย่าง #1083",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0711
+  },
+  {
+    "merchant_id": 1084,
+    "name": "ร้านตัวอย่าง #1084",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0805
+  },
+  {
+    "merchant_id": 1085,
+    "name": "ร้านตัวอย่าง #1085",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 76,
+    "forecast_wape": 0.0618
+  },
+  {
+    "merchant_id": 1086,
+    "name": "ร้านตัวอย่าง #1086",
+    "is_demo": false,
+    "gap_count": 2,
+    "score": 58,
+    "forecast_wape": 0.0772
+  },
+  {
+    "merchant_id": 1087,
+    "name": "ร้านตัวอย่าง #1087",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0786
+  },
+  {
+    "merchant_id": 1088,
+    "name": "ร้านตัวอย่าง #1088",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.1219
+  },
+  {
+    "merchant_id": 1089,
+    "name": "ร้านตัวอย่าง #1089",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0585
+  },
+  {
+    "merchant_id": 1090,
+    "name": "ร้านตัวอย่าง #1090",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0782
+  },
+  {
+    "merchant_id": 1091,
+    "name": "ร้านตัวอย่าง #1091",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0789
+  },
+  {
+    "merchant_id": 1092,
+    "name": "ร้านตัวอย่าง #1092",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 77,
+    "forecast_wape": 0.0819
+  },
+  {
+    "merchant_id": 1093,
+    "name": "ร้านตัวอย่าง #1093",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 88,
+    "forecast_wape": 0.0793
+  },
+  {
+    "merchant_id": 1094,
+    "name": "ร้านตัวอย่าง #1094",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 89,
+    "forecast_wape": 0.0867
+  },
+  {
+    "merchant_id": 1095,
+    "name": "ร้านตัวอย่าง #1095",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.0815
+  },
+  {
+    "merchant_id": 1096,
+    "name": "ร้านตัวอย่าง #1096",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0834
+  },
+  {
+    "merchant_id": 1097,
+    "name": "ร้านตัวอย่าง #1097",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0525
+  },
+  {
+    "merchant_id": 1098,
+    "name": "ร้านตัวอย่าง #1098",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 74,
+    "forecast_wape": 0.0588
+  },
+  {
+    "merchant_id": 1099,
+    "name": "ร้านตัวอย่าง #1099",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 79,
+    "forecast_wape": 0.0972
+  },
+  {
+    "merchant_id": 1100,
+    "name": "ร้านตัวอย่าง #1100",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 69,
+    "forecast_wape": 0.0909
+  },
+  {
+    "merchant_id": 1101,
+    "name": "ร้านตัวอย่าง #1101",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 75,
+    "forecast_wape": 0.0557
+  },
+  {
+    "merchant_id": 1102,
+    "name": "ร้านตัวอย่าง #1102",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0769
+  },
+  {
+    "merchant_id": 1103,
+    "name": "ร้านตัวอย่าง #1103",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0932
+  },
+  {
+    "merchant_id": 1104,
+    "name": "ร้านตัวอย่าง #1104",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 82,
+    "forecast_wape": 0.0843
+  },
+  {
+    "merchant_id": 1105,
+    "name": "ร้านตัวอย่าง #1105",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0822
+  },
+  {
+    "merchant_id": 1106,
+    "name": "ร้านตัวอย่าง #1106",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 86,
+    "forecast_wape": 0.0677
+  },
+  {
+    "merchant_id": 1107,
+    "name": "ร้านตัวอย่าง #1107",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 78,
+    "forecast_wape": 0.1466
+  },
+  {
+    "merchant_id": 1108,
+    "name": "ร้านตัวอย่าง #1108",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 85,
+    "forecast_wape": 0.0635
+  },
+  {
+    "merchant_id": 1109,
+    "name": "ร้านตัวอย่าง #1109",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.1191
+  },
+  {
+    "merchant_id": 1110,
+    "name": "ร้านตัวอย่าง #1110",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 84,
+    "forecast_wape": 0.0947
+  },
+  {
+    "merchant_id": 1111,
+    "name": "ร้านตัวอย่าง #1111",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.1255
+  },
+  {
+    "merchant_id": 1112,
+    "name": "ร้านตัวอย่าง #1112",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 83,
+    "forecast_wape": 0.1121
+  },
+  {
+    "merchant_id": 1113,
+    "name": "ร้านตัวอย่าง #1113",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 87,
+    "forecast_wape": 0.0793
+  },
+  {
+    "merchant_id": 1114,
+    "name": "ร้านตัวอย่าง #1114",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 90,
+    "forecast_wape": 0.0698
+  },
+  {
+    "merchant_id": 1115,
+    "name": "ร้านตัวอย่าง #1115",
+    "is_demo": false,
+    "gap_count": 0,
+    "score": 80,
+    "forecast_wape": 0.0667
+  }
+]

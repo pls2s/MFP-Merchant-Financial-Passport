@@ -1,16 +1,16 @@
 {
   "merchant_id": 1,
-  "opening_balance": 37057.12,
+  "opening_balance": 17035.37,
   "gaps": [
     {
       "date": "2015-07-22",
-      "shortfall": 7900.0,
-      "balance_after": -7900.0,
+      "shortfall": 7944.89,
+      "balance_after": -7944.89,
       "contributors": [
         {
           "type": "supplier_invoice",
           "label": "ค่าสินค้า supplier (สั่งล็อตใหญ่)",
-          "amount": 50100.0,
+          "amount": 28400.0,
           "due_date": "2015-07-22"
         },
         {
@@ -29,13 +29,13 @@
     },
     {
       "date": "2015-07-28",
-      "shortfall": 3138.66,
-      "balance_after": -3138.66,
+      "shortfall": 3183.55,
+      "balance_after": -3183.55,
       "contributors": [
         {
           "type": "supplier_invoice",
           "label": "ค่าสินค้า supplier (สั่งล็อตใหญ่)",
-          "amount": 50100.0,
+          "amount": 28400.0,
           "due_date": "2015-07-22"
         },
         {
