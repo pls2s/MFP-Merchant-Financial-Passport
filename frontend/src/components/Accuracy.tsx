@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { money, percent, thaiDate, thaiDateShort, thaiYearMonth, thaiYearMonthLong } from "../format";
 import type { Forecast, LongForecast, ModelResult, SeasonalOutlook } from "../types";
+import { Swatch } from "./ui";
 
 /**
  * "How accurate is it?" — kept out of the main chart. Each range shows its own backtest:
@@ -57,8 +58,8 @@ function MiniLines({ data }: { data: { date: string; actual: number | null; pred
 function Legend() {
   return (
     <div className="chart-legend">
-      <span><i className="swatch" style={{ background: "var(--series-actual)" }} />ยอดขายจริง</span>
-      <span><i className="swatch" style={{ background: "var(--series-predicted)" }} />ที่ทายไว้ล่วงหน้า (ยังไม่เห็นยอดจริง)</span>
+      <span><Swatch kind="line" color="var(--series-actual)" />ยอดขายจริง</span>
+      <span><Swatch kind="line" color="var(--series-predicted)" />ที่ทายไว้ล่วงหน้า (ยังไม่เห็นยอดจริง)</span>
     </div>
   );
 }
