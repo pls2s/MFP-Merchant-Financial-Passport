@@ -10,13 +10,16 @@ export const RANGES = [
 ] as const;
 export type RangeKey = (typeof RANGES)[number]["key"];
 
-export type SalesLayer = "promo" | "holiday" | "pastGaps" | "laterActual" | "simulated";
+export type SalesLayer = "promo" | "holiday" | "pastGaps" | "after";
 export const SALES_LAYERS: readonly { key: SalesLayer; label: string; swatch: ReactNode }[] = [
   { key: "promo", label: "วันโปรโมชัน", swatch: <Swatch kind="area" color="var(--series-promo)" /> },
   { key: "holiday", label: "วันหยุดนักขัตฤกษ์", swatch: <Swatch kind="line" color="var(--text-3)" dashed /> },
   { key: "pastGaps", label: "วันที่เงินเคยไม่พอ", swatch: <Swatch kind="line" color="var(--warn)" dashed /> },
-  { key: "laterActual", label: "ยอดจริงหลังวันนี้", swatch: <Swatch kind="line" color="var(--series-actual)" /> },
-  { key: "simulated", label: "ยอดขายจำลอง", swatch: <Swatch kind="line" color="var(--series-simulated)" dashed /> },
+  // One toggle for both lines after today: real sales up to the data end, then synthetic (still labelled จำลอง).
+  {
+    key: "after", label: "ยอดขายหลังวันนี้ (จริง + จำลอง)",
+    swatch: <><Swatch kind="line" color="var(--series-actual)" /><Swatch kind="line" color="var(--series-simulated)" dashed /></>,
+  },
 ];
 
 export type BalanceLayer = "expenses" | "pastGaps" | "longGaps";
