@@ -1,20 +1,13 @@
 import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { api } from "../api";
+import { MODELS, type ModelKey } from "../components/chartOptions";
+import { Experiments } from "../components/Experiments";
 import { Card, ChipGroup, ErrorState, Segmented, Skeleton, Swatch } from "../components/ui";
 import { money, percent } from "../format";
 import type { ModelResult } from "../types";
 import { useAsync } from "../useAsync";
 
-// Colour follows the model, never its rank — hiding a model does not repaint the others.
-const MODELS = [
-  { key: "seasonal_naive", label: "Seasonal naive", color: "var(--text-3)" },
-  { key: "lightgbm", label: "LightGBM", color: "var(--series-lgbm)" },
-  { key: "lstm", label: "LSTM", color: "var(--series-lstm)" },
-  { key: "gru", label: "GRU", color: "var(--series-gru)" },
-  { key: "ensemble", label: "LSTM+GRU (โมเดลหลัก)", color: "var(--series-forecast)" },
-] as const;
-type ModelKey = (typeof MODELS)[number]["key"];
 
 const METRICS = {
   wape: { label: "WAPE", hint: "ความคลาดเคลื่อนรวม ÷ ยอดขายจริงรวม (ยิ่งต่ำยิ่งดี)", fmt: (v: number) => percent(v), axis: (v: number) => percent(v, 0) },
@@ -138,14 +131,19 @@ export function ModelResults() {
             </div>
           </>
         )}
+        <p className="muted small chart-note">
+          LightGBM, LSTM และ GRU ในกราฟนี้เป็นผลของ seed 42 ส่วนโมเดลหลักคือค่าเฉลี่ยของ LSTM และ GRU จาก 5 seed (10 โมเดล)
+          — เทียบแบบ 5 seed ทุกโมเดลได้ในส่วน "ความเสถียรข้าม random seed" ด้านล่าง
+        </p>
       </Card>
       <Card title="สรุป">
         <ul className="summary-list">
           <li>ทุกโมเดลที่เทรนผ่านเป้า WAPE ≤ 20% และดีกว่า seasonal naive เกือบ 3 เท่า</li>
-          <li>ทดสอบ 5 random seed: LSTM+GRU ทัดเทียม LightGBM (8.32% ± 0.22 เทียบกับ 8.30% ± 0.06)</li>
+          <li>LSTM/GRU แต่ละ seed ทัดเทียม LightGBM แต่แกว่งมากกว่า เมื่อเฉลี่ย 5 seed แล้ว LSTM+GRU ดีกว่า LightGBM 5 seed เล็กน้อยแต่สม่ำเสมอ (8.17% เทียบกับ 8.24%)</li>
           <li>WAPE = ผลรวมความคลาดเคลื่อนสัมบูรณ์ ÷ ผลรวมยอดขายจริง วัดเฉพาะวันที่ร้านเปิด</li>
         </ul>
       </Card>
+      <Experiments />
     </>
   );
 }

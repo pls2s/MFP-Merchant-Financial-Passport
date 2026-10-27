@@ -174,3 +174,14 @@ export interface ModelResult {
   rmse: number;
   n_days: number;
 }
+
+// GET /api/v1/model-experiments — robustness results, precomputed
+export interface ModelExperiments {
+  seeds: { seed: number; model: string; split: "val" | "test"; wape: number }[];
+  seed_ensemble: ModelResult[]; // each model averaged over all 5 seeds
+  seed_ensemble_k: { model: string; k: number; mean: number; std: number | null; min: number; max: number }[]; // test
+  ablation: { variant: string; split: "val" | "test"; wape: number }[];
+  learning_curves: { config: string; epoch: number; loss: number; val_wape: number }[];
+  chosen_configs: Record<string, string>; // cell → tuning config chosen on validation
+  favorita: ModelResult[];
+}

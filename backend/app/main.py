@@ -107,3 +107,8 @@ def copilot(merchant_id: int, body: schemas.CopilotRequest | None = None):
 @app.get("/api/v1/model-results", response_model=list[schemas.ModelResult])
 def model_results():
     return store.results.to_dict(orient="records")
+
+
+@app.get("/api/v1/model-experiments", response_model=schemas.ModelExperiments)
+def model_experiments():
+    return store.experiments

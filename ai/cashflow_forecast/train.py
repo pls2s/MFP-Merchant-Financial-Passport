@@ -26,6 +26,9 @@ from ai.cashflow_forecast.preprocess import DATASETS, HORIZON, ROSSMANN, SEED, D
 
 VAL_ORIGINS = ROSSMANN.val_origins
 TEST_ORIGINS = ROSSMANN.test_origins
+# The main model averages LSTM and GRU over these seeds (10 runs). Seed 42 is the tuned run in
+# models/<cell>/; the others are the re-trained runs from `experiments seeds`.
+ENSEMBLE_SEEDS = [SEED, 1, 2, 3, 4]
 
 
 def load(ds: Dataset = ROSSMANN) -> pd.DataFrame:
@@ -415,16 +418,36 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
     return predict_blocks(model, arrays, window)
 
 
+def ensemble_members(ds: Dataset = ROSSMANN) -> list[dict]:
+    """LSTM and GRU runs averaged into the main model: every seed in ENSEMBLE_SEEDS for
+    Rossmann, seed 42 only for other datasets (no seed re-runs there)."""
+    seeds = ENSEMBLE_SEEDS if ds is ROSSMANN else [SEED]
+    members = []
+    for seed in seeds:
+        for cell in ("lstm", "gru"):
+            if seed == SEED:
+                model_dir, preds = ds.models_dir / cell, ds.predictions_dir / f"{cell}.parquet"
+            else:
+                run_dir = ds.models_dir / "experiments" / "seeds" / f"seed{seed}"
+                model_dir, preds = run_dir / f"{cell}_model", run_dir / f"{cell}.parquet"
+            members.append({"cell": cell, "seed": seed, "model_dir": model_dir, "predictions": preds})
+    missing = [str(m["predictions"]) for m in members if not m["predictions"].exists()]
+    if missing:
+        raise FileNotFoundError(f"run `python -m ai.cashflow_forecast.experiments seeds` first; missing {missing}")
+    return members
+
+
 def train_ensemble(ds: Dataset = ROSSMANN) -> pd.DataFrame:
-    """Plain average of the saved LSTM and GRU forecasts (equal weights, nothing
-    fitted). Adopted because its Validation WAPE beat both single models; the
-    rule was fixed before looking at Test."""
+    """Plain average of the saved LSTM and GRU forecasts over 5 seeds (10 runs, equal
+    weights, nothing fitted). Adopted because its Validation WAPE beat the seed-42
+    LSTM+GRU average and every 5-seed single-cell average; Test was not used to choose."""
     keys = ["store", "date", "split"]
-    lstm = pd.read_parquet(ds.predictions_dir / "lstm.parquet")[keys + ["forecast"]]
-    gru = pd.read_parquet(ds.predictions_dir / "gru.parquet")[keys + ["forecast"]]
-    merged = lstm.merge(gru, on=keys, suffixes=("_lstm", "_gru"), validate="one_to_one")
-    merged["forecast"] = (merged["forecast_lstm"] + merged["forecast_gru"]) / 2
-    return merged
+    runs = [pd.read_parquet(m["predictions"]).set_index(keys)["forecast"].clip(lower=0)
+            for m in ensemble_members(ds)]
+    stacked = pd.concat(runs, axis=1)
+    if stacked.isna().any().any():
+        raise ValueError("ensemble members do not cover the same store-days")
+    return stacked.mean(axis=1).rename("forecast").reset_index()
 
 
 def val_wape(df: pd.DataFrame, preds: pd.DataFrame) -> float:

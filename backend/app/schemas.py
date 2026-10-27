@@ -262,4 +262,47 @@ class ModelResult(BaseModel):
     n_days: int
 
 
+# --- GET /api/v1/model-experiments (Model results screen, robustness section) ----
+
+
+class SeedRun(BaseModel):
+    seed: int
+    model: str
+    split: Literal["val", "test"]
+    wape: float
+
+
+class SeedEnsembleK(BaseModel):
+    """Test WAPE when averaging k seeds, over every subset of k of the 5 seeds."""
+    model: str
+    k: int
+    mean: float
+    std: float | None = Field(description="None when only one subset exists (k = 5)")
+    min: float
+    max: float
+
+
+class AblationRow(BaseModel):
+    variant: str
+    split: Literal["val", "test"]
+    wape: float
+
+
+class CurvePoint(BaseModel):
+    config: str
+    epoch: int
+    loss: float
+    val_wape: float
+
+
+class ModelExperiments(BaseModel):
+    seeds: list[SeedRun]
+    seed_ensemble: list[ModelResult] = Field(description="Each model averaged over all 5 seeds")
+    seed_ensemble_k: list[SeedEnsembleK]
+    ablation: list[AblationRow]
+    learning_curves: list[CurvePoint]
+    chosen_configs: dict[str, str] = Field(description="Tuning run chosen for each cell, by validation WAPE")
+    favorita: list[ModelResult]
+
+
 CashBalance.model_rebuild()

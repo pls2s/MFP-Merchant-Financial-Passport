@@ -5,25 +5,31 @@ Usage:
     python -m ai.cashflow_forecast.experiments ablation
     python -m ai.cashflow_forecast.experiments seeds
     python -m ai.cashflow_forecast.experiments curves
+    python -m ai.cashflow_forecast.experiments seed_ensemble
 
 ablation  LSTM (w56/h128/l1, seed 42) with one component switched off at a time.
 seeds     LightGBM, LSTM, GRU and the LSTM+GRU average re-trained with seeds 1-4;
           seed 42 reuses the main predictions.
+seed_ensemble
+          Average the saved predictions of all 5 seeds (no retraining): LightGBM, LSTM and
+          GRU each over 5 seeds, LSTM+GRU over all 10 runs. Also every subset of k seeds
+          (k = 1-5) to show how the spread shrinks as more seeds are averaged.
 curves    Per-epoch train loss and validation WAPE of every tuning run, parsed
           from models/logs/tune.log.
 
-Writes  models/experiments/{ablation,seeds,learning_curves}.csv
+Writes  models/experiments/{ablation,seeds,learning_curves,seed_ensemble,seed_ensemble_k}.csv
         models/experiments/<experiment>/<run>/<model>.parquet   (resumable)
 """
 
 import argparse
+import itertools
 import re
 
 import pandas as pd
 
 from ai.cashflow_forecast.evaluate import score
 from ai.cashflow_forecast.preprocess import ROSSMANN, SEED
-from ai.cashflow_forecast.train import load, train_lightgbm, train_rnn
+from ai.cashflow_forecast.train import ENSEMBLE_SEEDS, load, train_lightgbm, train_rnn
 
 EXPERIMENTS_DIR = ROSSMANN.models_dir / "experiments"
 RNN_CONFIGS = {"lstm": {"window": 56, "hidden": 128, "layers": 1}, "gru": {"window": 28, "hidden": 128, "layers": 2}}
@@ -34,7 +40,7 @@ ABLATIONS = {
     "no_store_embedding": {"embedding": False},
     "unweighted_loss": {"weighted_loss": False},
 }
-SEEDS = [SEED, 1, 2, 3, 4]
+SEEDS = ENSEMBLE_SEEDS
 
 
 def run_rnn(df: pd.DataFrame, cell: str, out_dir, seed: int = SEED, options: dict | None = None) -> pd.DataFrame:
@@ -111,6 +117,47 @@ def summarize_seeds(table: pd.DataFrame) -> pd.DataFrame:
     return summary
 
 
+def seed_predictions(seed: int) -> dict[str, pd.DataFrame]:
+    """Saved predictions of one seed; run `seeds` first."""
+    base = ROSSMANN.predictions_dir if seed == SEED else EXPERIMENTS_DIR / "seeds" / f"seed{seed}"
+    keys = ["store", "date", "split", "forecast"]
+    return {m: pd.read_parquet(base / f"{m}.parquet")[keys] for m in ("lightgbm", "lstm", "gru")}
+
+
+def average(frames: list[pd.DataFrame]) -> pd.DataFrame:
+    keys = ["store", "date", "split"]
+    stacked = pd.concat([f.set_index(keys)["forecast"].clip(lower=0) for f in frames], axis=1)
+    if stacked.isna().any().any():
+        raise ValueError("seed predictions do not cover the same store-days")
+    return stacked.mean(axis=1).rename("forecast").reset_index()
+
+
+def seed_ensemble(actuals: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    runs = {seed: seed_predictions(seed) for seed in SEEDS}
+    members = {
+        "lightgbm": [(s, "lightgbm") for s in SEEDS],
+        "lstm": [(s, "lstm") for s in SEEDS],
+        "gru": [(s, "gru") for s in SEEDS],
+        "ensemble": [(s, m) for s in SEEDS for m in ("lstm", "gru")],
+    }
+    rows = []
+    for model, picks in members.items():
+        preds = average([runs[s][m] for s, m in picks])
+        rows += scores(preds, actuals, model=f"{model}_5seed", n_runs=len(picks))
+        print(f"  {model}_5seed: " + ", ".join(f"{r['split']} WAPE {r['wape']:.4f}" for r in rows[-2:]))
+
+    # Every subset of k seeds: does averaging more seeds lower the error and the spread?
+    by_k = []
+    for model in ("lightgbm", "lstm", "gru", "ensemble"):
+        cells = ("lstm", "gru") if model == "ensemble" else (model,)
+        for k in range(1, len(SEEDS) + 1):
+            for subset in itertools.combinations(SEEDS, k):
+                preds = average([runs[s][c] for s in subset for c in cells])
+                for r in scores(preds, actuals, model=model, k=k, seeds="+".join(map(str, subset))):
+                    by_k.append(r)
+    return pd.DataFrame(rows), pd.DataFrame(by_k)
+
+
 EPOCH_LINE = re.compile(r"loss: (?P<loss>[\d.]+) - val_wape: (?P<val_wape>[\d.]+)")
 
 
@@ -127,7 +174,7 @@ def learning_curves(log_path=ROSSMANN.models_dir / "logs" / "tune.log") -> pd.Da
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("experiment", choices=["ablation", "seeds", "curves"])
+    parser.add_argument("experiment", choices=["ablation", "seeds", "curves", "seed_ensemble"])
     args = parser.parse_args()
 
     if args.experiment == "curves":
@@ -140,6 +187,16 @@ def main() -> None:
 
     df = load()
     actuals = df[["store", "date", "sales", "is_eval_day"]]
+    if args.experiment == "seed_ensemble":
+        table, by_k = seed_ensemble(actuals)
+        table.to_csv(EXPERIMENTS_DIR / "seed_ensemble.csv", index=False)
+        by_k.to_csv(EXPERIMENTS_DIR / "seed_ensemble_k.csv", index=False)
+        with pd.option_context("display.float_format", "{:,.4f}".format):
+            print(table.to_string(index=False))
+            test = by_k[by_k["split"] == "test"]
+            print(test.groupby(["model", "k"])["wape"].agg(["mean", "std", "min", "max", "count"]))
+        print(f"Saved → {EXPERIMENTS_DIR / 'seed_ensemble.csv'}, {EXPERIMENTS_DIR / 'seed_ensemble_k.csv'}")
+        return
     table = ablation(df, actuals) if args.experiment == "ablation" else seeds(df, actuals)
     path = EXPERIMENTS_DIR / f"{args.experiment}.csv"
     path.parent.mkdir(parents=True, exist_ok=True)

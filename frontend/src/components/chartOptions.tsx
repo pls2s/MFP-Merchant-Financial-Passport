@@ -1,7 +1,17 @@
 import type { ReactNode } from "react";
 import { Swatch } from "./ui";
 
-// Shared by the page filter bar, <SalesChart> and <BalanceChart>.
+// Shared by the page filter bar, <SalesChart> and <BalanceChart>; MODELS by the model-results page.
+
+// Colour follows the model, never its rank — hiding a model does not repaint the others.
+export const MODELS = [
+  { key: "seasonal_naive", label: "Seasonal naive", color: "var(--text-3)" },
+  { key: "lightgbm", label: "LightGBM", color: "var(--series-lgbm)" },
+  { key: "lstm", label: "LSTM", color: "var(--series-lstm)" },
+  { key: "gru", label: "GRU", color: "var(--series-gru)" },
+  { key: "ensemble", label: "LSTM+GRU 5 seed (โมเดลหลัก)", color: "var(--series-forecast)" },
+] as const;
+export type ModelKey = (typeof MODELS)[number]["key"];
 
 export const RANGES = [
   { key: "4w", label: "4 สัปดาห์", back: 28 },

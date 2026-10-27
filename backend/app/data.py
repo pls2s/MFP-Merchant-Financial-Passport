@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
+from ai.cashflow_forecast.experiments import RNN_CONFIGS
 from ai.cashflow_forecast.preprocess import ROSSMANN
 from ai.cashflow_forecast.long_range import FORECASTS_DIR
 from ai.cashflow_forecast.predict import HISTORY_PATH
@@ -19,6 +20,8 @@ from ai.gap_detection.gaps import cash_flow_gaps
 from ai.gap_detection.long_balance import long_balance
 
 RESULTS_PATH = ROSSMANN.models_dir / "results.csv"
+EXPERIMENTS_DIR = ROSSMANN.models_dir / "experiments"
+FAVORITA_RESULTS_PATH = ROSSMANN.models_dir / "favorita" / "results.csv"
 
 
 def _by_merchant(path) -> dict[int, dict]:
@@ -31,6 +34,24 @@ def _by_store(df: pd.DataFrame) -> dict[int, pd.DataFrame]:
 
 def _num(x) -> float | None:
     return None if pd.isna(x) else round(float(x), 2)
+
+
+def _experiments() -> dict:
+    """Robustness results from `python -m ai.cashflow_forecast.experiments ...` (precomputed CSVs)."""
+    ens = pd.read_csv(EXPERIMENTS_DIR / "seed_ensemble.csv")
+    ens["model"] = ens["model"].str.removesuffix("_5seed")
+    k = pd.read_csv(EXPERIMENTS_DIR / "seed_ensemble_k.csv")
+    k = k[k["split"] == "test"].groupby(["model", "k"])["wape"].agg(["mean", "std", "min", "max"]).reset_index()
+    k["std"] = k["std"].astype(object).where(k["std"].notna(), None)
+    return {
+        "seeds": pd.read_csv(EXPERIMENTS_DIR / "seeds.csv")[["seed", "model", "split", "wape"]].to_dict(orient="records"),
+        "seed_ensemble": ens.drop(columns="n_runs").to_dict(orient="records"),
+        "seed_ensemble_k": k.to_dict(orient="records"),
+        "ablation": pd.read_csv(EXPERIMENTS_DIR / "ablation.csv")[["variant", "split", "wape"]].to_dict(orient="records"),
+        "learning_curves": pd.read_csv(EXPERIMENTS_DIR / "learning_curves.csv").to_dict(orient="records"),
+        "chosen_configs": {cell: f"{cell}_w{c['window']}_h{c['hidden']}_l{c['layers']}" for cell, c in RNN_CONFIGS.items()},
+        "favorita": pd.read_csv(FAVORITA_RESULTS_PATH).to_dict(orient="records"),
+    }
 
 
 @dataclass
@@ -48,6 +69,7 @@ class DataStore:
     seasonal_back: dict[int, pd.DataFrame]
     long_metrics: dict
     synthetic_sales: dict[int, pd.DataFrame]
+    experiments: dict
 
     @classmethod
     def load(cls) -> "DataStore":
@@ -66,6 +88,7 @@ class DataStore:
             seasonal_back=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_backtest.parquet")),
             long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
             synthetic_sales=_by_store(pd.read_parquet(FORECASTS_DIR / "synthetic_sales.parquet")),
+            experiments=_experiments(),
         )
 
     def merchants(self) -> list[dict]:

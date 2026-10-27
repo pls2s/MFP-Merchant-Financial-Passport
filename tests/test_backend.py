@@ -73,6 +73,16 @@ def test_model_results(client):
     assert {r["split"] for r in rows} == {"val", "test"}
 
 
+def test_model_experiments(client):
+    body = client.get("/api/v1/model-experiments").json()
+    assert {r["model"] for r in body["seed_ensemble"]} == {"lightgbm", "lstm", "gru", "ensemble"}
+    k5 = [r for r in body["seed_ensemble_k"] if r["k"] == 5]
+    assert len(k5) == 4 and all(r["std"] is None for r in k5)
+    assert {r["seed"] for r in body["seeds"]} == {42, 1, 2, 3, 4}
+    curves = {p["config"] for p in body["learning_curves"]}
+    assert set(body["chosen_configs"].values()) <= curves
+
+
 def test_cors_allows_vite_dev_server(client):
     resp = client.options("/api/v1/merchants", headers={
         "Origin": "http://localhost:5173", "Access-Control-Request-Method": "GET"})

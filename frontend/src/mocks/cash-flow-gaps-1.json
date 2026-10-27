@@ -4,13 +4,13 @@
   "gaps": [
     {
       "date": "2015-07-22",
-      "shortfall": 7944.89,
-      "balance_after": -7944.89,
+      "shortfall": 7917.04,
+      "balance_after": -7917.04,
       "contributors": [
         {
           "type": "supplier_invoice",
           "label": "ค่าสินค้า supplier (สั่งล็อตใหญ่)",
-          "amount": 28400.0,
+          "amount": 28300.0,
           "due_date": "2015-07-22"
         },
         {
@@ -29,13 +29,13 @@
     },
     {
       "date": "2015-07-28",
-      "shortfall": 3183.55,
-      "balance_after": -3183.55,
+      "shortfall": 2979.62,
+      "balance_after": -2979.62,
       "contributors": [
         {
           "type": "supplier_invoice",
           "label": "ค่าสินค้า supplier (สั่งล็อตใหญ่)",
-          "amount": 28400.0,
+          "amount": 28300.0,
           "due_date": "2015-07-22"
         },
         {

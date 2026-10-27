@@ -8,6 +8,7 @@ import type {
   Forecast,
   LongForecast,
   Merchant,
+  ModelExperiments,
   ModelResult,
   SalesHistory,
   SeasonalOutlook,
@@ -82,4 +83,7 @@ export const api = {
 
   modelResults: (): Promise<ModelResult[]> =>
     USE_MOCK ? mock("model-results") : request("/api/v1/model-results"),
+
+  modelExperiments: (): Promise<ModelExperiments> =>
+    USE_MOCK ? mock("model-experiments") : request("/api/v1/model-experiments"),
 };
