@@ -26,17 +26,23 @@ export function ErrorState({ error, onRetry }: { error: Error; onRetry?: () => v
   );
 }
 
-export function Card({ title, badges, action, children }: {
+export function Card({ title, badges, action, id, eyebrow, children, className = "" }: {
   title?: ReactNode;
   badges?: ReactNode;
   action?: ReactNode;
+  id?: string;
+  eyebrow?: string;
   children: ReactNode;
+  className?: string;
 }) {
   return (
-    <section className="card">
+    <section className={`card ${className}`} id={id}>
       {(title || badges || action) && (
         <div className="card-head">
-          {title && <h2>{title}</h2>}
+          <div className="card-title">
+            {eyebrow && <div className="eyebrow">{eyebrow}</div>}
+            {title && <h2>{title}</h2>}
+          </div>
           {badges}
           <span className="spacer" />
           {action}
@@ -46,3 +52,91 @@ export function Card({ title, badges, action, children }: {
     </section>
   );
 }
+
+/** Single choice (range, split, metric). */
+export function Segmented<K extends string>({ options, value, onChange, label }: {
+  options: readonly { key: K; label: ReactNode }[];
+  value: K;
+  onChange: (k: K) => void;
+  label: string;
+}) {
+  return (
+    <div className="segmented" role="radiogroup" aria-label={label}>
+      {options.map((o) => (
+        <button key={o.key} role="radio" aria-checked={value === o.key} className={value === o.key ? "on" : ""}
+          onClick={() => onChange(o.key)}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Multi choice — chart layers, model visibility. Each chip carries its legend swatch. */
+export function ChipGroup<K extends string>({ options, value, onChange, label }: {
+  options: readonly { key: K; label: ReactNode; swatch?: ReactNode; disabled?: boolean }[];
+  value: ReadonlySet<K>;
+  onChange: (next: Set<K>) => void;
+  label: string;
+}) {
+  return (
+    <div className="chip-group" role="group" aria-label={label}>
+      {options.map((o) => {
+        const on = value.has(o.key);
+        return (
+          <button key={o.key} className={`chip${on ? " on" : ""}`} aria-pressed={on} disabled={o.disabled}
+            onClick={() => {
+              const next = new Set(value);
+              if (on) next.delete(o.key);
+              else next.add(o.key);
+              onChange(next);
+            }}>
+            <span className="chip-check" aria-hidden>{on ? "✓" : "+"}</span>
+            {o.swatch}
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export type ViewMode = "chart" | "table";
+
+export function ViewToggle({ value, onChange }: { value: ViewMode; onChange: (v: ViewMode) => void }) {
+  return (
+    <Segmented label="รูปแบบการแสดงผล" value={value} onChange={onChange}
+      options={[{ key: "chart", label: "กราฟ" }, { key: "table", label: "ตาราง" }]} />
+  );
+}
+
+/** Table twin of a chart: every value the chart shows is readable without hovering. */
+export function DataTable({ columns, rows, highlight }: {
+  columns: { key: string; label: string; align?: "left" | "right" }[];
+  rows: Record<string, ReactNode>[];
+  highlight?: (i: number) => "bad" | "warn" | "muted" | undefined;
+}) {
+  return (
+    <div className="table-wrap scroll">
+      <table>
+        <thead>
+          <tr>{columns.map((c) => <th key={c.key} className={c.align === "left" ? "left" : ""}>{c.label}</th>)}</tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i} className={highlight?.(i) ?? ""}>
+              {columns.map((c) => <td key={c.key} className={c.align === "left" ? "left" : "num"}>{r[c.key] ?? "—"}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/** Legend swatches — mirror the mark (bar = rect, line = stroke, area = soft block). */
+export const Swatch = ({ kind, color, dashed, opacity }: {
+  kind: "bar" | "line" | "area"; color: string; dashed?: boolean; opacity?: number;
+}) => (
+  <i className={`swatch ${kind}${dashed ? " dashed" : ""}`} style={{ "--c": color, opacity } as React.CSSProperties} aria-hidden />
+);

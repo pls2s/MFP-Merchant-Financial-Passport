@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Bar,
   CartesianGrid,
@@ -14,14 +13,11 @@ import {
 import { addDays, money, monthStarts, pillRows, thaiDate, thaiDateShort, thaiMonthShort, thaiWeekday } from "../format";
 import type { BalanceHorizon, CashBalance, Gap, LongGap } from "../types";
 import { GapPill } from "./GapMarker";
+import type { BalanceLayer, RangeKey } from "./chartOptions";
+import { DataTable, Swatch, type ViewMode } from "./ui";
 
 // Same ranges as the sales chart: days back from today; the projection runs to the end of each horizon.
-const RANGES = [
-  { key: "4w", label: "4 สัปดาห์", back: 28 },
-  { key: "3m", label: "3 เดือน", back: 91 },
-  { key: "1y", label: "1 ปี", back: Infinity },
-] as const;
-type RangeKey = (typeof RANGES)[number]["key"];
+const BACK: Record<RangeKey, number> = { "4w": 28, "3m": 91, "1y": Infinity };
 
 const SOURCE: Record<BalanceHorizon, string> = {
   actual: "ยอดขายจริง",
@@ -81,10 +77,16 @@ function niceTicks(lo: number, hi: number): number[] {
 }
 
 /** B_t = B_{t-1} + S_t − E_t on synthetic expenses: history up to "today", projection after. */
-export function BalanceChart({ balance, asOf, gaps }: { balance: CashBalance; asOf: string; gaps: Gap[] }) {
-  const [range, setRange] = useState<RangeKey>("4w");
-  const spec = RANGES.find((r) => r.key === range)!;
-  const from = Number.isFinite(spec.back) ? addDays(asOf, -spec.back + 1) : "";
+export function BalanceChart({ balance, asOf, gaps, range, layers, view }: {
+  balance: CashBalance;
+  asOf: string;
+  gaps: Gap[];
+  range: RangeKey;
+  layers: ReadonlySet<BalanceLayer>;
+  view: ViewMode;
+}) {
+  const back = BACK[range];
+  const from = Number.isFinite(back) ? addDays(asOf, -back + 1) : "";
   const shortEnd = addDays(asOf, 14);
   const end = range === "4w" ? shortEnd : range === "3m"
     ? balance.points.filter((p) => p.horizon === "3m").at(-1)!.date
@@ -102,35 +104,72 @@ export function BalanceChart({ balance, asOf, gaps }: { balance: CashBalance; as
       horizon: p.horizon,
     }));
   const inRange = (d: string) => d >= rows[0].date && d <= end;
-  const pastGaps = balance.past_gaps.filter((g) => inRange(g.date));
+  const pastGaps = layers.has("pastGaps") ? balance.past_gaps.filter((g) => inRange(g.date)) : [];
   const longGaps: LongGap[] = balance.long_gaps.filter((g) => inRange(g.date));
   // one outlined callout for the worst later shortfall; the others show as faded red dots + the note
   const worstLong = longGaps.reduce<LongGap | null>((w, g) => (!w || g.shortfall > w.shortfall ? g : w), null);
+  const showLong = layers.has("longGaps") && worstLong;
   const lowest = rows.filter((r) => r.horizon === "14d").reduce((a, b) => (b.balance < a.balance ? b : a));
   const monthAxis = range !== "4w";
   const dates = rows.map((r) => r.date);
   const pills = pillRows(gaps.map((g) => g.date), dates, monthAxis ? 25 : 8);
+  const showExpenses = layers.has("expenses");
   const yTicks = niceTicks(Math.min(0, ...rows.map((r) => r.balance)),
-    Math.max(...rows.map((r) => Math.max(r.balance, r.expenses))) * (gaps.length || worstLong ? 1.4 : 1.05));
+    Math.max(...rows.map((r) => Math.max(r.balance, showExpenses ? r.expenses : 0))) * (gaps.length || showLong ? 1.4 : 1.05));
+  const gapDates = new Set([...gaps, ...balance.past_gaps, ...balance.long_gaps].map((g) => g.date));
+
+  const note = (
+    <p className="muted small chart-note">
+      ยอดเงิน = ยอดเงินวันก่อน + ยอดขาย − รายจ่าย · ยอดเงินตั้งต้น {money(balance.opening_balance)} ({thaiDate(balance.points[0].date)}) ·
+      เจ้าของร้านถอนเงินส่วนที่เกินเงินสำรองทุกวันที่ 25 · ต่ำสุดใน 14 วันข้างหน้า{" "}
+      <b className="num" style={{ color: lowest.balance < 0 ? "var(--bad)" : undefined }}>{money(lowest.balance)}</b> วันที่ {thaiDate(lowest.date)}
+      {monthAxis && <>
+        {" "}· หลัง {thaiDate(shortEnd)}{" "}
+        {worstLong
+          ? <>อาจขาดอีก <b>{longGaps.length} ครั้ง</b> (มากสุด {money(worstLong.shortfall)} วันที่ {thaiDate(worstLong.date)})</>
+          : "ไม่พบวันที่เงินอาจไม่พอ"}
+        {" "}— ใช้ยอดขาย{range === "3m" ? "ที่โมเดลทายต่อเนื่อง 3 เดือน" : "ที่ทายต่อเนื่อง 3 เดือน แล้วต่อด้วยภาพรวมรายเดือน"}
+        {" "}กับรายจ่ายจำลองรอบเดิม จึงเป็นสถานการณ์คร่าว ๆ ไม่ใช่คำเตือนแน่นอน
+      </>}
+    </p>
+  );
+
+  if (view === "table") {
+    return (
+      <div>
+        <DataTable
+          columns={[
+            { key: "date", label: "วันที่", align: "left" },
+            { key: "sales", label: "ยอดขาย (+)" },
+            { key: "expenses", label: "รายจ่าย (−)" },
+            { key: "balance", label: "ยอดเงินคงเหลือ" },
+            { key: "source", label: "ที่มาของยอดขาย", align: "left" },
+          ]}
+          rows={rows.map((r) => ({
+            date: thaiDate(r.date),
+            sales: money(r.sales),
+            expenses: r.expenses > 0 ? money(r.expenses) : null,
+            balance: <span style={{ color: r.balance < 0 ? "var(--bad)" : undefined }}>{r.balance < 0 && "⚠ "}{money(r.balance)}</span>,
+            source: SOURCE[r.horizon],
+          }))}
+          highlight={(i) => (rows[i].balance < 0 ? (rows[i].horizon === "actual" ? "warn" : "bad") : gapDates.has(rows[i].date) ? "warn" : undefined)}
+        />
+        {note}
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div className="chart-toolbar">
-        <div className="toggle" role="tablist" aria-label="ช่วงเวลา">
-          {RANGES.map((r) => (
-            <button key={r.key} className={range === r.key ? "on" : ""} onClick={() => setRange(r.key)}>{r.label}</button>
-          ))}
-        </div>
-      </div>
       <div className="chart-legend">
-        <span><i className="swatch" style={{ background: "var(--series-balance)" }} />ยอดเงินคงเหลือ</span>
-        <span><i className="swatch dashed balance" />คาดการณ์ 14 วัน</span>
-        {monthAxis && <span><i className="swatch dashed balance" style={{ opacity: 0.45 }} />คาดการณ์ไกลกว่า 14 วัน (แม่นน้อยลง)</span>}
-        <span><i className="swatch bar" />รายจ่ายที่ครบกำหนดวันนั้น</span>
-        {pastGaps.length > 0 && <span><i className="swatch dashed past-gap" />วันที่เงินเคยไม่พอ</span>}
-        <span><i className="swatch bar" style={{ background: "var(--bad)", opacity: 1 }} />วันที่เงินอาจไม่พอ · ระดับ 0</span>
+        <span><Swatch kind="line" color="var(--series-balance)" />ยอดเงินคงเหลือ</span>
+        <span><Swatch kind="line" color="var(--series-balance)" dashed />คาดการณ์ 14 วัน</span>
+        {monthAxis && <span><Swatch kind="line" color="var(--series-balance)" dashed opacity={0.45} />คาดการณ์ไกลกว่า 14 วัน (แม่นน้อยลง)</span>}
+        {showExpenses && <span><Swatch kind="bar" color="var(--series-expense)" />รายจ่ายที่ครบกำหนดวันนั้น</span>}
+        {pastGaps.length > 0 && <span><Swatch kind="line" color="var(--warn)" dashed />วันที่เงินเคยไม่พอ</span>}
+        <span><Swatch kind="line" color="var(--bad)" />⚠ วันที่เงินอาจไม่พอ · ระดับ 0</span>
       </div>
-      <div style={{ width: "100%", height: 300 }}>
+      <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer>
           <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}>
             <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -145,7 +184,9 @@ export function BalanceChart({ balance, asOf, gaps }: { balance: CashBalance; as
               axisLine={false} tickLine={false} width={64}
               domain={[yTicks[0], yTicks[yTicks.length - 1]]} ticks={yTicks} />
             <Tooltip content={<BalanceTooltip />} />
-            <Bar dataKey="expenses" fill="var(--series-expense)" fillOpacity={0.55} radius={[3, 3, 0, 0]} maxBarSize={14} isAnimationActive={false} />
+            {showExpenses && (
+              <Bar dataKey="expenses" fill="var(--series-expense)" fillOpacity={0.55} radius={[3, 3, 0, 0]} maxBarSize={14} isAnimationActive={false} />
+            )}
             <ReferenceLine y={0} stroke="var(--bad)" strokeWidth={1.5} />
             {pastGaps.map((g) => (
               <ReferenceLine key={`past-${g.date}`} x={g.date} stroke="var(--warn)" strokeWidth={1.5} strokeDasharray="4 3" />
@@ -154,7 +195,7 @@ export function BalanceChart({ balance, asOf, gaps }: { balance: CashBalance; as
               <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={1.5} strokeDasharray="3 3"
                 label={{ content: <GapPill gap={g} row={pills[i]} flip={dates.indexOf(g.date) > dates.length * 0.5} /> }} />
             ))}
-            {worstLong && (
+            {showLong && worstLong && (
               <ReferenceLine x={worstLong.date} stroke="var(--bad)" strokeOpacity={0.5} strokeDasharray="3 3"
                 label={{ content: <GapPill gap={worstLong} row={gaps.length ? Math.max(...pills) + 1 : 0} outline flip={dates.indexOf(worstLong.date) > dates.length * 0.5} /> }} />
             )}
@@ -167,19 +208,7 @@ export function BalanceChart({ balance, asOf, gaps }: { balance: CashBalance; as
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <p className="muted small chart-note">
-        ยอดเงิน = ยอดเงินวันก่อน + ยอดขาย − รายจ่าย · ยอดเงินตั้งต้น {money(balance.opening_balance)} ({thaiDate(balance.points[0].date)}) ·
-        เจ้าของร้านถอนเงินส่วนที่เกินเงินสำรองทุกวันที่ 25 · ต่ำสุดใน 14 วันข้างหน้า{" "}
-        <b className="num" style={{ color: lowest.balance < 0 ? "var(--bad)" : undefined }}>{money(lowest.balance)}</b> วันที่ {thaiDate(lowest.date)}
-        {monthAxis && <>
-          {" "}· หลัง {thaiDate(shortEnd)}{" "}
-          {worstLong
-            ? <>อาจขาดอีก <b>{longGaps.length} ครั้ง</b> (มากสุด {money(worstLong.shortfall)} วันที่ {thaiDate(worstLong.date)})</>
-            : "ไม่พบวันที่เงินอาจไม่พอ"}
-          {" "}— ใช้ยอดขาย{range === "3m" ? "ที่โมเดลทายต่อเนื่อง 3 เดือน" : "ที่ทายต่อเนื่อง 3 เดือน แล้วต่อด้วยภาพรวมรายเดือน"}
-          {" "}กับรายจ่ายจำลองรอบเดิม จึงเป็นสถานการณ์คร่าว ๆ ไม่ใช่คำเตือนแน่นอน
-        </>}
-      </p>
+      {note}
     </div>
   );
 }
