@@ -7,11 +7,10 @@ All expenses, balances and gaps are synthetic (`is_synthetic_expense: true`), an
 credit signal is always `status: "experimental"`.
 """
 
-import io
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app import schemas
@@ -122,22 +121,43 @@ def upload_sample():
     return store.upload_sample
 
 
-@app.post("/api/v1/upload", response_model=schemas.UploadForecast)
-def upload(file: UploadFile = File(...)):
-    """Runs the model live on the uploaded file — the one exception to precomputed forecasts.
-    The demo uses /upload/sample instead."""
-    from ai.cashflow_forecast.cold_start import SalesFileError, daily_sales, read_file, run
-
+def _read_upload(file: UploadFile) -> bytes:
     data = file.file.read(MAX_UPLOAD_BYTES + 1)
     if len(data) > MAX_UPLOAD_BYTES:
         raise HTTPException(413, "ไฟล์ใหญ่เกิน 30 MB")
+    return data
+
+
+def _mapping(date_column, sales_column, quantity_column, price_column) -> dict:
+    return {"date": date_column, "sales": sales_column, "quantity": quantity_column, "price": price_column}
+
+
+@app.post("/api/v1/upload/inspect", response_model=schemas.UploadInspect)
+def upload_inspect(file: UploadFile = File(...), date_column: str | None = Form(None), sales_column: str | None = Form(None),
+                   quantity_column: str | None = Form(None), price_column: str | None = Form(None)):
+    """Read the file, guess (or use the chosen) columns and report what was read — no model."""
+    from ai.cashflow_forecast.sales_file import SalesFileError, inspect
+
     try:
-        daily = daily_sales(read_file(io.BytesIO(data), file.filename or ""))
+        return inspect(_read_upload(file), file.filename or "",
+                       _mapping(date_column, sales_column, quantity_column, price_column))
     except SalesFileError as e:
         raise HTTPException(422, str(e)) from e
-    except Exception as e:  # unreadable file
-        raise HTTPException(422, "อ่านไฟล์ไม่ได้ — รองรับ .csv และ .xlsx") from e
-    return run(daily, file.filename or "ไฟล์ที่อัปโหลด", "live")
+
+
+@app.post("/api/v1/upload", response_model=schemas.UploadForecast)
+def upload(file: UploadFile = File(...), date_column: str | None = Form(None), sales_column: str | None = Form(None),
+           quantity_column: str | None = Form(None), price_column: str | None = Form(None)):
+    """Runs the model live on the uploaded file — the one exception to precomputed forecasts.
+    The demo uses /upload/sample instead."""
+    from ai.cashflow_forecast.cold_start import SalesFileError, load_sales, run
+
+    try:
+        daily, report = load_sales(_read_upload(file), file.filename or "",
+                                   _mapping(date_column, sales_column, quantity_column, price_column))
+    except SalesFileError as e:
+        raise HTTPException(422, str(e)) from e
+    return run(daily, file.filename or "ไฟล์ที่อัปโหลด", "live", report)
 
 
 @app.get("/api/v1/model-results", response_model=list[schemas.ModelResult])

@@ -18,9 +18,9 @@ The trained LSTM+GRU ensemble (Rossmann, 5 seeds) is reused without retraining (
                      multiplied by Σ actual ÷ Σ forecast over the shop's previous CALIB_BLOCKS
                      14-day blocks — only days before the forecast origin, so nothing is peeked at.
 
-Accepted files: one row per transaction with InvoiceDate, Quantity, UnitPrice (UCI Online Retail
-layout; cancellations count as negative sales), or one row per day with date and sales columns.
-At least MIN_DAYS calendar days are needed (the longest model input window is 56 days).
+Files are read by sales_file.py (any .csv/.xlsx layout: daily or per invoice, Thai or English
+headers, d/m/y, Buddhist years, "4,000"); it reports every row it skips. At least MIN_DAYS calendar
+days are needed (the longest model input window is 56 days plus one block to backtest).
 
 Accuracy is checked with a backtest on the shop's own last BACKTEST_BLOCKS × 14 days (raw model,
 level-corrected model, and seasonal naive = same weekday last week). UCI Online Retail is a UK online wholesaler, very unlike a
@@ -39,58 +39,29 @@ import numpy as np
 import pandas as pd
 
 from ai.cashflow_forecast.preprocess import HORIZON, PROCESSED_PATH, ROOT, ROSSMANN, add_calendar_features
+from ai.cashflow_forecast.sales_file import MIN_DAYS, SalesFileError, guess_mapping, normalize, read_table
 from ai.cashflow_forecast.train import KNOWN_COLS, ensemble_members, feature_frame, gather, load_model
 
 UCI_PATH = ROOT / "data" / "raw" / "online_retail" / "Online Retail.xlsx"
 DEMO_PATH = ROOT / "models" / "forecasts" / "uci_demo.json"
 CHECK_PATH = ROOT / "models" / "forecasts" / "cold_start_check.json"
-MIN_DAYS = 56 + HORIZON          # one input window plus one block to backtest
 BACKTEST_BLOCKS = 6
 CALIB_BLOCKS = 4                 # previous blocks used for the level correction
 HISTORY_SHOWN = 120              # days of history returned for the chart
 OPEN_WEEKS = 8                   # weekly pattern used for future open days
 
 
-class SalesFileError(ValueError):
-    """The file cannot be turned into daily sales; the message is shown to the user (Thai)."""
+# --- File → daily sales (sales_file.py does the reading and reports what it skipped) -------
 
 
-# --- File → daily sales ------------------------------------------------------------------
-
-DATE_NAMES = ("date", "invoicedate", "วันที่")
-SALES_NAMES = ("sales", "amount", "revenue", "ยอดขาย")
-
-
-def daily_sales(raw: pd.DataFrame) -> pd.DataFrame:
-    """Contiguous calendar: date, sales (≥ 0), open (1 if there were any sales that day)."""
-    cols = {c.strip().lower(): c for c in raw.columns}
-    date_col = next((cols[n] for n in DATE_NAMES if n in cols), None)
-    if date_col is None:
-        raise SalesFileError("ไม่พบคอลัมน์วันที่ (date หรือ InvoiceDate)")
-    if "quantity" in cols and "unitprice" in cols:
-        amount = pd.to_numeric(raw[cols["quantity"]], errors="coerce") * pd.to_numeric(raw[cols["unitprice"]], errors="coerce")
-    else:
-        sales_col = next((cols[n] for n in SALES_NAMES if n in cols), None)
-        if sales_col is None:
-            raise SalesFileError("ไม่พบคอลัมน์ยอดขาย (sales) หรือ Quantity + UnitPrice")
-        amount = pd.to_numeric(raw[sales_col], errors="coerce")
-    dates = pd.to_datetime(raw[date_col], errors="coerce", dayfirst=False).dt.normalize()
-    ok = dates.notna() & amount.notna()
-    if ok.sum() == 0:
-        raise SalesFileError("อ่านวันที่หรือยอดขายไม่ได้เลย")
-    per_day = amount[ok].groupby(dates[ok]).sum().clip(lower=0)
-    days = pd.date_range(per_day.index.min(), per_day.index.max(), freq="D")
-    if len(days) < MIN_DAYS:
-        raise SalesFileError(f"ต้องมีข้อมูลอย่างน้อย {MIN_DAYS} วัน (มี {len(days)} วัน)")
-    out = pd.DataFrame({"date": days, "sales": per_day.reindex(days, fill_value=0.0).to_numpy()})
-    out["open"] = (out["sales"] > 0).astype("float32")
-    return out
-
-
-def read_file(path_or_buffer, name: str = "") -> pd.DataFrame:
-    if str(name or path_or_buffer).lower().endswith((".xlsx", ".xls")):
-        return pd.read_excel(path_or_buffer)
-    return pd.read_csv(path_or_buffer, encoding_errors="replace")
+def load_sales(data: bytes, filename: str, mapping: dict[str, str | None] | None = None) -> tuple[pd.DataFrame, dict]:
+    """(daily, read report); raises SalesFileError with a Thai message when it cannot be used."""
+    df, _ = read_table(data, filename)
+    daily, report = normalize(df, {**guess_mapping(df), **{k: v for k, v in (mapping or {}).items() if v}})
+    if not report["enough_days"]:
+        raise SalesFileError(f"ต้องมีข้อมูลอย่างน้อย {MIN_DAYS} วัน (อ่านได้ {report['days']} วัน "
+                             f"{report['date_range']['start']} – {report['date_range']['end']})")
+    return daily, report
 
 
 # --- Model inputs for one new shop -------------------------------------------------------
@@ -225,7 +196,7 @@ def backtest(daily: pd.DataFrame, blocks: int = BACKTEST_BLOCKS) -> tuple[dict, 
     return summary, level_factor([(b[1], b[2]) for b in done[-CALIB_BLOCKS:]]), nxt
 
 
-def run(daily: pd.DataFrame, name: str, source: str) -> dict:
+def run(daily: pd.DataFrame, name: str, source: str, read_report: dict | None = None) -> dict:
     end = daily["date"].max()
     bt, factor, fc = backtest(daily)
     fc["forecast"] *= factor
@@ -249,6 +220,7 @@ def run(daily: pd.DataFrame, name: str, source: str) -> dict:
         "level_factor": round(factor, 3),
         "notes": notes,
         "model": "ensemble-v2 cold start",
+        "read_report": read_report,
     }
 
 
@@ -294,8 +266,8 @@ def main() -> None:
         print(json.dumps(out, indent=1))
         return
     path = args.path or UCI_PATH
-    daily = daily_sales(read_file(path))
-    out = run(daily, path.name if args.path else "UCI Online Retail (ตัวอย่าง)", "precomputed")
+    daily, report = load_sales(path.read_bytes(), path.name)
+    out = run(daily, path.name if args.path else "UCI Online Retail (ตัวอย่าง)", "precomputed", report)
     print(json.dumps({k: v for k, v in out.items() if k not in ("history", "forecast")}, ensure_ascii=False, indent=1))
     if not args.path:
         DEMO_PATH.write_text(json.dumps(out, ensure_ascii=False) + "\n")

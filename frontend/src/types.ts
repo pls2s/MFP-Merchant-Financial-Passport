@@ -185,6 +185,42 @@ export interface CopilotResponse {
   is_synthetic_expense: true;
 }
 
+// What ai/cashflow_forecast/sales_file.py did with an uploaded file
+export interface ReadReport {
+  rows: number;
+  rows_used: number;
+  skipped: { reason: string; count: number; rows: number[] }[]; // rows = spreadsheet row numbers (header = 1)
+  date_format: string;
+  amount_source: string;
+  date_range: { start: string; end: string };
+  days: number;
+  open_days: number;
+  notes: string[];
+  enough_days: boolean;
+  min_days: number;
+}
+
+export interface ColumnMapping {
+  date: string | null;
+  sales: string | null;
+  quantity: string | null;
+  price: string | null;
+}
+
+// POST /api/v1/upload/inspect — preview before forecasting (no model)
+export interface UploadInspect {
+  filename: string;
+  encoding: string;
+  columns: string[];
+  preview: Record<string, string | null>[];
+  mapping: ColumnMapping; // used: the guess, overridden by the user's choice
+  guessed: ColumnMapping;
+  ok: boolean;
+  report: ReadReport | null;
+  error: string | null;
+  daily: { date: string; sales: number }[];
+}
+
 // GET /api/v1/upload/sample, POST /api/v1/upload — cold-start forecast for a shop not in the training data
 export interface UploadForecast {
   name: string;
@@ -205,6 +241,7 @@ export interface UploadForecast {
   level_factor: number;
   notes: string[];
   model: string;
+  read_report: ReadReport | null;
 }
 
 // GET /api/v1/model-results

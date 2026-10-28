@@ -89,6 +89,16 @@ def test_upload_sample_and_bad_file(client):
     assert resp.status_code == 422 and "วันที่" in resp.json()["detail"]
 
 
+def test_upload_inspect_guesses_and_accepts_a_chosen_column(client):
+    rows = "วันที่,ต้นทุน,มูลค่า\n" + "".join(f"{d}/1/2567,1,{100 + d}\n" for d in range(1, 29))
+    files = {"file": ("shop.csv", rows.encode(), "text/csv")}
+    body = client.post("/api/v1/upload/inspect", files=files).json()
+    assert body["mapping"]["date"] == "วันที่" and body["mapping"]["sales"] is None and body["ok"] is False
+    body = client.post("/api/v1/upload/inspect", files=files, data={"sales_column": "มูลค่า"}).json()
+    assert body["ok"] and body["report"]["date_range"] == {"start": "2024-01-01", "end": "2024-01-28"}
+    assert body["report"]["enough_days"] is False and len(body["daily"]) == 28
+
+
 def test_model_experiments(client):
     body = client.get("/api/v1/model-experiments").json()
     assert {r["model"] for r in body["seed_ensemble"]} == {"lightgbm", "lstm", "gru", "ensemble"}

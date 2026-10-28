@@ -313,6 +313,48 @@ class UploadBacktest(BaseModel):
     calib_blocks: int
 
 
+class SkippedRows(BaseModel):
+    reason: str
+    count: int
+    rows: list[int] = Field(description="First spreadsheet row numbers (header = row 1)")
+
+
+class ReadReport(BaseModel):
+    """What the reader (ai/cashflow_forecast/sales_file.py) did with the file."""
+    rows: int
+    rows_used: int
+    skipped: list[SkippedRows]
+    date_format: str
+    amount_source: str
+    date_range: dict[str, IsoDate]
+    days: int
+    open_days: int
+    notes: list[str]
+    enough_days: bool
+    min_days: int
+
+
+class ColumnMapping(BaseModel):
+    date: str | None = None
+    sales: str | None = None
+    quantity: str | None = None
+    price: str | None = None
+
+
+class UploadInspect(BaseModel):
+    """Preview of an uploaded file before forecasting (the model is not run)."""
+    filename: str
+    encoding: str
+    columns: list[str]
+    preview: list[dict[str, str | None]]
+    mapping: ColumnMapping = Field(description="Columns used: the guess, overridden by the user's choice")
+    guessed: ColumnMapping
+    ok: bool
+    report: ReadReport | None
+    error: str | None
+    daily: list[DailySales]
+
+
 class UploadForecast(BaseModel):
     """Cold-start forecast for a shop that is not in the training data."""
     name: str
@@ -326,6 +368,7 @@ class UploadForecast(BaseModel):
     level_factor: float
     notes: list[str]
     model: str
+    read_report: ReadReport | None = None
 
 
 # --- GET /api/v1/model-results (Model results screen) --------------------------

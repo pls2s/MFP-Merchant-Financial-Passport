@@ -13,7 +13,9 @@ import type {
   SalesHistory,
   SeasonalOutlook,
   ShortfallRisk,
+  ColumnMapping,
   UploadForecast,
+  UploadInspect,
 } from "./types";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -41,6 +43,22 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
   if (!res.ok) throw new Error(`${res.status} ${path}`);
   return res.json() as Promise<T>;
+}
+
+/** Uploads always go to the backend, also in mock mode: an uploaded file has no mock, and the
+ *  rest of the app keeps using mocks. */
+async function postFile<T>(path: string, file: File, mapping?: Partial<ColumnMapping>): Promise<T> {
+  const body = new FormData();
+  body.append("file", file);
+  for (const [role, col] of Object.entries(mapping ?? {})) if (col) body.append(`${role}_column`, col);
+  try {
+    return await request<T>(path, { method: "POST", body });
+  } catch (e) {
+    if (e instanceof TypeError) {  // fetch could not reach the server
+      throw new Error(`ต่อ backend ไม่ได้ (${BASE}) — เปิดด้วย uvicorn backend.app.main:app --port 8000 แล้วลองใหม่`);
+    }
+    throw e;
+  }
 }
 
 export const isMock = USE_MOCK;
@@ -94,13 +112,13 @@ export const api = {
   uploadSample: (): Promise<UploadForecast> =>
     USE_MOCK ? mock("upload-sample") : request("/api/v1/upload/sample"),
 
-  /** Runs the model live on the file (not available in mock mode). */
-  upload: (file: File): Promise<UploadForecast> => {
-    if (USE_MOCK) return Promise.reject(new Error("โหมด mock อัปโหลดไม่ได้ — ใช้ข้อมูลตัวอย่างแทน"));
-    const body = new FormData();
-    body.append("file", file);
-    return request("/api/v1/upload", { method: "POST", body });
-  },
+  /** Read the file and report what was read — no model. */
+  inspectUpload: (file: File, mapping?: Partial<ColumnMapping>): Promise<UploadInspect> =>
+    postFile("/api/v1/upload/inspect", file, mapping),
+
+  /** Runs the model live on the file with the confirmed columns. */
+  upload: (file: File, mapping?: Partial<ColumnMapping>): Promise<UploadForecast> =>
+    postFile("/api/v1/upload", file, mapping),
 
   modelResults: (): Promise<ModelResult[]> =>
     USE_MOCK ? mock("model-results") : request("/api/v1/model-results"),
