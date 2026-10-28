@@ -7,10 +7,11 @@ All expenses, balances and gaps are synthetic (`is_synthetic_expense: true`), an
 credit signal is always `status: "experimental"`.
 """
 
+import io
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app import schemas
@@ -108,6 +109,35 @@ def copilot(merchant_id: int, body: schemas.CopilotRequest | None = None):
     _require(merchant_id)
     body = body or schemas.CopilotRequest()
     return store.copilot(merchant_id, body.question, [m.model_dump() for m in body.history])
+
+
+MAX_UPLOAD_BYTES = 30 * 1024 * 1024
+
+
+@app.get("/api/v1/upload/sample", response_model=schemas.UploadForecast)
+def upload_sample():
+    """UCI Online Retail, precomputed by `python -m ai.cashflow_forecast.cold_start` (demo path)."""
+    if store.upload_sample is None:
+        raise HTTPException(404, "ยังไม่มีผลตัวอย่าง — รัน python -m ai.cashflow_forecast.cold_start")
+    return store.upload_sample
+
+
+@app.post("/api/v1/upload", response_model=schemas.UploadForecast)
+def upload(file: UploadFile = File(...)):
+    """Runs the model live on the uploaded file — the one exception to precomputed forecasts.
+    The demo uses /upload/sample instead."""
+    from ai.cashflow_forecast.cold_start import SalesFileError, daily_sales, read_file, run
+
+    data = file.file.read(MAX_UPLOAD_BYTES + 1)
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "ไฟล์ใหญ่เกิน 30 MB")
+    try:
+        daily = daily_sales(read_file(io.BytesIO(data), file.filename or ""))
+    except SalesFileError as e:
+        raise HTTPException(422, str(e)) from e
+    except Exception as e:  # unreadable file
+        raise HTTPException(422, "อ่านไฟล์ไม่ได้ — รองรับ .csv และ .xlsx") from e
+    return run(daily, file.filename or "ไฟล์ที่อัปโหลด", "live")
 
 
 @app.get("/api/v1/model-results", response_model=list[schemas.ModelResult])

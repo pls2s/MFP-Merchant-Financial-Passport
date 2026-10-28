@@ -185,6 +185,28 @@ export interface CopilotResponse {
   is_synthetic_expense: true;
 }
 
+// GET /api/v1/upload/sample, POST /api/v1/upload — cold-start forecast for a shop not in the training data
+export interface UploadForecast {
+  name: string;
+  source: "precomputed" | "live";
+  date_range: { start: string; end: string };
+  days: number;
+  open_days: number;
+  history: { date: string; sales: number }[];
+  forecast: { date: string; forecast: number }[];
+  backtest: {
+    blocks: { origin: string; level_factor: number; wape_model: number | null; wape_raw: number | null; wape_naive: number | null }[];
+    wape_model: number | null; // cold start + level correction
+    wape_raw: number | null; // cold start, no correction
+    wape_naive: number | null; // same weekday last week
+    days: number;
+    calib_blocks: number;
+  };
+  level_factor: number;
+  notes: string[];
+  model: string;
+}
+
 // GET /api/v1/model-results
 export interface ModelResult {
   model: "seasonal_naive" | "lightgbm" | "lstm" | "gru" | "ensemble" | string;

@@ -82,6 +82,13 @@ def test_shortfall_risk_demo_store(client):
     assert next(d for d in body["days"] if d["date"] == gap_day)["p_shortfall"] > 0.5
 
 
+def test_upload_sample_and_bad_file(client):
+    body = client.get("/api/v1/upload/sample").json()
+    assert body["source"] == "precomputed" and len(body["forecast"]) == 14
+    resp = client.post("/api/v1/upload", files={"file": ("bad.csv", b"foo,bar\n1,2\n", "text/csv")})
+    assert resp.status_code == 422 and "วันที่" in resp.json()["detail"]
+
+
 def test_model_experiments(client):
     body = client.get("/api/v1/model-experiments").json()
     assert {r["model"] for r in body["seed_ensemble"]} == {"lightgbm", "lstm", "gru", "ensemble"}

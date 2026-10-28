@@ -28,6 +28,7 @@ def main() -> None:
             "merchants.json": client.get("/api/v1/merchants").json(),
             "model-results.json": client.get("/api/v1/model-results").json(),
             "model-experiments.json": client.get("/api/v1/model-experiments").json(),
+            "upload-sample.json": client.get("/api/v1/upload/sample").json(),
         }
         for m in MERCHANTS:
             base = f"/api/v1/merchants/{m}"

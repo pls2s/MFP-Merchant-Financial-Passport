@@ -283,6 +283,51 @@ class ShortfallRisk(BaseModel):
     is_synthetic_expense: Literal[True] = True
 
 
+# --- GET /api/v1/upload/sample, POST /api/v1/upload (CSV upload screen) --------
+
+
+class DailySales(BaseModel):
+    date: IsoDate
+    sales: float
+
+
+class UploadPoint(BaseModel):
+    date: IsoDate
+    forecast: float
+
+
+class UploadBlock(BaseModel):
+    origin: IsoDate
+    level_factor: float
+    wape_model: float | None
+    wape_raw: float | None
+    wape_naive: float | None
+
+
+class UploadBacktest(BaseModel):
+    blocks: list[UploadBlock]
+    wape_model: float | None = Field(description="Cold start with level correction")
+    wape_raw: float | None = Field(description="Cold start without level correction")
+    wape_naive: float | None = Field(description="Same weekday last week")
+    days: int
+    calib_blocks: int
+
+
+class UploadForecast(BaseModel):
+    """Cold-start forecast for a shop that is not in the training data."""
+    name: str
+    source: Literal["precomputed", "live"]
+    date_range: dict[str, IsoDate]
+    days: int
+    open_days: int
+    history: list[DailySales]
+    forecast: list[UploadPoint]
+    backtest: UploadBacktest
+    level_factor: float
+    notes: list[str]
+    model: str
+
+
 # --- GET /api/v1/model-results (Model results screen) --------------------------
 
 

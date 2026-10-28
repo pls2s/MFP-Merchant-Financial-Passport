@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
+from ai.cashflow_forecast.cold_start import DEMO_PATH as UPLOAD_SAMPLE_PATH
 from ai.cashflow_forecast.experiments import config_name, trained_cells
 from ai.cashflow_forecast.preprocess import ROSSMANN
 from ai.cashflow_forecast.long_range import FORECASTS_DIR
@@ -84,6 +85,7 @@ class DataStore:
     synthetic_sales: dict[int, pd.DataFrame]
     experiments: dict
     shortfall: dict[int, dict]
+    upload_sample: dict | None
 
     @classmethod
     def load(cls) -> "DataStore":
@@ -104,6 +106,7 @@ class DataStore:
             synthetic_sales=_by_store(pd.read_parquet(FORECASTS_DIR / "synthetic_sales.parquet")),
             experiments=_experiments(),
             shortfall=_shortfall(),
+            upload_sample=json.loads(UPLOAD_SAMPLE_PATH.read_text()) if UPLOAD_SAMPLE_PATH.exists() else None,
         )
 
     def merchants(self) -> list[dict]:

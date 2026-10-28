@@ -43,6 +43,8 @@ models/forecasts/*
 !models/forecasts/seasonal_backtest.parquet
 !models/forecasts/long_range_metrics.json
 !models/forecasts/synthetic_sales.parquet
+!models/forecasts/uci_demo.json
+!models/forecasts/cold_start_check.json
 models/favorita/*
 !models/favorita/results.csv
 models/experiments/*

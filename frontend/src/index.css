@@ -526,3 +526,10 @@ td .swatch { margin-right: 6px; vertical-align: middle; }
 .how summary { cursor: pointer; color: var(--accent); font-weight: 600; }
 .how ol { padding-left: 20px; margin: 8px 0; display: grid; gap: 6px; }
 .how p { margin: 6px 0; }
+
+/* ---------- Upload (cold start) ---------- */
+.upload-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.upload-option { border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; background: var(--surface-2); }
+.upload-option h3 { margin: 0 0 6px; display: flex; gap: 8px; align-items: center; }
+.upload-option input[type="file"] { max-width: 100%; color: var(--text-2); }
+@media (max-width: 720px) { .upload-options { grid-template-columns: 1fr; } }

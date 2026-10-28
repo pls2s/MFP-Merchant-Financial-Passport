@@ -13,6 +13,7 @@ import type {
   SalesHistory,
   SeasonalOutlook,
   ShortfallRisk,
+  UploadForecast,
 } from "./types";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -33,6 +34,11 @@ async function mock<T>(name: string): Promise<T> {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, init);
   if (res.status === 404) throw new NotFoundError(path);
+  if (res.status === 413 || res.status === 422) {
+    // the backend explains bad uploads in Thai
+    const body = await res.json().catch(() => null);
+    throw new Error(typeof body?.detail === "string" ? body.detail : `${res.status} ${path}`);
+  }
   if (!res.ok) throw new Error(`${res.status} ${path}`);
   return res.json() as Promise<T>;
 }
@@ -83,6 +89,17 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question, history }),
     });
+  },
+
+  uploadSample: (): Promise<UploadForecast> =>
+    USE_MOCK ? mock("upload-sample") : request("/api/v1/upload/sample"),
+
+  /** Runs the model live on the file (not available in mock mode). */
+  upload: (file: File): Promise<UploadForecast> => {
+    if (USE_MOCK) return Promise.reject(new Error("โหมด mock อัปโหลดไม่ได้ — ใช้ข้อมูลตัวอย่างแทน"));
+    const body = new FormData();
+    body.append("file", file);
+    return request("/api/v1/upload", { method: "POST", body });
   },
 
   modelResults: (): Promise<ModelResult[]> =>
