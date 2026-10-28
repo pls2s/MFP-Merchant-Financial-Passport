@@ -112,7 +112,7 @@ def export_history() -> pd.DataFrame:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--model", default="ensemble", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"])
+    parser.add_argument("--model", default="ensemble", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "tcn", "transformer", "ensemble"])
     args = parser.parse_args()
 
     forecasts = export(args.model)

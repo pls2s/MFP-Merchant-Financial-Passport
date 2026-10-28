@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from ai.cashflow_forecast.experiments import RNN_CONFIGS
+from ai.cashflow_forecast.experiments import config_name, trained_cells
 from ai.cashflow_forecast.preprocess import ROSSMANN
 from ai.cashflow_forecast.long_range import FORECASTS_DIR
 from ai.cashflow_forecast.predict import HISTORY_PATH
@@ -49,7 +49,7 @@ def _experiments() -> dict:
         "seed_ensemble_k": k.to_dict(orient="records"),
         "ablation": pd.read_csv(EXPERIMENTS_DIR / "ablation.csv")[["variant", "split", "wape"]].to_dict(orient="records"),
         "learning_curves": pd.read_csv(EXPERIMENTS_DIR / "learning_curves.csv").to_dict(orient="records"),
-        "chosen_configs": {cell: f"{cell}_w{c['window']}_h{c['hidden']}_l{c['layers']}" for cell, c in RNN_CONFIGS.items()},
+        "chosen_configs": {cell: config_name(cell) for cell in trained_cells()},
         "favorita": pd.read_csv(FAVORITA_RESULTS_PATH).to_dict(orient="records"),
     }
 

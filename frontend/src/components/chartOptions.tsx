@@ -9,6 +9,8 @@ export const MODELS = [
   { key: "lightgbm", label: "LightGBM", color: "var(--series-lgbm)" },
   { key: "lstm", label: "LSTM", color: "var(--series-lstm)" },
   { key: "gru", label: "GRU", color: "var(--series-gru)" },
+  { key: "tcn", label: "TCN", color: "var(--series-tcn)" },
+  { key: "transformer", label: "Transformer", color: "var(--series-transformer)" },
   { key: "ensemble", label: "LSTM+GRU 5 seed (โมเดลหลัก)", color: "var(--series-forecast)" },
 ] as const;
 export type ModelKey = (typeof MODELS)[number]["key"];

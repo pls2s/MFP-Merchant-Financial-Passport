@@ -39,7 +39,7 @@ import numpy as np
 import pandas as pd
 
 from ai.cashflow_forecast.preprocess import PROCESSED_PATH, ROOT, ROSSMANN, TRAIN_END, add_calendar_features
-from ai.cashflow_forecast.train import HORIZON, TEST_ORIGINS, ensemble_members, gather, sequence_arrays
+from ai.cashflow_forecast.train import HORIZON, TEST_ORIGINS, ensemble_members, gather, load_model, sequence_arrays
 
 FORECASTS_DIR = ROOT / "models" / "forecasts"
 AS_OF = TEST_ORIGINS[-1]                       # demo "today", 2015-07-17
@@ -89,13 +89,11 @@ def synthetic_calendar(df: pd.DataFrame, end: pd.Timestamp) -> pd.DataFrame:
 
 
 def load_models():
-    import keras
-
     models = {}
     for m in ensemble_members():
         cfg = json.loads((m["model_dir"] / "config.json").read_text())
         models[f"{m['cell']}_seed{m['seed']}"] = (
-            keras.models.load_model(m["model_dir"] / "model.keras", compile=False), cfg["window"])
+            load_model(m["model_dir"]), cfg["window"])
     return models
 
 

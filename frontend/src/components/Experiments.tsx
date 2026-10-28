@@ -15,7 +15,6 @@ import { Card, ErrorState, Segmented, Skeleton, Swatch } from "./ui";
  * `ai.cashflow_forecast.experiments` — nothing is trained here.
  */
 
-const TRAINED = MODELS.filter((m) => m.key !== "seasonal_naive");
 const colorOf = (key: string) => MODELS.find((m) => m.key === key)?.color ?? "var(--text-3)";
 const shortLabel = (key: string) => (key === "ensemble" ? "LSTM+GRU" : MODELS.find((m) => m.key === key)?.label ?? key);
 const pts = (x: number) => `${x >= 0 ? "+" : "−"}${Math.abs(x * 100).toFixed(2)}`;
@@ -43,9 +42,11 @@ function SeedTip({ active, payload, label }: { active?: boolean; payload?: { dat
 }
 
 function Seeds({ data }: { data: ModelExperiments }) {
+  // only models that have seed runs (a newly added cell shows up once `experiments seeds` has run)
+  const trained = MODELS.filter((m) => data.seed_ensemble.some((r) => r.model === m.key));
   const ks = [1, 2, 3, 4, 5];
   const rows = ks.map((k) => Object.fromEntries([
-    ["k", k], ...TRAINED.map((m) => [m.key, data.seed_ensemble_k.find((r) => r.model === m.key && r.k === k)?.mean]),
+    ["k", k], ...trained.map((m) => [m.key, data.seed_ensemble_k.find((r) => r.model === m.key && r.k === k)?.mean]),
   ]));
   const at = (model: string, k: number) => data.seed_ensemble_k.find((r) => r.model === model && r.k === k);
   const final = (model: string, split: "val" | "test") => data.seed_ensemble.find((r) => r.model === model && r.split === split);
@@ -55,7 +56,7 @@ function Seeds({ data }: { data: ModelExperiments }) {
       <p className="muted small" style={{ marginTop: 0 }}>
         เทรนทุกโมเดลซ้ำ 5 seed (42, 1, 2, 3, 4) แล้วเฉลี่ยผลพยากรณ์ k seed ทุกชุดที่เป็นไปได้ เส้นคือ Test WAPE เฉลี่ย
       </p>
-      <Legend keys={TRAINED.map((m) => m.key)} />
+      <Legend keys={trained.map((m) => m.key)} />
       <div style={{ width: "100%", height: 260 }}>
         <ResponsiveContainer>
           <LineChart data={rows} margin={{ top: 8, right: 16, bottom: 4, left: 0 }}>
@@ -63,7 +64,7 @@ function Seeds({ data }: { data: ModelExperiments }) {
             <XAxis dataKey="k" {...AXIS} axisLine={{ stroke: "var(--axis)" }} tickFormatter={(k) => `${k} seed`} />
             <YAxis {...AXIS} axisLine={false} width={56} domain={["auto", "auto"]} tickFormatter={(v) => percent(v, 1)} />
             <Tooltip content={<SeedTip />} />
-            {TRAINED.map((m) => (
+            {trained.map((m) => (
               <Line key={m.key} dataKey={m.key} stroke={m.color} strokeWidth={m.key === "ensemble" ? 3 : 2}
                 dot={{ r: 3, fill: m.color, stroke: "none" }} isAnimationActive={false} />
             ))}
@@ -78,7 +79,7 @@ function Seeds({ data }: { data: ModelExperiments }) {
             </tr>
           </thead>
           <tbody>
-            {TRAINED.map((m) => {
+            {trained.map((m) => {
               const one = at(m.key, 1);
               return (
                 <tr key={m.key} className={m.key === "ensemble" ? "highlight" : ""}>
