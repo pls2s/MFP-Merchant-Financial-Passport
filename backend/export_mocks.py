@@ -27,6 +27,8 @@ def main() -> None:
         files = {
             "merchants.json": client.get("/api/v1/merchants").json(),
             "model-results.json": client.get("/api/v1/model-results").json(),
+            "model-experiments.json": client.get("/api/v1/model-experiments").json(),
+            "upload-sample.json": client.get("/api/v1/upload/sample").json(),
         }
         for m in MERCHANTS:
             base = f"/api/v1/merchants/{m}"
@@ -37,6 +39,7 @@ def main() -> None:
             files[f"seasonal-outlook-{m}.json"] = client.get(f"{base}/seasonal-outlook").json()
             files[f"cash-flow-gaps-{m}.json"] = client.get(f"{base}/cash-flow-gaps").json()
             files[f"credit-signal-{m}.json"] = client.get(f"{base}/credit-signal").json()
+            files[f"shortfall-risk-{m}.json"] = client.get(f"{base}/shortfall-risk").json()
             files[f"copilot-{m}.json"] = client.post(f"{base}/copilot", json={"question": None}).json()
     for name, body in files.items():
         (MOCKS_DIR / name).write_text(json.dumps(body, ensure_ascii=False, indent=2) + "\n")

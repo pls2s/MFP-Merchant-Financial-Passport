@@ -106,10 +106,10 @@ function Trend({ value, label }: { value: number; label: string }) {
 interface DayRow {
   date: string;
   actual: number | null; // real sales up to today (bar)
-  laterActual: number | null; // real sales after today, up to the data end (line over the forecast bars) — details only
+  laterActual: number | null; // real sales after today, up to the data end (line over the forecast bars) — "after" layer only
   forecast: number | null;
   band: [number, number] | null;
-  simulated: number | null; // synthetic sales after the data ends (ข้อมูลจำลอง) — details only
+  simulated: number | null; // synthetic sales after the data ends (ข้อมูลจำลอง) — "after" layer only
   open: boolean;
   promo: boolean;
   holiday: boolean;
@@ -136,10 +136,11 @@ function dayRows(range: "4w" | "3m", p: Props, layers: ReadonlySet<SalesLayer>):
       schoolHoliday: h?.school_holiday ?? false, assumed: range === "3m" && d > DATA_END,
     };
     if (!future) row.actual = positive(h?.sales);
-    else if (d <= DATA_END) row.laterActual = layers.has("laterActual") ? positive(main.get(d)?.actual) : null;
-    else if (layers.has("simulated")) row.simulated = positive(simulated.get(d));
+    else if (!layers.has("after")) { /* layer off */ }
+    else if (d <= DATA_END) row.laterActual = positive(main.get(d)?.actual);
+    else row.simulated = positive(simulated.get(d));
     // join the two lines: the simulated line starts from the last real day
-    if (layers.has("simulated") && layers.has("laterActual") && d === DATA_END) row.simulated = row.laterActual;
+    if (layers.has("after") && d === DATA_END) row.simulated = row.laterActual;
     if (future && f && positive(f.forecast) && f.lower != null && f.upper != null) {
       row.forecast = f.forecast;
       row.band = [f.lower, f.upper];
@@ -232,8 +233,8 @@ function DailyChart({ range, p, layers, view }: { range: "4w" | "3m"; p: Props; 
         {layers.has("promo") && range === "3m" && <span><Swatch kind="area" color="var(--text-3)" />ตารางโปรโมชันจำลอง</span>}
         {layers.has("holiday") && <span><Swatch kind="line" color="var(--text-3)" dashed />วันหยุดนักขัตฤกษ์</span>}
         {layers.has("pastGaps") && pastGaps.length > 0 && <span><Swatch kind="line" color="var(--warn)" dashed />วันที่เงินเคยไม่พอ</span>}
-        {layers.has("laterActual") && <span><Swatch kind="line" color="var(--series-actual)" />ยอดจริงหลังวันนี้ (ถึง 31 ก.ค.)</span>}
-        {layers.has("simulated") && <span><Swatch kind="line" color="var(--series-simulated)" dashed />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>}
+        {layers.has("after") && <span><Swatch kind="line" color="var(--series-actual)" />ยอดจริงหลังวันนี้ (ถึง 31 ก.ค.)</span>}
+        {layers.has("after") && rows.some((r) => r.date > DATA_END && r.simulated != null) && <span><Swatch kind="line" color="var(--series-simulated)" dashed />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>}
         <span className="muted">ช่องว่าง = ร้านปิด</span>
       </div>
       <div style={{ width: "100%", height: 320 }}>
@@ -408,8 +409,8 @@ export function SalesChart({ range, layers, view, ...props }: Props & {
   const [showAccuracy, setShowAccuracy] = useState(true);
   const daily = range !== "1y";
   const notes = [
-    daily && layers.has("laterActual") && <>หลังวันนี้ เส้นทึบทับแท่งคาดการณ์ = ยอดขายจริงถึง 31 ก.ค. 2558 (ข้อมูลจบแค่นั้น)</>,
-    daily && layers.has("simulated") && <>เส้นประเหลือง = <b>ยอดขายจำลอง</b> หลังข้อมูลจริงจบ (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)</>,
+    daily && layers.has("after") && <>หลังวันนี้ เส้นทึบทับแท่งคาดการณ์ = ยอดขายจริงถึง 31 ก.ค. 2558 (ข้อมูลจบแค่นั้น)</>,
+    daily && range === "3m" && layers.has("after") && <>ต่อจากนั้นเส้นประเหลือง = <b>ยอดขายจำลอง</b> (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)</>,
     daily && range === "3m" && layers.has("promo") && <>แรเงาเทา = ตารางโปรโมชันจำลองแบบเดียวกับปีก่อน</>,
   ].filter(Boolean);
 

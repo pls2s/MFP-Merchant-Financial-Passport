@@ -6,6 +6,8 @@ from dataclasses import dataclass
 
 import pandas as pd
 
+from ai.cashflow_forecast.cold_start import DEMO_PATH as UPLOAD_SAMPLE_PATH
+from ai.cashflow_forecast.experiments import config_name, trained_cells
 from ai.cashflow_forecast.preprocess import ROSSMANN
 from ai.cashflow_forecast.long_range import FORECASTS_DIR
 from ai.cashflow_forecast.predict import HISTORY_PATH
@@ -16,9 +18,12 @@ from ai.gap_detection.build import (
     AS_OF, DEMO_STORES, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, past_gaps, sales_series,
 )
 from ai.gap_detection.gaps import cash_flow_gaps
+from ai.gap_detection.shortfall_risk import CALIBRATION_PATH, RISK_PATH
 from ai.gap_detection.long_balance import long_balance
 
 RESULTS_PATH = ROSSMANN.models_dir / "results.csv"
+EXPERIMENTS_DIR = ROSSMANN.models_dir / "experiments"
+FAVORITA_RESULTS_PATH = ROSSMANN.models_dir / "favorita" / "results.csv"
 
 
 def _by_merchant(path) -> dict[int, dict]:
@@ -31,6 +36,36 @@ def _by_store(df: pd.DataFrame) -> dict[int, pd.DataFrame]:
 
 def _num(x) -> float | None:
     return None if pd.isna(x) else round(float(x), 2)
+
+
+def _experiments() -> dict:
+    """Robustness results from `python -m ai.cashflow_forecast.experiments ...` (precomputed CSVs)."""
+    ens = pd.read_csv(EXPERIMENTS_DIR / "seed_ensemble.csv")
+    ens["model"] = ens["model"].str.removesuffix("_5seed")
+    k = pd.read_csv(EXPERIMENTS_DIR / "seed_ensemble_k.csv")
+    k = k[k["split"] == "test"].groupby(["model", "k"])["wape"].agg(["mean", "std", "min", "max"]).reset_index()
+    k["std"] = k["std"].astype(object).where(k["std"].notna(), None)
+    return {
+        "seeds": pd.read_csv(EXPERIMENTS_DIR / "seeds.csv")[["seed", "model", "split", "wape"]].to_dict(orient="records"),
+        "seed_ensemble": ens.drop(columns="n_runs").to_dict(orient="records"),
+        "seed_ensemble_k": k.to_dict(orient="records"),
+        "ablation": pd.read_csv(EXPERIMENTS_DIR / "ablation.csv")[["variant", "split", "wape"]].to_dict(orient="records"),
+        "learning_curves": pd.read_csv(EXPERIMENTS_DIR / "learning_curves.csv").to_dict(orient="records"),
+        "chosen_configs": {cell: config_name(cell) for cell in trained_cells()},
+        "favorita": pd.read_csv(FAVORITA_RESULTS_PATH).to_dict(orient="records"),
+    }
+
+
+def _shortfall() -> dict[int, dict]:
+    """Shortfall probabilities (ai.gap_detection.shortfall_risk) with the Test-period check attached."""
+    cal = json.loads(CALIBRATION_PATH.read_text())
+    day = cal["shortfall_day"]
+    check = {
+        "origins": cal["origins"],
+        "sales_interval_80_coverage": cal["sales_interval_80"]["coverage"],
+        **{k: day[k] for k in ("store_days", "events", "brier_probability", "brier_yes_no_warning", "brier_base_rate")},
+    }
+    return {o["merchant_id"]: {**o, "method": cal["method"], "check": check} for o in json.loads(RISK_PATH.read_text())}
 
 
 @dataclass
@@ -48,6 +83,9 @@ class DataStore:
     seasonal_back: dict[int, pd.DataFrame]
     long_metrics: dict
     synthetic_sales: dict[int, pd.DataFrame]
+    experiments: dict
+    shortfall: dict[int, dict]
+    upload_sample: dict | None
 
     @classmethod
     def load(cls) -> "DataStore":
@@ -66,6 +104,9 @@ class DataStore:
             seasonal_back=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_backtest.parquet")),
             long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
             synthetic_sales=_by_store(pd.read_parquet(FORECASTS_DIR / "synthetic_sales.parquet")),
+            experiments=_experiments(),
+            shortfall=_shortfall(),
+            upload_sample=json.loads(UPLOAD_SAMPLE_PATH.read_text()) if UPLOAD_SAMPLE_PATH.exists() else None,
         )
 
     def merchants(self) -> list[dict]:

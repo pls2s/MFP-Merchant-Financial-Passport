@@ -129,7 +129,7 @@ UX rules:
 
 Frontend: React + Vite, Recharts. All API calls through `src/api.ts`. Mock JSON in `src/mocks/`, matching the contract exactly; switch mock vs real API with an environment variable.
 
-Backend: FastAPI + Pydantic models matching the contract. Load precomputed forecasts at startup — never run the model live during the demo. Call Workstream 2's modules for gaps and credit signal. Enable CORS for the Vite dev server.
+Backend: FastAPI + Pydantic models matching the contract. Load precomputed forecasts at startup — never run the model live during the demo. One exception: `POST /api/v1/upload` (CSV upload screen) runs the cold-start model live on an uploaded file; the demo uses the precomputed UCI sample (`GET /api/v1/upload/sample`, built by `python -m ai.cashflow_forecast.cold_start`) instead. Call Workstream 2's modules for gaps and credit signal. Enable CORS for the Vite dev server.
 
 ## Data contract
 

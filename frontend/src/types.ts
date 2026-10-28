@@ -128,6 +128,26 @@ export interface CashFlowGaps {
   is_synthetic_expense: true;
 }
 
+// GET /api/v1/merchants/{id}/shortfall-risk — probability from simulated sales paths (ข้อมูลจำลอง)
+export interface ShortfallRisk {
+  merchant_id: number;
+  as_of: string;
+  n_paths: number; // simulated 14-day sales paths
+  method: string;
+  p_any: number; // share of paths with at least one day below the buffer
+  days: { date: string; p_shortfall: number; balance_p10: number; balance_p50: number; balance_p90: number }[];
+  check: {
+    origins: string[];
+    sales_interval_80_coverage: number;
+    store_days: number;
+    events: number;
+    brier_probability: number;
+    brier_yes_no_warning: number;
+    brier_base_rate: number;
+  };
+  is_synthetic_expense: true;
+}
+
 // GET /api/v1/merchants/{id}/credit-signal
 export interface CreditSignal {
   merchant_id: number;
@@ -165,6 +185,65 @@ export interface CopilotResponse {
   is_synthetic_expense: true;
 }
 
+// What ai/cashflow_forecast/sales_file.py did with an uploaded file
+export interface ReadReport {
+  rows: number;
+  rows_used: number;
+  skipped: { reason: string; count: number; rows: number[] }[]; // rows = spreadsheet row numbers (header = 1)
+  date_format: string;
+  amount_source: string;
+  date_range: { start: string; end: string };
+  days: number;
+  open_days: number;
+  notes: string[];
+  enough_days: boolean;
+  min_days: number;
+}
+
+export interface ColumnMapping {
+  date: string | null;
+  sales: string | null;
+  quantity: string | null;
+  price: string | null;
+}
+
+// POST /api/v1/upload/inspect — preview before forecasting (no model)
+export interface UploadInspect {
+  filename: string;
+  encoding: string;
+  columns: string[];
+  preview: Record<string, string | null>[];
+  mapping: ColumnMapping; // used: the guess, overridden by the user's choice
+  guessed: ColumnMapping;
+  ok: boolean;
+  report: ReadReport | null;
+  error: string | null;
+  daily: { date: string; sales: number }[];
+}
+
+// GET /api/v1/upload/sample, POST /api/v1/upload — cold-start forecast for a shop not in the training data
+export interface UploadForecast {
+  name: string;
+  source: "precomputed" | "live";
+  date_range: { start: string; end: string };
+  days: number;
+  open_days: number;
+  history: { date: string; sales: number }[];
+  forecast: { date: string; forecast: number }[];
+  backtest: {
+    blocks: { origin: string; level_factor: number; wape_model: number | null; wape_raw: number | null; wape_naive: number | null }[];
+    wape_model: number | null; // cold start + level correction
+    wape_raw: number | null; // cold start, no correction
+    wape_naive: number | null; // same weekday last week
+    days: number;
+    calib_blocks: number;
+  };
+  level_factor: number;
+  notes: string[];
+  model: string;
+  read_report: ReadReport | null;
+}
+
 // GET /api/v1/model-results
 export interface ModelResult {
   model: "seasonal_naive" | "lightgbm" | "lstm" | "gru" | "ensemble" | string;
@@ -173,4 +252,15 @@ export interface ModelResult {
   mae: number;
   rmse: number;
   n_days: number;
+}
+
+// GET /api/v1/model-experiments — robustness results, precomputed
+export interface ModelExperiments {
+  seeds: { seed: number; model: string; split: "val" | "test"; wape: number }[];
+  seed_ensemble: ModelResult[]; // each model averaged over all 5 seeds
+  seed_ensemble_k: { model: string; k: number; mean: number; std: number | null; min: number; max: number }[]; // test
+  ablation: { variant: string; split: "val" | "test"; wape: number }[];
+  learning_curves: { config: string; epoch: number; loss: number; val_wape: number }[];
+  chosen_configs: Record<string, string>; // cell → tuning config chosen on validation
+  favorita: ModelResult[];
 }

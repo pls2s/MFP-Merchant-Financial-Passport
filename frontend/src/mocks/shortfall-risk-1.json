@@ -1,0 +1,121 @@
+{
+  "merchant_id": 1,
+  "as_of": "2015-07-17",
+  "n_paths": 200,
+  "method": "MC dropout (10 ensemble models × 20 passes) × Validation error blocks",
+  "p_any": 1.0,
+  "days": [
+    {
+      "date": "2015-07-18",
+      "p_shortfall": 0.0,
+      "balance_p10": 29358.7,
+      "balance_p50": 29822.11,
+      "balance_p90": 30542.13
+    },
+    {
+      "date": "2015-07-19",
+      "p_shortfall": 0.0,
+      "balance_p10": 29358.7,
+      "balance_p50": 29822.11,
+      "balance_p90": 30542.13
+    },
+    {
+      "date": "2015-07-20",
+      "p_shortfall": 0.0,
+      "balance_p10": 29852.36,
+      "balance_p50": 30495.0,
+      "balance_p90": 31211.72
+    },
+    {
+      "date": "2015-07-21",
+      "p_shortfall": 0.0,
+      "balance_p10": 16170.38,
+      "balance_p50": 16898.21,
+      "balance_p90": 17756.82
+    },
+    {
+      "date": "2015-07-22",
+      "p_shortfall": 1.0,
+      "balance_p10": -8622.61,
+      "balance_p50": -7724.43,
+      "balance_p90": -6651.98
+    },
+    {
+      "date": "2015-07-23",
+      "p_shortfall": 1.0,
+      "balance_p10": -5209.87,
+      "balance_p50": -4000.41,
+      "balance_p90": -2854.78
+    },
+    {
+      "date": "2015-07-24",
+      "p_shortfall": 0.535,
+      "balance_p10": -1708.02,
+      "balance_p50": -89.83,
+      "balance_p90": 1451.88
+    },
+    {
+      "date": "2015-07-25",
+      "p_shortfall": 0.005,
+      "balance_p10": 2260.84,
+      "balance_p50": 4215.66,
+      "balance_p90": 6227.77
+    },
+    {
+      "date": "2015-07-26",
+      "p_shortfall": 0.005,
+      "balance_p10": 2260.84,
+      "balance_p50": 4215.66,
+      "balance_p90": 6227.77
+    },
+    {
+      "date": "2015-07-27",
+      "p_shortfall": 0.0,
+      "balance_p10": 8035.56,
+      "balance_p50": 10019.56,
+      "balance_p90": 12236.88
+    },
+    {
+      "date": "2015-07-28",
+      "p_shortfall": 0.88,
+      "balance_p10": -4501.76,
+      "balance_p50": -2096.57,
+      "balance_p90": 153.81
+    },
+    {
+      "date": "2015-07-29",
+      "p_shortfall": 0.045,
+      "balance_p10": 492.55,
+      "balance_p50": 3151.11,
+      "balance_p90": 5380.25
+    },
+    {
+      "date": "2015-07-30",
+      "p_shortfall": 0.0,
+      "balance_p10": 5458.69,
+      "balance_p50": 8382.56,
+      "balance_p90": 10823.69
+    },
+    {
+      "date": "2015-07-31",
+      "p_shortfall": 0.035,
+      "balance_p10": 1338.92,
+      "balance_p50": 4340.87,
+      "balance_p90": 6999.24
+    }
+  ],
+  "check": {
+    "origins": [
+      "2015-06-19",
+      "2015-07-03",
+      "2015-07-17"
+    ],
+    "sales_interval_80_coverage": 0.7407278685268854,
+    "store_days": 46704,
+    "events": 242,
+    "brier_probability": 0.0005360531217882837,
+    "brier_yes_no_warning": 0.0006423432682425488,
+    "brier_base_rate": 0.005154720372872162
+  },
+  "is_synthetic_expense": true
+}

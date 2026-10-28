@@ -40,6 +40,8 @@
   --series-lgbm: #d95926;
   --series-lstm: #199e70;
   --series-gru: #c98500;
+  --series-tcn: #1aa9c7;
+  --series-transformer: #d6539f;
   --shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 40px rgba(0, 0, 0, 0.35);
   --radius: 16px;
   font-family: "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -87,6 +89,8 @@
   --series-lgbm: #eb6834;
   --series-lstm: #1baf7a;
   --series-gru: #eda100;
+  --series-tcn: #0c87a3;
+  --series-transformer: #b8327e;
   --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
@@ -171,6 +175,7 @@ main > *, .grid-2 > *, .summary-grid > * { min-width: 0; }
 .badge.experimental, .badge.accent { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
 .badge.danger { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
 .badge.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+.badge.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
 
 /* ---------- Home hero ---------- */
 .hero {
@@ -511,3 +516,35 @@ td .swatch { margin-right: 6px; vertical-align: middle; }
   .asof { margin-left: 0; }
   h1 { font-size: 1.55rem; }
 }
+
+/* ---------- Shortfall odds (โอกาสที่เงินจะไม่พอ) ---------- */
+.odds { border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; background: var(--surface-2); }
+.odds-head { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: flex-end; justify-content: space-between; margin-bottom: 6px; }
+.odds-head p { margin: 0; max-width: 28rem; }
+.odds-value { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; }
+.how { margin-top: 8px; font-size: 0.85rem; color: var(--text-2); }
+.how summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+.how ol { padding-left: 20px; margin: 8px 0; display: grid; gap: 6px; }
+.how p { margin: 6px 0; }
+
+/* ---------- Upload (cold start) ---------- */
+.upload-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.upload-option { border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; background: var(--surface-2); }
+.upload-option h3 { margin: 0 0 6px; display: flex; gap: 8px; align-items: center; }
+.upload-option input[type="file"] { max-width: 100%; color: var(--text-2); }
+@media (max-width: 720px) { .upload-options { grid-template-columns: 1fr; } }
+.dropzone {
+  position: relative; display: grid; justify-items: center; gap: 4px; text-align: center; cursor: pointer; margin: 4px 0 8px;
+  padding: 22px 16px; border: 2px dashed var(--border-strong); border-radius: 14px; background: var(--surface);
+  transition: border-color 0.15s, background 0.15s;
+}
+.dropzone:hover, .dropzone.over { border-color: var(--accent); background: var(--accent-soft); }
+.dropzone.disabled { opacity: 0.5; cursor: progress; }
+.dropzone input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.dropzone:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dropzone-icon { font-size: 1.6rem; color: var(--accent); line-height: 1; }
+.link-btn { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; text-decoration: underline; }
+.preview th, .preview td { white-space: nowrap; }
+.preview .mapped { background: var(--accent-soft); }
+.mapping { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin: 10px 0 12px; }
+.read-report { margin: 10px 0; padding-left: 20px; display: grid; gap: 4px; font-size: 0.88rem; color: var(--text-2); }

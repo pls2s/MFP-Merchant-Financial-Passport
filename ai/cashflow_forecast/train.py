@@ -1,9 +1,13 @@
-"""Train seasonal naive, LightGBM, LSTM and GRU with a shared split and seed.
+"""Train seasonal naive, LightGBM, LSTM, GRU, TCN and Transformer with a shared split and seed.
 
 Usage:
     python -m ai.cashflow_forecast.train --model all
     python -m ai.cashflow_forecast.train --model lstm --window 56 --hidden 64 --layers 1
     python -m ai.cashflow_forecast.train --dataset favorita --model lightgbm
+    python -m ai.cashflow_forecast.train --model transformer --tune
+
+LSTM, GRU, TCN and Transformer share everything except the encoder that reads the
+input window (see ENCODERS), so their results compare architectures only.
 
 Every model forecasts the same 14-day blocks: three rolling origins cover the
 42-day Validation period and three cover the 42-day Test period. At each origin
@@ -16,6 +20,7 @@ Writes  models/predictions/<model>.parquet   (store, date, split, forecast)
 """
 
 import argparse
+import functools
 import json
 
 import numpy as np
@@ -26,6 +31,10 @@ from ai.cashflow_forecast.preprocess import DATASETS, HORIZON, ROSSMANN, SEED, D
 
 VAL_ORIGINS = ROSSMANN.val_origins
 TEST_ORIGINS = ROSSMANN.test_origins
+# The main model averages ENSEMBLE_CELLS over these seeds. Seed 42 is the tuned run in
+# models/<cell>/; the others are the re-trained runs from `experiments seeds`.
+ENSEMBLE_SEEDS = [SEED, 1, 2, 3, 4]
+ENSEMBLE_CELLS = ("lstm", "gru")
 
 
 def load(ds: Dataset = ROSSMANN) -> pd.DataFrame:
@@ -182,15 +191,10 @@ def standardize(x: pd.Series) -> pd.Series:
     return (x - x.mean()) / std if std > 0 else x * 0
 
 
-def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN, neighbours: bool = True) -> dict:
-    """Dense (stores, days, features) arrays. Relies on preprocess's contiguous calendar.
-    `neighbours=False` drops the previous/next-day features (ablation)."""
-    df = df.sort_values(["store", "date"]).reset_index(drop=True)
-    stores = np.sort(df["store"].unique())
-    dates = pd.date_range(ds.train_start, ds.test_end, freq="D")
-    n_s, n_d = len(stores), len(dates)
-    assert len(df) == n_s * n_d
-
+def feature_frame(df: pd.DataFrame) -> pd.DataFrame:
+    """Per store-day model features (sales_in, eval_flag, then KNOWN_COLS). `df` is sorted by
+    store and date with: store, sales_scaled, is_eval_day, open, promo, school_holiday,
+    state_holiday and the calendar columns from preprocess.add_calendar_features."""
     f = pd.DataFrame(index=df.index)
     f["sales_in"] = (df["sales_scaled"] * df["is_eval_day"]).fillna(0)
     f["eval_flag"] = df["is_eval_day"]
@@ -211,6 +215,19 @@ def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN, neighbours: bool =
     f["month_sin"] = np.sin(2 * np.pi * df["month"] / 12)
     f["month_cos"] = np.cos(2 * np.pi * df["month"] / 12)
     f["woy_scaled"] = df["week_of_year"] / 53
+    return f
+
+
+def sequence_arrays(df: pd.DataFrame, ds: Dataset = ROSSMANN, neighbours: bool = True) -> dict:
+    """Dense (stores, days, features) arrays. Relies on preprocess's contiguous calendar.
+    `neighbours=False` drops the previous/next-day features (ablation)."""
+    df = df.sort_values(["store", "date"]).reset_index(drop=True)
+    stores = np.sort(df["store"].unique())
+    dates = pd.date_range(ds.train_start, ds.test_end, freq="D")
+    n_s, n_d = len(stores), len(dates)
+    assert len(df) == n_s * n_d
+    f = feature_frame(df)
+
 
     def cube(cols):
         return f[cols].to_numpy("float32").reshape(n_s, n_d, len(cols))
@@ -289,20 +306,112 @@ def gather(arrays: dict, s_idx: np.ndarray, o_idx: np.ndarray, window: int):
     return inputs, y, level_sales
 
 
+# --- Encoders: past window (batch, window, features) → vector (batch, d) ---------------
+# Everything else in the model (store embedding, static features, per-day head, loss) is
+# shared, so the cells differ only in how they read the input window.
+
+
+def rnn_encoder(cell: str):
+    def encode(x, window, hidden, layers, dropout):
+        from keras import layers as L
+
+        rnn = {"lstm": L.LSTM, "gru": L.GRU}[cell]
+        for i in range(layers):
+            x = rnn(hidden, return_sequences=i < layers - 1, dropout=dropout)(x)
+        return x
+    return encode
+
+
+TCN_KERNEL = 3
+TCN_DILATIONS = (1, 2, 4, 8, 16)  # one conv per block: receptive field 1 + 2·31 = 63 days ≥ the 56-day window
+
+
+def tcn_encoder(x, window, hidden, layers, dropout):
+    """Temporal convolutional network: `layers` stacks of residual blocks, one dilated causal
+    Conv1D each; the last time step (which sees the whole window) is the encoding."""
+    from keras import layers as L
+
+    x = L.Conv1D(hidden, 1)(x)
+    for _ in range(layers):
+        for d in TCN_DILATIONS:
+            h = L.Conv1D(hidden, TCN_KERNEL, padding="causal", dilation_rate=d, activation="relu")(x)
+            x = L.Add()([x, L.Dropout(dropout)(h)])
+    return L.Flatten()(L.Cropping1D((window - 1, 0))(x))
+
+
+TRANSFORMER_HEADS = 4
+
+
+def transformer_encoder(x, window, hidden, layers, dropout):
+    """Transformer encoder: project to `hidden`, add a learned position embedding, then
+    `layers` pre-norm self-attention blocks. Encoding = last day ⊕ mean over the window."""
+    from keras import layers as L
+
+    x = position_embedding()(window, hidden)(L.Dense(hidden)(x))
+    for i in range(layers):
+        h = L.LayerNormalization()(x)
+        h = L.MultiHeadAttention(TRANSFORMER_HEADS, hidden // TRANSFORMER_HEADS, dropout=dropout,
+                                 name=f"attention_{i}")(h, h)
+        x = L.Add()([x, L.Dropout(dropout)(h)])
+        h = L.LayerNormalization()(x)
+        h = L.Dense(2 * hidden, activation="relu")(h)
+        h = L.Dense(hidden)(L.Dropout(dropout)(h))
+        x = L.Add()([x, h])
+    x = L.LayerNormalization()(x)
+    last = L.Flatten()(L.Cropping1D((window - 1, 0))(x))
+    return L.Concatenate()([last, L.GlobalAveragePooling1D()(x)])
+
+
+@functools.cache
+def position_embedding():
+    """The custom layer class, defined (and registered for model loading) on first use so
+    importing this module does not import keras."""
+    import keras
+
+    @keras.saving.register_keras_serializable(package="mfp")
+    class PositionEmbedding(keras.layers.Layer):
+        """Adds a learned vector per position (day in the input window)."""
+
+        def __init__(self, length: int, dim: int, **kwargs):
+            super().__init__(**kwargs)
+            self.length, self.dim = length, dim
+            self.table = keras.layers.Embedding(length, dim)
+
+        def build(self, input_shape):
+            self.table.build((self.length,))
+
+        def call(self, x):
+            return x + self.table(keras.ops.arange(self.length))[None]
+
+        def get_config(self):
+            return {**super().get_config(), "length": self.length, "dim": self.dim}
+
+    return PositionEmbedding
+
+
+def load_model(model_dir):
+    """Load a saved forecasting model of any cell (registers custom layers first)."""
+    import keras
+
+    position_embedding()
+    return keras.models.load_model(model_dir / "model.keras", compile=False)
+
+
+ENCODERS = {"lstm": rnn_encoder("lstm"), "gru": rnn_encoder("gru"), "tcn": tcn_encoder, "transformer": transformer_encoder}
+DEEP_CELLS = tuple(ENCODERS)
+
+
 def build_model(cell: str, n_stores: int, n_past: int, n_future: int, n_static: int,
                 window: int, hidden: int, layers: int, dropout: float, embedding: bool = True):
     import keras
     from keras import layers as L
 
-    rnn = {"lstm": L.LSTM, "gru": L.GRU}[cell]
     past = keras.Input((window, n_past), name="past")
     future = keras.Input((HORIZON, n_future), name="future")
     store = keras.Input((), dtype="int32", name="store")
     static = keras.Input((n_static,), name="static")
 
-    x = past
-    for i in range(layers):
-        x = rnn(hidden, return_sequences=i < layers - 1, dropout=dropout)(x)
+    x = ENCODERS[cell](past, window, hidden, layers, dropout)
     # embedding=False (ablation) keeps the input but freezes it at zero.
     emb_layer = L.Embedding(n_stores, 16) if embedding else L.Embedding(
         n_stores, 16, embeddings_initializer="zeros", trainable=False
@@ -415,16 +524,36 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
     return predict_blocks(model, arrays, window)
 
 
+def ensemble_members(ds: Dataset = ROSSMANN) -> list[dict]:
+    """LSTM and GRU runs averaged into the main model: every seed in ENSEMBLE_SEEDS for
+    Rossmann, seed 42 only for other datasets (no seed re-runs there)."""
+    seeds = ENSEMBLE_SEEDS if ds is ROSSMANN else [SEED]
+    members = []
+    for seed in seeds:
+        for cell in ENSEMBLE_CELLS:
+            if seed == SEED:
+                model_dir, preds = ds.models_dir / cell, ds.predictions_dir / f"{cell}.parquet"
+            else:
+                run_dir = ds.models_dir / "experiments" / "seeds" / f"seed{seed}"
+                model_dir, preds = run_dir / f"{cell}_model", run_dir / f"{cell}.parquet"
+            members.append({"cell": cell, "seed": seed, "model_dir": model_dir, "predictions": preds})
+    missing = [str(m["predictions"]) for m in members if not m["predictions"].exists()]
+    if missing:
+        raise FileNotFoundError(f"run `python -m ai.cashflow_forecast.experiments seeds` first; missing {missing}")
+    return members
+
+
 def train_ensemble(ds: Dataset = ROSSMANN) -> pd.DataFrame:
-    """Plain average of the saved LSTM and GRU forecasts (equal weights, nothing
-    fitted). Adopted because its Validation WAPE beat both single models; the
-    rule was fixed before looking at Test."""
+    """Plain average of the saved LSTM and GRU forecasts over 5 seeds (10 runs, equal
+    weights, nothing fitted). Adopted because its Validation WAPE beat the seed-42
+    LSTM+GRU average and every 5-seed single-cell average; Test was not used to choose."""
     keys = ["store", "date", "split"]
-    lstm = pd.read_parquet(ds.predictions_dir / "lstm.parquet")[keys + ["forecast"]]
-    gru = pd.read_parquet(ds.predictions_dir / "gru.parquet")[keys + ["forecast"]]
-    merged = lstm.merge(gru, on=keys, suffixes=("_lstm", "_gru"), validate="one_to_one")
-    merged["forecast"] = (merged["forecast_lstm"] + merged["forecast_gru"]) / 2
-    return merged
+    runs = [pd.read_parquet(m["predictions"]).set_index(keys)["forecast"].clip(lower=0)
+            for m in ensemble_members(ds)]
+    stacked = pd.concat(runs, axis=1)
+    if stacked.isna().any().any():
+        raise ValueError("ensemble members do not cover the same store-days")
+    return stacked.mean(axis=1).rename("forecast").reset_index()
 
 
 def val_wape(df: pd.DataFrame, preds: pd.DataFrame) -> float:
@@ -474,7 +603,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--dataset", choices=list(DATASETS), default="rossmann")
     parser.add_argument(
-        "--model", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble", "all"], default="all"
+        "--model", choices=["seasonal_naive", "lightgbm", *DEEP_CELLS, "ensemble", "all"], default="all"
     )
     parser.add_argument("--window", type=int, default=56, choices=[28, 56])
     parser.add_argument("--hidden", type=int, default=64, choices=[64, 128])
@@ -491,7 +620,7 @@ def main() -> None:
     df = load(ds)
     if args.tune:
         cells = ["lstm", "gru"] if args.model == "all" else [args.model]
-        assert set(cells) <= {"lstm", "gru"}, "--tune applies to lstm and gru only"
+        assert set(cells) <= set(DEEP_CELLS), f"--tune applies to {', '.join(DEEP_CELLS)} only"
         for cell in cells:
             tune(df, cell, args, ds)
         return

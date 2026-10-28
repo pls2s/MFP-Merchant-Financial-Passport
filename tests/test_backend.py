@@ -73,6 +73,42 @@ def test_model_results(client):
     assert {r["split"] for r in rows} == {"val", "test"}
 
 
+def test_shortfall_risk_demo_store(client):
+    body = client.get("/api/v1/merchants/1/shortfall-risk").json()
+    assert body["is_synthetic_expense"] is True and len(body["days"]) == 14
+    assert all(0 <= d["p_shortfall"] <= 1 for d in body["days"])
+    assert body["p_any"] >= max(d["p_shortfall"] for d in body["days"])
+    gap_day = client.get("/api/v1/merchants/1/cash-flow-gaps").json()["gaps"][0]["date"]
+    assert next(d for d in body["days"] if d["date"] == gap_day)["p_shortfall"] > 0.5
+
+
+def test_upload_sample_and_bad_file(client):
+    body = client.get("/api/v1/upload/sample").json()
+    assert body["source"] == "precomputed" and len(body["forecast"]) == 14
+    resp = client.post("/api/v1/upload", files={"file": ("bad.csv", b"foo,bar\n1,2\n", "text/csv")})
+    assert resp.status_code == 422 and "วันที่" in resp.json()["detail"]
+
+
+def test_upload_inspect_guesses_and_accepts_a_chosen_column(client):
+    rows = "วันที่,ต้นทุน,มูลค่า\n" + "".join(f"{d}/1/2567,1,{100 + d}\n" for d in range(1, 29))
+    files = {"file": ("shop.csv", rows.encode(), "text/csv")}
+    body = client.post("/api/v1/upload/inspect", files=files).json()
+    assert body["mapping"]["date"] == "วันที่" and body["mapping"]["sales"] is None and body["ok"] is False
+    body = client.post("/api/v1/upload/inspect", files=files, data={"sales_column": "มูลค่า"}).json()
+    assert body["ok"] and body["report"]["date_range"] == {"start": "2024-01-01", "end": "2024-01-28"}
+    assert body["report"]["enough_days"] is False and len(body["daily"]) == 28
+
+
+def test_model_experiments(client):
+    body = client.get("/api/v1/model-experiments").json()
+    assert {r["model"] for r in body["seed_ensemble"]} == {"lightgbm", "lstm", "gru", "ensemble"}
+    k5 = [r for r in body["seed_ensemble_k"] if r["k"] == 5]
+    assert len(k5) == 4 and all(r["std"] is None for r in k5)
+    assert {r["seed"] for r in body["seeds"]} == {42, 1, 2, 3, 4}
+    curves = {p["config"] for p in body["learning_curves"]}
+    assert set(body["chosen_configs"].values()) <= curves
+
+
 def test_cors_allows_vite_dev_server(client):
     resp = client.options("/api/v1/merchants", headers={
         "Origin": "http://localhost:5173", "Access-Control-Request-Method": "GET"})

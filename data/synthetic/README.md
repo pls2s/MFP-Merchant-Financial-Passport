@@ -80,3 +80,5 @@ So the demo always shows an upcoming alert with a date and an amount, and a hist
 | `expenses.parquet` | store, due_date, type (`supplier_invoice` / `rent` / `payroll` / `utilities` / `owner_draw`), label, amount, scenario (`baseline` / `demo_gap`), is_synthetic |
 | `cash_flow_gaps.json` | `cash-flow-gaps` contract object per store (upcoming gaps; `opening_balance` = reserve on 2015-01-01) |
 | `credit_signal.json` | `credit-signal` contract object per store (risk indicators include past shortfalls) |
+| `shortfall_risk.json` | Probability of a shortfall per forecast day (share of 200 simulated sales paths: MC-dropout ensemble × Validation error blocks), seed 42 — see `docs/shortfall_probability.md` |
+| `shortfall_calibration.json` | Test-period checks of those probabilities (interval coverage, Brier scores, reliability) |

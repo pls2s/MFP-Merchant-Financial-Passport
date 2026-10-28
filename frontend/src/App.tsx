@@ -4,6 +4,7 @@ import { Card } from "./components/ui";
 import { MerchantPicker } from "./pages/MerchantPicker";
 import { ModelResults } from "./pages/ModelResults";
 import { Passport } from "./pages/Passport";
+import { Upload } from "./pages/Upload";
 import { useTheme } from "./theme";
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <nav className="nav">
             <NavLink to="/" end>ร้านค้า</NavLink>
             <NavLink to="/model-results">ผลโมเดล</NavLink>
+            <NavLink to="/upload">ลองกับร้านอื่น</NavLink>
           </nav>
           <span className="mode">
             <i className={isMock ? "dot warn" : "dot live"} />
@@ -38,6 +40,7 @@ export default function App() {
           <Route path="/" element={<MerchantPicker />} />
           <Route path="/merchants/:id" element={<Passport />} />
           <Route path="/model-results" element={<ModelResults />} />
+          <Route path="/upload" element={<Upload />} />
           <Route path="*" element={<Card><p className="state">ไม่พบหน้านี้</p></Card>} />
         </Routes>
       </main>

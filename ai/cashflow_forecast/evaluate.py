@@ -16,7 +16,7 @@ import pandas as pd
 from ai.cashflow_forecast.preprocess import DATASETS, ROSSMANN, Dataset
 
 PREDICTIONS_DIR = ROSSMANN.predictions_dir
-MODEL_ORDER = ["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"]
+MODEL_ORDER = ["seasonal_naive", "lightgbm", "lstm", "gru", "tcn", "transformer", "ensemble"]
 
 
 def wape(y: np.ndarray, y_hat: np.ndarray) -> float:

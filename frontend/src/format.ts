@@ -79,3 +79,15 @@ export function pillRows(dates: string[], allDates: string[], minGap: number): n
   });
   return rows;
 }
+
+/** Shortfall probability for people: whole percent, never a bare 0% or 100% from 200 simulated paths. */
+export function oddsText(p: number): string {
+  if (p < 0.01) return "ต่ำกว่า 1%";
+  if (p > 0.99) return "มากกว่า 99%";
+  return `${Math.round(p * 100)}%`;
+}
+
+/** Probability of a shortfall on `date` from a shortfall-risk response, if that day is in it. */
+export function oddsOn(risk: { days: { date: string; p_shortfall: number }[] }, date: string): number | undefined {
+  return risk.days.find((d) => d.date === date)?.p_shortfall;
+}

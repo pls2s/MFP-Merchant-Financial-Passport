@@ -27,7 +27,7 @@ from ai.cashflow_forecast.train import TEST_ORIGINS, VAL_ORIGINS
 FORECASTS_DIR = ROOT / "models" / "forecasts"
 HISTORY_PATH = FORECASTS_DIR / "sales_history.parquet"
 HISTORY_DAYS = 365  # shown before the Test period so the dashboard has real context
-MODEL_VERSION = "v1"
+MODEL_VERSION = "v2"  # v2: LSTM+GRU averaged over 5 seeds
 INTERVAL = 0.8
 
 
@@ -112,7 +112,7 @@ def export_history() -> pd.DataFrame:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--model", default="ensemble", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "ensemble"])
+    parser.add_argument("--model", default="ensemble", choices=["seasonal_naive", "lightgbm", "lstm", "gru", "tcn", "transformer", "ensemble"])
     args = parser.parse_args()
 
     forecasts = export(args.model)
