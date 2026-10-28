@@ -73,6 +73,15 @@ def test_model_results(client):
     assert {r["split"] for r in rows} == {"val", "test"}
 
 
+def test_shortfall_risk_demo_store(client):
+    body = client.get("/api/v1/merchants/1/shortfall-risk").json()
+    assert body["is_synthetic_expense"] is True and len(body["days"]) == 14
+    assert all(0 <= d["p_shortfall"] <= 1 for d in body["days"])
+    assert body["p_any"] >= max(d["p_shortfall"] for d in body["days"])
+    gap_day = client.get("/api/v1/merchants/1/cash-flow-gaps").json()["gaps"][0]["date"]
+    assert next(d for d in body["days"] if d["date"] == gap_day)["p_shortfall"] > 0.5
+
+
 def test_model_experiments(client):
     body = client.get("/api/v1/model-experiments").json()
     assert {r["model"] for r in body["seed_ensemble"]} == {"lightgbm", "lstm", "gru", "ensemble"}

@@ -128,6 +128,26 @@ export interface CashFlowGaps {
   is_synthetic_expense: true;
 }
 
+// GET /api/v1/merchants/{id}/shortfall-risk — probability from simulated sales paths (ข้อมูลจำลอง)
+export interface ShortfallRisk {
+  merchant_id: number;
+  as_of: string;
+  n_paths: number; // simulated 14-day sales paths
+  method: string;
+  p_any: number; // share of paths with at least one day below the buffer
+  days: { date: string; p_shortfall: number; balance_p10: number; balance_p50: number; balance_p90: number }[];
+  check: {
+    origins: string[];
+    sales_interval_80_coverage: number;
+    store_days: number;
+    events: number;
+    brier_probability: number;
+    brier_yes_no_warning: number;
+    brier_base_rate: number;
+  };
+  is_synthetic_expense: true;
+}
+
 // GET /api/v1/merchants/{id}/credit-signal
 export interface CreditSignal {
   merchant_id: number;

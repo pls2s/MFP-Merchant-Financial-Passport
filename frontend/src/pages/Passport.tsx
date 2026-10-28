@@ -8,14 +8,16 @@ import {
 import { Copilot } from "../components/Copilot";
 import { Offers } from "../components/Offers";
 import { SalesChart } from "../components/SalesChart";
+import { OddsPill, ShortfallOdds } from "../components/ShortfallOdds";
 import type { SkylineDay } from "../components/three/CashSkyline3D";
 import { Scene3D } from "../components/three/Scene3D";
 import {
   Card, ChipGroup, ErrorState, ExperimentalBadge, Segmented, Skeleton, SyntheticBadge, ViewToggle, type ViewMode,
 } from "../components/ui";
-import { addDays, money, thaiDate, thaiDateShort, thaiDatesInText, thaiWeekday } from "../format";
+import { addDays, money, oddsOn, oddsText, thaiDate, thaiDateShort, thaiDatesInText, thaiWeekday } from "../format";
 import type {
   CashBalance, CashFlowGaps, CreditSignal, Forecast, Gap, LongForecast, LongGap, ModelResult, SalesHistory, SeasonalOutlook,
+  ShortfallRisk,
 } from "../types";
 import { useAsync } from "../useAsync";
 
@@ -48,14 +50,16 @@ interface PassportData {
   results: ModelResult[];
   longForecast: LongForecast;
   seasonal: SeasonalOutlook;
+  risk: ShortfallRisk;
 }
 
 async function loadPassport(id: number): Promise<PassportData> {
-  const [asOf, forecast, history, balance, gaps, credit, results, longForecast, seasonal] = await Promise.all([
+  const [asOf, forecast, history, balance, gaps, credit, results, longForecast, seasonal, risk] = await Promise.all([
     api.asOf(), api.forecast(id), api.salesHistory(id), api.cashBalance(id),
     api.cashFlowGaps(id), api.creditSignal(id), api.modelResults(), api.longForecast(id), api.seasonalOutlook(id),
+    api.shortfallRisk(id),
   ]);
-  return { asOf, forecast, history, balance, gaps, credit, results, longForecast, seasonal };
+  return { asOf, forecast, history, balance, gaps, credit, results, longForecast, seasonal, risk };
 }
 
 // --- Summary ---------------------------------------------------------------------------
@@ -72,7 +76,7 @@ function ScoreRing({ score }: { score: number }) {
   );
 }
 
-function SummaryCards({ asOf, forecast, gaps, credit, balance }: PassportData) {
+function SummaryCards({ asOf, forecast, gaps, credit, balance, risk }: PassportData) {
   const recent = forecast.points.filter((p) => p.date <= asOf);
   const recentSales = recent.reduce((sum, p) => sum + (p.actual ?? 0), 0);
   const nextSales = forecast.points.filter((p) => p.date > asOf).reduce((s, p) => s + p.forecast, 0);
@@ -98,7 +102,7 @@ function SummaryCards({ asOf, forecast, gaps, credit, balance }: PassportData) {
         {next ? (
           <>
             <div className="stat-value bad-text">⚠ {thaiDate(next.date)}</div>
-            <div className="stat-sub">ขาดประมาณ <strong className="num">{money(next.shortfall)}</strong></div>
+            <div className="stat-sub">ขาดประมาณ <strong className="num">{money(next.shortfall)}</strong> · <OddsPill p={oddsOn(risk, next.date)} /></div>
           </>
         ) : (
           <>
@@ -106,6 +110,7 @@ function SummaryCards({ asOf, forecast, gaps, credit, balance }: PassportData) {
             <div className="stat-sub">ใน 14 วันข้างหน้า</div>
           </>
         )}
+        <div className="stat-sub">โอกาสเงินไม่พอใน 14 วัน <b className="num">{oddsText(risk.p_any)}</b></div>
         {balance.past_gaps.length > 0 && (
           <div className="stat-sub warn-text">ที่ผ่านมาเคยเงินไม่พอ {balance.past_gaps.length} ครั้ง</div>
         )}
@@ -165,6 +170,9 @@ function Skyline({ data }: { data: PassportData }) {
                 <div className="total"><dt>ยอดเงินคงเหลือสิ้นวัน</dt>
                   <dd className={`num ${day.balance < 0 ? "bad-text" : ""}`}>{money(day.balance)}</dd></div>
               </dl>
+              <p className="small" style={{ margin: "0 0 8px" }}>
+                โอกาสเงินไม่พอวันนี้ <OddsPill p={oddsOn(data.risk, day.date)} />
+              </p>
               {gap ? (
                 <div className="alert bad compact">
                   <div className="alert-title">⚠ เงินสดอาจไม่พอ ขาดประมาณ {money(gap.shortfall)}</div>
@@ -200,7 +208,7 @@ function Skyline({ data }: { data: PassportData }) {
 
 type AlertTab = "next" | "past" | "later";
 
-function GapAlerts({ gaps, pastGaps, longGaps }: { gaps: CashFlowGaps; pastGaps: Gap[]; longGaps: LongGap[] }) {
+function GapAlerts({ gaps, pastGaps, longGaps, risk }: { gaps: CashFlowGaps; pastGaps: Gap[]; longGaps: LongGap[]; risk: ShortfallRisk }) {
   const [tab, setTab] = useState<AlertTab>("next");
   return (
     <Card id="alerts" eyebrow="เงินสด" title="การแจ้งเตือนเงินสด" badges={<SyntheticBadge />}
@@ -211,6 +219,7 @@ function GapAlerts({ gaps, pastGaps, longGaps }: { gaps: CashFlowGaps; pastGaps:
           { key: "later", label: <>หลัง 14 วัน <span className="count">{longGaps.length}</span></> },
         ]} />
       }>
+      {tab === "next" && <ShortfallOdds risk={risk} />}
       {tab === "next" && (gaps.gaps.length === 0 ? (
         <div className="alert good">✓ ไม่พบช่วงที่เงินสดอาจไม่พอใน 14 วันข้างหน้า</div>
       ) : (
@@ -219,6 +228,7 @@ function GapAlerts({ gaps, pastGaps, longGaps }: { gaps: CashFlowGaps; pastGaps:
             <div key={g.date} className="alert bad">
               <div className="alert-title">
                 ⚠ วันที่ {thaiDate(g.date)} เงินสดอาจไม่พอ ขาดประมาณ {money(g.shortfall)}
+                <OddsPill p={oddsOn(risk, g.date)} />
               </div>
               <div className="muted small">รายจ่ายที่เป็นสาเหตุ (เรียงจากมากไปน้อย)</div>
               <ul className="contributors">
@@ -393,7 +403,8 @@ export function Passport() {
               range={range} layers={balanceLayers} view={view} />
           </Card>
 
-          <GapAlerts gaps={state.data.gaps} pastGaps={state.data.balance.past_gaps} longGaps={state.data.balance.long_gaps} />
+          <GapAlerts gaps={state.data.gaps} pastGaps={state.data.balance.past_gaps} longGaps={state.data.balance.long_gaps}
+            risk={state.data.risk} />
           <Factors credit={state.data.credit} />
           <div id="copilot"><Copilot merchantId={id} /></div>
           <Offers gaps={state.data.gaps.gaps} />

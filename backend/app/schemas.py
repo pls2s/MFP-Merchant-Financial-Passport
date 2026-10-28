@@ -250,6 +250,39 @@ class CopilotResponse(BaseModel):
     is_synthetic_expense: Literal[True] = True
 
 
+# --- GET /api/v1/merchants/{id}/shortfall-risk ----------------------------------
+
+
+class ShortfallDay(BaseModel):
+    date: IsoDate
+    p_shortfall: float = Field(description="Share of simulated sales paths with the balance below the minimum buffer")
+    balance_p10: float
+    balance_p50: float
+    balance_p90: float
+
+
+class ShortfallCheck(BaseModel):
+    """How the probabilities did on the Test period (all stores except the demo stores)."""
+    origins: list[IsoDate]
+    sales_interval_80_coverage: float
+    store_days: int
+    events: int
+    brier_probability: float
+    brier_yes_no_warning: float
+    brier_base_rate: float
+
+
+class ShortfallRisk(BaseModel):
+    merchant_id: int
+    as_of: IsoDate
+    n_paths: int
+    method: str
+    p_any: float = Field(description="Share of paths with at least one day below the buffer in the 14 days")
+    days: list[ShortfallDay]
+    check: ShortfallCheck
+    is_synthetic_expense: Literal[True] = True
+
+
 # --- GET /api/v1/model-results (Model results screen) --------------------------
 
 

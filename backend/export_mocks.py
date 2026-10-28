@@ -38,6 +38,7 @@ def main() -> None:
             files[f"seasonal-outlook-{m}.json"] = client.get(f"{base}/seasonal-outlook").json()
             files[f"cash-flow-gaps-{m}.json"] = client.get(f"{base}/cash-flow-gaps").json()
             files[f"credit-signal-{m}.json"] = client.get(f"{base}/credit-signal").json()
+            files[f"shortfall-risk-{m}.json"] = client.get(f"{base}/shortfall-risk").json()
             files[f"copilot-{m}.json"] = client.post(f"{base}/copilot", json={"question": None}).json()
     for name, body in files.items():
         (MOCKS_DIR / name).write_text(json.dumps(body, ensure_ascii=False, indent=2) + "\n")

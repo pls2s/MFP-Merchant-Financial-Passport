@@ -17,6 +17,7 @@ from ai.gap_detection.build import (
     AS_OF, DEMO_STORES, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, past_gaps, sales_series,
 )
 from ai.gap_detection.gaps import cash_flow_gaps
+from ai.gap_detection.shortfall_risk import CALIBRATION_PATH, RISK_PATH
 from ai.gap_detection.long_balance import long_balance
 
 RESULTS_PATH = ROSSMANN.models_dir / "results.csv"
@@ -54,6 +55,18 @@ def _experiments() -> dict:
     }
 
 
+def _shortfall() -> dict[int, dict]:
+    """Shortfall probabilities (ai.gap_detection.shortfall_risk) with the Test-period check attached."""
+    cal = json.loads(CALIBRATION_PATH.read_text())
+    day = cal["shortfall_day"]
+    check = {
+        "origins": cal["origins"],
+        "sales_interval_80_coverage": cal["sales_interval_80"]["coverage"],
+        **{k: day[k] for k in ("store_days", "events", "brier_probability", "brier_yes_no_warning", "brier_base_rate")},
+    }
+    return {o["merchant_id"]: {**o, "method": cal["method"], "check": check} for o in json.loads(RISK_PATH.read_text())}
+
+
 @dataclass
 class DataStore:
     forecasts: dict[int, dict]
@@ -70,6 +83,7 @@ class DataStore:
     long_metrics: dict
     synthetic_sales: dict[int, pd.DataFrame]
     experiments: dict
+    shortfall: dict[int, dict]
 
     @classmethod
     def load(cls) -> "DataStore":
@@ -89,6 +103,7 @@ class DataStore:
             long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
             synthetic_sales=_by_store(pd.read_parquet(FORECASTS_DIR / "synthetic_sales.parquet")),
             experiments=_experiments(),
+            shortfall=_shortfall(),
         )
 
     def merchants(self) -> list[dict]:

@@ -12,6 +12,7 @@ import type {
   ModelResult,
   SalesHistory,
   SeasonalOutlook,
+  ShortfallRisk,
 } from "./types";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -65,6 +66,9 @@ export const api = {
     USE_MOCK
       ? mock(`cash-flow-gaps-${id}`)
       : request(`/api/v1/merchants/${id}/cash-flow-gaps?min_buffer=${minBuffer}`),
+
+  shortfallRisk: (id: number): Promise<ShortfallRisk> =>
+    USE_MOCK ? mock(`shortfall-risk-${id}`) : request(`/api/v1/merchants/${id}/shortfall-risk`),
 
   creditSignal: (id: number): Promise<CreditSignal> =>
     USE_MOCK ? mock(`credit-signal-${id}`) : request(`/api/v1/merchants/${id}/credit-signal`),

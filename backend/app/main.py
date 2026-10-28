@@ -97,6 +97,12 @@ def credit_signal(merchant_id: int):
     return store.credit[merchant_id]
 
 
+@app.get("/api/v1/merchants/{merchant_id}/shortfall-risk", response_model=schemas.ShortfallRisk)
+def shortfall_risk(merchant_id: int):
+    _require(merchant_id)
+    return store.shortfall[merchant_id]
+
+
 @app.post("/api/v1/merchants/{merchant_id}/copilot", response_model=schemas.CopilotResponse)
 def copilot(merchant_id: int, body: schemas.CopilotRequest | None = None):
     _require(merchant_id)

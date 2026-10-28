@@ -1,0 +1,109 @@
+{
+ "method": "MC dropout (10 ensemble models × 20 passes) × Validation error blocks",
+ "n_paths": 200,
+ "origins": [
+  "2015-06-19",
+  "2015-07-03",
+  "2015-07-17"
+ ],
+ "excluded_stores": [
+  1,
+  25,
+  817
+ ],
+ "sales_interval_80": {
+  "coverage": 0.7407278685268854,
+  "mean_width_vs_median": 0.24028669707309117,
+  "model_uncertainty_share_of_variance": 0.2082622523109118
+ },
+ "shortfall_day": {
+  "store_days": 46704,
+  "events": 242,
+  "base_rate": 0.005181569030489894,
+  "brier_probability": 0.0005360531217882837,
+  "brier_yes_no_warning": 0.0006423432682425488,
+  "brier_base_rate": 0.005154720372872162,
+  "reliability": [
+   {
+    "bin": "0%–5%",
+    "n": 46422,
+    "mean_predicted": 1.4755934686140193e-05,
+    "observed_rate": 0.0
+   },
+   {
+    "bin": "5%–20%",
+    "n": 29,
+    "mean_predicted": 0.11379310344827584,
+    "observed_rate": 0.20689655172413793
+   },
+   {
+    "bin": "20%–40%",
+    "n": 14,
+    "mean_predicted": 0.2925,
+    "observed_rate": 0.7857142857142857
+   },
+   {
+    "bin": "40%–60%",
+    "n": 11,
+    "mean_predicted": 0.514090909090909,
+    "observed_rate": 0.9090909090909091
+   },
+   {
+    "bin": "60%–80%",
+    "n": 16,
+    "mean_predicted": 0.69,
+    "observed_rate": 0.6875
+   },
+   {
+    "bin": "80%–100%",
+    "n": 212,
+    "mean_predicted": 0.9879245283018869,
+    "observed_rate": 0.9622641509433962
+   }
+  ]
+ },
+ "shortfall_any_14_days": {
+  "store_windows": 3336,
+  "events": 46,
+  "brier_probability": 0.0011562350119904076,
+  "brier_base_rate": 0.013598833163684876,
+  "reliability": [
+   {
+    "bin": "0%–5%",
+    "n": 3280,
+    "mean_predicted": 5.4878048780487806e-05,
+    "observed_rate": 0.0
+   },
+   {
+    "bin": "5%–20%",
+    "n": 7,
+    "mean_predicted": 0.10928571428571428,
+    "observed_rate": 0.14285714285714285
+   },
+   {
+    "bin": "20%–40%",
+    "n": 4,
+    "mean_predicted": 0.3,
+    "observed_rate": 0.5
+   },
+   {
+    "bin": "40%–60%",
+    "n": 2,
+    "mean_predicted": 0.4475,
+    "observed_rate": 0.5
+   },
+   {
+    "bin": "60%–80%",
+    "n": 3,
+    "mean_predicted": 0.6383333333333333,
+    "observed_rate": 1.0
+   },
+   {
+    "bin": "80%–100%",
+    "n": 40,
+    "mean_predicted": 0.9866249999999999,
+    "observed_rate": 0.975
+   }
+  ]
+ }
+}
