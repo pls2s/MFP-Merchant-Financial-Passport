@@ -93,7 +93,7 @@ def load_models():
 
     models = {}
     for cell in ("lstm", "gru"):
-        cfg = json.loads((ROSSMANN.models_dir / cell / "config.json").read_text())
+        cfg = json.loads((ROSSMANN.models_dir / cell / "config.json").read_text(encoding="utf-8"))
         models[cell] = (keras.models.load_model(ROSSMANN.models_dir / cell / "model.keras", compile=False), cfg["window"])
     return models
 
@@ -157,7 +157,7 @@ def recursive_forecasts(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, d
     # on the last data day, whose "next day" inputs the main model saw as missing (0); use the main
     # values so every view shows the same numbers.
     main = pd.DataFrame([{"store": o["merchant_id"], "date": p["date"], "main": p["forecast"]}
-                         for o in json.loads((FORECASTS_DIR / "ensemble.json").read_text()) for p in o["points"]])
+                         for o in json.loads((FORECASTS_DIR / "ensemble.json").read_text(encoding="utf-8")) for p in o["points"]])
     main["date"] = pd.to_datetime(main["date"])
     fwd = fwd.merge(main, on=["store", "date"], how="left")
     fwd["forecast"] = fwd["main"].fillna(fwd["forecast"])

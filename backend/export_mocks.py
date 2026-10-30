@@ -39,7 +39,7 @@ def main() -> None:
             files[f"credit-signal-{m}.json"] = client.get(f"{base}/credit-signal").json()
             files[f"copilot-{m}.json"] = client.post(f"{base}/copilot", json={"question": None}).json()
     for name, body in files.items():
-        (MOCKS_DIR / name).write_text(json.dumps(body, ensure_ascii=False, indent=2) + "\n")
+        (MOCKS_DIR / name).write_text(json.dumps(body, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Saved {len(files)} mocks → {MOCKS_DIR}")
 
 
