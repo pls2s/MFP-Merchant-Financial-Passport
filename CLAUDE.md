@@ -1,8 +1,72 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # MFP — Merchant Financial Passport
 
 Course final project (Deep Learning). A prototype that forecasts daily sales for small merchants with LSTM/GRU, turns the forecast into cash-flow gap warnings and an explainable financial-health score, and shows it all in a React + FastAPI dashboard.
 
 The deep-learning forecasting model is what the course grades. Everything else exists to make its output useful in the demo.
+
+## Commands
+
+Python 3.11. Run all Python commands from the repository root. The demo needs no dataset download or training: its forecasts and synthetic data are committed. Copy `.env.example` to `.env` first; the backend and Vite both read the root `.env`.
+
+```bash
+# Setup (ai/requirements.txt has pytest, TensorFlow and LightGBM; the backend alone needs only backend/requirements.txt)
+python -m venv .venv
+pip install -r ai/requirements.txt -r backend/requirements.txt
+cd frontend && npm install
+
+# Run
+uvicorn backend.app.main:app --reload --port 8000   # API docs at http://localhost:8000/docs
+cd frontend && npm run dev                          # http://localhost:5173
+
+# Test and check
+pytest                                              # all tests
+pytest tests/test_gap_detection.py                  # one file
+pytest tests/test_gap_detection.py::test_name       # one test
+cd frontend && npm run build                        # type-check + production build
+cd frontend && npm run lint                         # oxlint
+```
+
+`VITE_USE_MOCK` selects the frontend's data source: `true` reads `src/mocks/` (stores 1, 2, 25 and 817 only, no backend), and anything else, including unset, calls the backend. `.env.example` sets it to `true`. To override it for one run in PowerShell: `$env:VITE_USE_MOCK='false'; npm run dev`.
+
+Regenerate data only when its inputs change (needs Rossmann in `data/raw/rossmann/`). Steps run in this order, because each reads the previous step's output:
+
+```bash
+python -m ai.cashflow_forecast.preprocess
+python -m ai.cashflow_forecast.train --model all --tune
+python -m ai.cashflow_forecast.train --model ensemble
+python -m ai.cashflow_forecast.evaluate
+python -m ai.cashflow_forecast.predict --model ensemble
+python -m ai.cashflow_forecast.long_range
+python -m ai.gap_detection.build
+python -m ai.credit_signal.build
+python -m backend.export_mocks                      # then copy docs/frontend/mocks/ to frontend/src/mocks/
+```
+
+`docker-compose.yml` is empty, so there is no Docker setup.
+
+## Architecture
+
+Everything flows through committed files; the backend never trains or runs a model.
+
+- **Offline pipeline:** `ai/` writes artifacts to `models/forecasts/`, `models/results.csv` and `data/synthetic/`.
+- **Backend:** `backend/app/data.py` (`DataStore`) loads those artifacts at startup, `main.py` serves them, and `schemas.py` defines the response models. It re-runs WS2 code live for `min_buffer` on `cash-flow-gaps` and for the copilot.
+- **Frontend:** `frontend/src/api.ts` is the only API layer. `src/types.ts` is a copy of `docs/frontend/api-types.ts`, and `src/mocks/` holds real API responses exported by `backend/export_mocks.py`, so API shape changes must update both.
+
+Facts that span several files:
+
+- **Served model:** the app serves the LSTM+GRU `ensemble`, not a single LSTM.
+- **Demo date:** "today" is fixed at 2015-07-17 (`AS_OF = TEST_ORIGINS[-1]` in `ai/gap_detection/build.py`). The 14-day forecast covers 2015-07-18 to 2015-07-31.
+- **Demo stores:** 1, 25 and 817 have a deliberate synthetic gap on 2015-07-22. Store 2 is the healthy comparison.
+- **Contract additions:** endpoints beyond the data contract below (`sales-history`, `long-forecast`, `seasonal-outlook`, `cash-balance`, `model-results`) are documented in `backend/README.md`.
+- **Copilot:** `ai/copilot/facts.py` computes the only figures the LLM (Typhoon, OpenAI-compatible) may use. `explain.py` validates every number and month in the answer, retries once, then falls back to a template.
+
+`docs/demo.md` is the demo script and lists the figures each screen must show, so update it when those numbers or the screens change.
+
+Frontend design work follows the skill in `.claude/skills/mfp-google-ux/SKILL.md` (Material Design 3, light-first). Implementation conventions are in `frontend/README.md`.
 
 ## Scope
 
