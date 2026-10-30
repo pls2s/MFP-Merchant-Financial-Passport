@@ -22,7 +22,7 @@ RESULTS_PATH = ROSSMANN.models_dir / "results.csv"
 
 
 def _by_merchant(path) -> dict[int, dict]:
-    return {obj["merchant_id"]: obj for obj in json.loads(path.read_text())}
+    return {obj["merchant_id"]: obj for obj in json.loads(path.read_text(encoding="utf-8"))}
 
 
 def _by_store(df: pd.DataFrame) -> dict[int, pd.DataFrame]:
@@ -64,7 +64,7 @@ class DataStore:
             long_back=_by_store(pd.read_parquet(FORECASTS_DIR / "long_backtest.parquet")),
             seasonal_months=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_outlook.parquet")),
             seasonal_back=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_backtest.parquet")),
-            long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
+            long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text(encoding="utf-8")),
             synthetic_sales=_by_store(pd.read_parquet(FORECASTS_DIR / "synthetic_sales.parquet")),
         )
 

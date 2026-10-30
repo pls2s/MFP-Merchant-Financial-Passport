@@ -25,7 +25,7 @@ export function GapPill({ viewBox, gap, row, flip, outline = false }: {
     <g>
       <rect x={x} y={y} width={width} height={height} rx={11} fill={outline ? "var(--surface)" : "var(--bad)"}
         stroke="var(--bad)" strokeWidth={outline ? 1.5 : 0} strokeDasharray={outline ? "4 2" : undefined} />
-      <text x={x + width / 2} y={y + height / 2 + 4} textAnchor="middle" fill={outline ? "var(--bad)" : "#fff"}
+      <text x={x + width / 2} y={y + height / 2 + 4} textAnchor="middle" fill={outline ? "var(--bad)" : "var(--on-bad)"}
         fontSize={12} fontWeight={600}>
         {text}
       </text>

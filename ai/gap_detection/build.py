@@ -58,7 +58,7 @@ def sales_series() -> dict[int, pd.DataFrame]:
     history = history[(history["date"] >= SIM_START) & (history["date"] <= AS_OF)]
     actual = {int(s): df for s, df in history.groupby("store")}
     series = {}
-    for obj in json.loads(FORECASTS_PATH.read_text()):
+    for obj in json.loads(FORECASTS_PATH.read_text(encoding="utf-8")):
         m = obj["merchant_id"]
         past = actual[m][["date", "sales"]].assign(sales=lambda d: d["sales"].fillna(0.0), is_forecast=False)
         fut = pd.DataFrame(obj["points"])
@@ -111,7 +111,7 @@ def main() -> None:
     expenses, gaps = build()
     SYNTHETIC_DIR.mkdir(parents=True, exist_ok=True)
     expenses.to_parquet(EXPENSES_PATH, index=False)
-    GAPS_PATH.write_text(json.dumps(gaps, ensure_ascii=False))
+    GAPS_PATH.write_text(json.dumps(gaps, ensure_ascii=False), encoding="utf-8")
 
     with_gap = [g for g in gaps if g["gaps"]]
     series = sales_series()
