@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   Area,
   Bar,
@@ -15,22 +15,22 @@ import {
   YAxis,
 } from "recharts";
 import {
-  addDays, change, daysInMonth, money, monthStarts, pillRows, thaiDate, thaiDateShort, thaiMonthShort,
+  addDays, change, compact, daysInMonth, money, monthStarts, pillRows, thaiDate, thaiDateShort, thaiMonthShort,
   thaiWeekday, thaiYearMonth, thaiYearMonthLong,
 } from "../format";
 import type { Forecast, Gap, LongForecast, ModelResult, SalesHistory, SeasonalOutlook } from "../types";
 import { Accuracy } from "./Accuracy";
 import { GapPill } from "./GapMarker";
 import { RANGES, type RangeKey, type SalesLayer } from "./chartOptions";
-import { DataTable, Swatch, type ViewMode } from "./ui";
+import { DataTable, Disclosure, LegendChip, Swatch, type ViewMode } from "./ui";
 
 /**
- * Sales chart, simple by default. Daily views draw one bar per day so every day is its own slot
- * (closed days stay empty); the forecast band sits faintly behind the bars.
+ * Sales chart, simple by default. Daily views draw a solid actual line and a dashed forecast line that
+ * break on closed days (never drop to zero); the forecast band sits faintly behind them.
  *   4w — actual + main LSTM+GRU 14-day forecast
  *   3m — actual + the same models rolled forward 84 days
  *   1y — monthly bars: last 12 months actual, next 12 months seasonal outlook (NOT deep learning)
- * Range and layers come from the page's filter bar; each layer (promo days, holidays, past
+ * Range and layers come from the page; each layer (promo days, holidays, past
  * shortfalls, real sales after today, synthetic sales after the data ends) toggles on its own.
  * Backtests live in <Accuracy>, below the chart.
  */
@@ -184,7 +184,7 @@ function DailyTable({ rows, gaps }: { rows: DayRow[]; gaps: Gap[] }) {
         { key: "date", label: "วันที่", align: "left" },
         { key: "actual", label: "ยอดขายจริง" },
         { key: "forecast", label: "คาดการณ์" },
-        { key: "band", label: "ช่วงที่น่าจะเป็น" },
+        { key: "band", label: "ช่วงคาดการณ์โดยประมาณ" },
         { key: "extra", label: "ยอดจริง/จำลอง หลังวันนี้" },
         { key: "tags", label: "หมายเหตุ", align: "left" },
       ]}
@@ -206,8 +206,16 @@ function DailyTable({ rows, gaps }: { rows: DayRow[]; gaps: Gap[] }) {
   );
 }
 
+type DailySeries = "actual" | "forecast" | "band";
+
 function DailyChart({ range, p, layers, view }: { range: "4w" | "3m"; p: Props; layers: ReadonlySet<SalesLayer>; view: ViewMode }) {
   const { asOf, gaps, pastGaps } = p;
+  const [hidden, setHidden] = useState<ReadonlySet<DailySeries>>(new Set());
+  const toggle = (k: DailySeries) => setHidden((h) => {
+    const next = new Set(h);
+    if (!next.delete(k)) next.add(k);
+    return next;
+  });
   const rows = useMemo(() => dayRows(range, p, layers), [range, p, layers]);
   const promo = useMemo(() => (layers.has("promo") ? spans(rows, "promo") : []), [rows, layers]);
   const assumed = useMemo(() => (layers.has("promo") ? spans(rows, "assumed") : []), [rows, layers]);
@@ -221,25 +229,34 @@ function DailyChart({ range, p, layers, view }: { range: "4w" | "3m"; p: Props; 
 
   if (view === "table") return <DailyTable rows={rows} gaps={shown} />;
 
+  // Lines break on closed days, so a day with closed days on both sides needs a dot to be visible at all.
+  const dayDot = (key: "actual" | "forecast", color: string) => (d: { cx?: number; cy?: number; index?: number; payload?: DayRow }) => {
+    const i = d.index ?? 0;
+    const isGap = key === "forecast" && d.payload != null && gapDays.has(d.payload.date);
+    const alone = rows[i - 1]?.[key] == null && rows[i + 1]?.[key] == null;
+    if (d.cx == null || d.cy == null || d.payload?.[key] == null || (!isGap && !alone)) return <g key={i} />;
+    return <circle key={i} cx={d.cx} cy={d.cy} r={isGap ? 4.5 : 2.5} fill={isGap ? "var(--bad)" : color} stroke="none" />;
+  };
+
   return (
     <>
       <div className="chart-legend">
-        <span><Swatch kind="bar" color="var(--series-actual)" />ยอดขายจริง</span>
-        <span><Swatch kind="bar" color="var(--series-forecast)" />{range === "3m" ? "คาดการณ์ 3 เดือน" : "คาดการณ์ 14 วัน"}</span>
-        <span><Swatch kind="area" color="var(--series-band)" />ช่วงที่น่าจะเป็น</span>
-        {gaps.length > 0 && <span><Swatch kind="bar" color="var(--bad)" />⚠ วันที่เงินอาจไม่พอ</span>}
+        <LegendChip on={!hidden.has("actual")} onClick={() => toggle("actual")}><Swatch kind="line" color="var(--series-actual)" />ยอดขายจริง</LegendChip>
+        <LegendChip on={!hidden.has("forecast")} onClick={() => toggle("forecast")}><Swatch kind="line" color="var(--series-forecast)" dashed />{range === "3m" ? "คาดการณ์ 3 เดือน" : "คาดการณ์ 14 วัน"}</LegendChip>
+        <LegendChip on={!hidden.has("band")} onClick={() => toggle("band")}><Swatch kind="area" color="var(--series-band)" />ช่วงคาดการณ์โดยประมาณ</LegendChip>
+        {gaps.length > 0 && <span><Swatch kind="line" color="var(--bad)" dashed />⚠ วันที่เงินอาจไม่พอ</span>}
         {layers.has("promo") && <span><Swatch kind="area" color="var(--series-promo)" />วันโปรโมชัน</span>}
         {layers.has("promo") && range === "3m" && <span><Swatch kind="area" color="var(--text-3)" />ตารางโปรโมชันจำลอง</span>}
         {layers.has("holiday") && <span><Swatch kind="line" color="var(--text-3)" dashed />วันหยุดนักขัตฤกษ์</span>}
         {layers.has("pastGaps") && pastGaps.length > 0 && <span><Swatch kind="line" color="var(--warn)" dashed />วันที่เงินเคยไม่พอ</span>}
         {layers.has("laterActual") && <span><Swatch kind="line" color="var(--series-actual)" />ยอดจริงหลังวันนี้ (ถึง 31 ก.ค.)</span>}
         {layers.has("simulated") && <span><Swatch kind="line" color="var(--series-simulated)" dashed />ยอดขายจำลอง (ไม่ใช่ข้อมูลจริง)</span>}
-        <span className="muted">ช่องว่าง = ร้านปิด</span>
+        <span className="muted">เส้นขาด = ร้านปิด</span>
       </div>
-      <div style={{ width: "100%", height: 320 }}>
+      <div style={{ width: "100%", height: 320 }} role="img" aria-label={`กราฟยอดขายจริงและคาดการณ์ ${range === "3m" ? "3 เดือน" : "4 สัปดาห์"}${shown[0] ? ` ระวังวันที่ ${thaiDate(shown[0].date)} เงินสดอาจไม่พอ ขาดประมาณ ${money(shown[0].shortfall)}` : ""}`}>
         <ResponsiveContainer>
-          <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }} barCategoryGap="22%">
-            {/* top headroom so the warning pills do not sit on the bars */}
+          <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}>
+            {/* top headroom so the warning pills do not sit on the lines */}
             <CartesianGrid stroke="var(--border)" vertical={false} />
             {assumed.map(([a, b]) => (
               <ReferenceArea key={`as-${a}`} x1={a} x2={b} fill="var(--text-3)" fillOpacity={0.08} stroke="none" ifOverflow="hidden" />
@@ -250,28 +267,24 @@ function DailyChart({ range, p, layers, view }: { range: "4w" | "3m"; p: Props; 
             {holidays.map((d) => <ReferenceLine key={d} x={d} stroke="var(--text-3)" strokeDasharray="2 3" />)}
             <XAxis dataKey="date" tickFormatter={monthAxis ? thaiMonthShort : thaiDateShort}
               ticks={monthAxis ? monthStarts(rows.map((r) => r.date)) : undefined}
-              tick={{ fill: "var(--text-2)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false}
+              tick={{ fill: "var(--text-3)", fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: "var(--border)" }} tickLine={false}
               minTickGap={monthAxis ? 8 : 24} />
-            <YAxis tickFormatter={(v: number) => money(v)} tick={{ fill: "var(--text-2)", fontSize: 12 }}
-              axisLine={false} tickLine={false} width={64}
+            <YAxis tickFormatter={compact} tick={{ fill: "var(--text-3)", fontSize: 12, fontWeight: 500 }}
+              axisLine={false} tickLine={false} width={48}
               domain={[0, (max: number) => Math.ceil((max * (shown.length ? 1.3 : 1.05)) / 1000) * 1000]} />
-            <Tooltip content={<DayTooltip />} cursor={{ fill: "var(--surface-2)" }} />
-            <Area dataKey="band" stroke="none" fill="var(--series-band)" fillOpacity={0.22} connectNulls isAnimationActive={false} />
-            {/* actual (past) and forecast (future) never share a day, so stacking keeps one centred bar per slot. */}
-            <Bar dataKey="actual" stackId="day" fill="var(--series-actual)" fillOpacity={0.8} radius={[2, 2, 0, 0]} maxBarSize={18} isAnimationActive={false} />
-            <Bar dataKey="forecast" stackId="day" radius={[2, 2, 0, 0]} maxBarSize={18} isAnimationActive={false}>
-              {rows.map((r) => (
-                <Cell key={r.date} fill={gapDays.has(r.date) ? "var(--bad)" : "var(--series-forecast)"}
-                  fillOpacity={gapDays.has(r.date) ? 0.9 : 0.6} />
-              ))}
-            </Bar>
-            {/* Details: what actually happened (real, then synthetic) as two coloured lines over the forecast bars. */}
+            <Tooltip content={<DayTooltip />} cursor={{ stroke: "var(--border-strong)" }} />
+            <Area dataKey="band" hide={hidden.has("band")} stroke="none" fill="var(--series-band)" fillOpacity={0.16} connectNulls isAnimationActive={false} />
+            <Line dataKey="actual" hide={hidden.has("actual")} stroke="var(--series-actual)" strokeWidth={2} connectNulls={false}
+              dot={dayDot("actual", "var(--series-actual)")} activeDot={{ r: 4 }} isAnimationActive={false} />
+            <Line dataKey="forecast" hide={hidden.has("forecast")} stroke="var(--series-forecast)" strokeWidth={2} strokeDasharray="6 4" connectNulls={false}
+              dot={dayDot("forecast", "var(--series-forecast)")} activeDot={{ r: 4 }} isAnimationActive={false} />
+            {/* Details: what actually happened (real, then synthetic) over the forecast. */}
             <Line dataKey="laterActual" stroke="var(--series-actual)" strokeWidth={2} connectNulls
               dot={{ r: 2.5, fill: "var(--series-actual)", stroke: "none" }} isAnimationActive={false} />
-            <Line dataKey="simulated" stroke="var(--series-simulated)" strokeWidth={2} strokeDasharray="5 3" connectNulls
+            <Line dataKey="simulated" stroke="var(--series-simulated)" strokeWidth={2} strokeDasharray="8 3 2 3" connectNulls
               dot={range === "4w" ? { r: 2.5, fill: "var(--series-simulated)", stroke: "none" } : false} isAnimationActive={false} />
             <ReferenceLine x={asOf} stroke="var(--text-3)" strokeDasharray="3 3"
-              label={{ value: "วันนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
+              label={{ value: "วันนี้", position: "top", fill: "var(--text-3)", fontSize: 12 }} />
             {shown.map((g, i) => (
               <ReferenceLine key={g.date} x={g.date} stroke="var(--bad)" strokeWidth={1.5} strokeDasharray="3 3"
                 label={{ content: <GapPill gap={g} row={pills[i]} flip={dates.indexOf(g.date) > dates.length * 0.5} /> }} />
@@ -355,7 +368,7 @@ function MonthlyChart({ p, view }: { p: Props; view: ViewMode }) {
           { key: "month", label: "เดือน", align: "left" },
           { key: "actual", label: "ยอดขายจริง" },
           { key: "forecast", label: "คาดการณ์ / ภาพรวม" },
-          { key: "range", label: "ช่วงที่น่าจะเป็น" },
+          { key: "range", label: "ช่วงคาดการณ์โดยประมาณ" },
           { key: "kind", label: "ที่มา", align: "left" },
         ]}
         rows={rows.map((r) => ({
@@ -373,21 +386,21 @@ function MonthlyChart({ p, view }: { p: Props; view: ViewMode }) {
     <>
       <div className="chart-legend">
         <span><Swatch kind="bar" color="var(--series-actual)" />ยอดขายจริงรายเดือน</span>
-        <span><Swatch kind="bar" color="var(--series-forecast)" />ภาพรวม 12 เดือนข้างหน้า (ขีดคือช่วงที่น่าจะเป็น)</span>
+        <span><Swatch kind="bar" color="var(--series-forecast)" opacity={0.35} />ภาพรวม 12 เดือนข้างหน้า (ขีดคือช่วงคาดการณ์โดยประมาณ)</span>
       </div>
-      <div style={{ width: "100%", height: 320 }}>
+      <div style={{ width: "100%", height: 320 }} role="img" aria-label="กราฟแท่งยอดขายจริงรายเดือนและภาพรวม 12 เดือนข้างหน้า">
         <ResponsiveContainer>
           <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }} barCategoryGap="18%">
             <CartesianGrid stroke="var(--border)" vertical={false} />
-            <XAxis dataKey="month" tickFormatter={thaiYearMonth} interval={0} tick={{ fill: "var(--text-2)", fontSize: 11 }}
+            <XAxis dataKey="month" tickFormatter={thaiYearMonth} interval={0} tick={{ fill: "var(--text-3)", fontSize: 11, fontWeight: 500 }}
               axisLine={{ stroke: "var(--border)" }} tickLine={false} />
-            <YAxis tickFormatter={(v: number) => money(v)} tick={{ fill: "var(--text-2)", fontSize: 12 }}
-              axisLine={false} tickLine={false} width={64} />
+            <YAxis tickFormatter={compact} tick={{ fill: "var(--text-3)", fontSize: 12, fontWeight: 500 }}
+              axisLine={false} tickLine={false} width={48} />
             <Tooltip content={<MonthTooltip />} cursor={{ fill: "var(--surface-2)" }} />
             <ReferenceLine x={p.asOf.slice(0, 7)} stroke="var(--text-3)" strokeDasharray="3 3"
-              label={{ value: "เดือนนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
-            <Bar dataKey="actual" stackId="m" fill="var(--series-actual)" fillOpacity={0.75} isAnimationActive={false} />
-            <Bar dataKey="forecast" stackId="m" fill="var(--series-forecast)" fillOpacity={0.55} radius={[3, 3, 0, 0]} isAnimationActive={false}>
+              label={{ value: "เดือนนี้", position: "top", fill: "var(--text-3)", fontSize: 12 }} />
+            <Bar dataKey="actual" stackId="m" fill="var(--series-actual)" isAnimationActive={false} />
+            <Bar dataKey="forecast" stackId="m" fill="var(--series-forecast)" fillOpacity={0.35} radius={[3, 3, 0, 0]} isAnimationActive={false}>
               {rows.map((r) => <Cell key={r.month} />)}
               <ErrorBar dataKey="err" width={5} strokeWidth={1.2} stroke="var(--series-forecast)" direction="y" />
             </Bar>
@@ -400,16 +413,17 @@ function MonthlyChart({ p, view }: { p: Props; view: ViewMode }) {
 
 // --- Main ----------------------------------------------------------------------------
 
-export function SalesChart({ range, layers, view, ...props }: Props & {
+export function SalesChart({ range, layers, view, details, ...props }: Props & {
   range: RangeKey;
   layers: ReadonlySet<SalesLayer>;
   view: ViewMode;
+  details?: ReactNode;
 }) {
-  const [showAccuracy, setShowAccuracy] = useState(true);
+  const [showAccuracy, setShowAccuracy] = useState(false);
   const daily = range !== "1y";
   const notes = [
-    daily && layers.has("laterActual") && <>หลังวันนี้ เส้นทึบทับแท่งคาดการณ์ = ยอดขายจริงถึง 31 ก.ค. 2558 (ข้อมูลจบแค่นั้น)</>,
-    daily && layers.has("simulated") && <>เส้นประเหลือง = <b>ยอดขายจำลอง</b> หลังข้อมูลจริงจบ (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)</>,
+    daily && layers.has("laterActual") && <>หลังวันนี้ เส้นทึบมีจุด = ยอดขายจริงถึง 31 ก.ค. 2558 (ข้อมูลจบแค่นั้น)</>,
+    daily && layers.has("simulated") && <>เส้นเทาจุดขีด = <b>ยอดขายจำลอง</b> หลังข้อมูลจริงจบ (ไม่ใช่ข้อมูลจริง ไม่ได้ใช้วัดความแม่นยำ)</>,
     daily && range === "3m" && layers.has("promo") && <>แรเงาเทา = ตารางโปรโมชันจำลองแบบเดียวกับปีก่อน</>,
   ].filter(Boolean);
 
@@ -419,14 +433,13 @@ export function SalesChart({ range, layers, view, ...props }: Props & {
       {daily
         ? <DailyChart range={range} p={props} layers={layers} view={view} />
         : <MonthlyChart p={props} view={view} />}
+      {details}
       {notes.length > 0 && (
         <p className="muted small chart-note">
           {notes.map((n, i) => <span key={i}>{i > 0 && " · "}{n}</span>)}
         </p>
       )}
-      <button className="disclosure" aria-expanded={showAccuracy} onClick={() => setShowAccuracy((s) => !s)}>
-        <span>{showAccuracy ? "▾" : "▸"}</span> ความแม่นยำของการทาย (ทดสอบย้อนหลัง)
-      </button>
+      <Disclosure open={showAccuracy} onToggle={() => setShowAccuracy((s) => !s)}>โมเดลทายร้านนี้แม่นแค่ไหน</Disclosure>
       {showAccuracy && (
         <Accuracy range={range} forecast={props.forecast} longForecast={props.longForecast}
           seasonal={props.seasonal} results={props.results} asOf={props.asOf} />

@@ -4,13 +4,13 @@ export type Theme = "dark" | "light";
 
 const KEY = "mfp-theme";
 
-/** Saved choice, else dark (the dashboard is designed dark-first). Storage may be blocked — never throw. */
+/** Saved choice, else the OS preference, else light (light-first). Storage may be blocked — never throw. */
 export function initialTheme(): Theme {
   try {
     const saved = localStorage.getItem(KEY);
     if (saved === "dark" || saved === "light") return saved;
   } catch { /* private window / blocked storage */ }
-  return "dark";
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 export function applyTheme(theme: Theme) {
