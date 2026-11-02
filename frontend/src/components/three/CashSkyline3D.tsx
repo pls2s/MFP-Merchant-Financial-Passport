@@ -1,8 +1,9 @@
-import { ContactShadows, Html, OrbitControls, RoundedBox } from "@react-three/drei";
+import { ContactShadows, OrbitControls, RoundedBox } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
 import { money, thaiDateShort } from "../../format";
 import { useTokens } from "../../theme";
+import { Label } from "./Label";
 import { FitCamera, Sway } from "./Sway";
 
 const CAMERA: [number, number, number] = [0, 2.6, 6.6];
@@ -58,22 +59,13 @@ function Day({ d, x, scale, selected, dimmed, onSelect, colors }: {
             <ringGeometry args={[0.36, 0.44, 40]} />
             <meshBasicMaterial color={colors.bad} />
           </mesh>
-          <Html position={[0, Math.max(sH, eH) + 0.32, 0]} center distanceFactor={6} zIndexRange={[20, 0]}>
-            <span className="pill3d">⚠ {thaiDateShort(d.date)} เงินอาจไม่พอ</span>
-          </Html>
+          <Label position={[0, Math.max(sH, eH) + 0.32, 0]} className="pill3d" text={`⚠ ${thaiDateShort(d.date)} เงินอาจไม่พอ`} />
         </>
       )}
       {(hover && !selected) && !d.gap && (
-        <Html position={[0, Math.max(sH, eH) + 0.35, 0]} center distanceFactor={9} zIndexRange={[20, 0]}>
-          <div className="tip3d">
-            <strong>{thaiDateShort(d.date)}</strong>
-            <div>ขาย <b className="num">{money(d.sales)}</b></div>
-          </div>
-        </Html>
+        <Label position={[0, Math.max(sH, eH) + 0.35, 0]} className="tip3d" text={`${thaiDateShort(d.date)}\nขาย ${money(d.sales)}`} />
       )}
-      <Html position={[0, -0.02, 0.62]} center distanceFactor={10} zIndexRange={[10, 0]}>
-        <span className={`axis3d${selected ? " on" : ""}`}>{Number(d.date.slice(8))}</span>
-      </Html>
+      <Label position={[0, -0.02, 0.62]} className={`axis3d${selected ? " on" : ""}`} text={String(Number(d.date.slice(8)))} />
     </group>
   );
 }

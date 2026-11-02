@@ -1,7 +1,8 @@
-import { ContactShadows, Html, OrbitControls, RoundedBox } from "@react-three/drei";
+import { ContactShadows, OrbitControls, RoundedBox } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
 import { useTokens } from "../../theme";
+import { Label } from "./Label";
 import { FitCamera, Sway } from "./Sway";
 
 const CAMERA: [number, number, number] = [0.4, 3.2, 9.4];
@@ -54,17 +55,11 @@ function Bin({ bin, x, scale, selected, dimmed, onSelect, colors }: {
         </RoundedBox>
       )}
       {(hover || selected) && (
-        <Html position={[0, riskH + safeH + 0.35, 0]} center distanceFactor={9} zIndexRange={[20, 0]}>
-          <div className="tip3d">
-            <strong>คะแนน {bin.from}–{bin.to}</strong>
-            <div><b className="num">{bin.total.toLocaleString("en-US")}</b> ร้าน</div>
-            {bin.atRisk > 0 && <div className="bad-text">เงินอาจไม่พอ {bin.atRisk.toLocaleString("en-US")} ร้าน</div>}
-          </div>
-        </Html>
+        <Label position={[0, riskH + safeH + 0.35, 0]} className="tip3d"
+          text={[`สัญญาณการเงิน ${bin.from}–${bin.to}`, `${bin.total.toLocaleString("en-US")} ร้าน`,
+            ...(bin.atRisk > 0 ? [`เงินอาจไม่พอ ${bin.atRisk.toLocaleString("en-US")} ร้าน`] : [])].join("\n")} />
       )}
-      <Html position={[0, -0.05, 0.5]} center distanceFactor={10} zIndexRange={[10, 0]}>
-        <span className="axis3d">{bin.from}</span>
-      </Html>
+      <Label position={[0, -0.05, 0.5]} className="axis3d" text={String(bin.from)} />
     </group>
   );
 }

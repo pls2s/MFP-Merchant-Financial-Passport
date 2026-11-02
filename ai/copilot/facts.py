@@ -280,9 +280,9 @@ def load_context(merchant_id: int) -> MerchantContext:
     from ai.gap_detection.build import AS_OF, EXPENSES_PATH, FORECASTS_PATH, GAPS_PATH, past_gaps, sales_series
 
     def find(path):
-        return next(x for x in json.loads(path.read_text()) if x["merchant_id"] == merchant_id)
+        return next(x for x in json.loads(path.read_text(encoding="utf-8")) if x["merchant_id"] == merchant_id)
 
-    credit_all = json.loads(CREDIT_PATH.read_text())
+    credit_all = json.loads(CREDIT_PATH.read_text(encoding="utf-8"))
     credit = next(c for c in credit_all if c["merchant_id"] == merchant_id)
     sales = sales_series()[merchant_id]
     expenses = pd.read_parquet(EXPENSES_PATH)
@@ -297,5 +297,5 @@ def load_context(merchant_id: int) -> MerchantContext:
         score_rank=score_rank(credit["score"], [c["score"] for c in credit_all]),
         long_forecast=_store_rows(FORECASTS_DIR / "long_forecast.parquet", merchant_id),
         seasonal=_store_rows(FORECASTS_DIR / "seasonal_outlook.parquet", merchant_id),
-        long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
+        long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text(encoding="utf-8")),
     )
