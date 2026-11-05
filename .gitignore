@@ -50,5 +50,6 @@ models/favorita/*
 models/experiments/*
 !models/experiments/*.csv
 
-# AWS packaging output (infra/package.sh)
+# AWS build output and OpenTofu working dir/state (infra/setup.sh)
 infra/build/
+infra/live/
