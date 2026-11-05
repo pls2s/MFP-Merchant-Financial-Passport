@@ -1,0 +1,7 @@
+{
+  "window": 56,
+  "hidden": 128,
+  "layers": 1,
+  "dropout": 0.2,
+  "seed": 42
+}

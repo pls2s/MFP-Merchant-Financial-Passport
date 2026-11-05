@@ -30,8 +30,11 @@ data/processed/*.parquet
 # Regenerable training outputs
 models/tuning/
 models/logs/
-models/lstm/
-models/gru/
+# Keep the chosen hyperparameters (read by the model-experiments screen), not the weights
+models/lstm/*
+!models/lstm/config.json
+models/gru/*
+!models/gru/config.json
 models/lightgbm/
 models/predictions/
 models/forecasts/*
