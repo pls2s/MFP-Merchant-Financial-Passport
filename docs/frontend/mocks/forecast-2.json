@@ -1,13 +1,13 @@
 {
   "merchant_id": 2,
-  "model": "ensemble-v1",
+  "model": "ensemble-v2",
   "horizon_days": 14,
   "points": [
     {
       "date": "2015-06-20",
-      "forecast": 2757.82,
-      "lower": 2444.83,
-      "upper": 3145.61,
+      "forecast": 2777.14,
+      "lower": 2474.67,
+      "upper": 3164.35,
       "actual": 3020.0
     },
     {
@@ -19,44 +19,44 @@
     },
     {
       "date": "2015-06-22",
-      "forecast": 4353.42,
-      "lower": 3893.45,
-      "upper": 4741.05,
+      "forecast": 4368.08,
+      "lower": 3931.98,
+      "upper": 4785.27,
       "actual": 4123.0
     },
     {
       "date": "2015-06-23",
-      "forecast": 4291.19,
-      "lower": 3898.28,
-      "upper": 4747.35,
+      "forecast": 4224.59,
+      "lower": 3889.17,
+      "upper": 4683.94,
       "actual": 4094.0
     },
     {
       "date": "2015-06-24",
-      "forecast": 4355.89,
-      "lower": 3982.63,
-      "upper": 4897.33,
+      "forecast": 4237.24,
+      "lower": 3917.49,
+      "upper": 4805.43,
       "actual": 4805.0
     },
     {
       "date": "2015-06-25",
-      "forecast": 4320.27,
-      "lower": 3897.4,
-      "upper": 4838.95,
+      "forecast": 4197.36,
+      "lower": 3785.56,
+      "upper": 4771.19,
       "actual": 4022.0
     },
     {
       "date": "2015-06-26",
-      "forecast": 4242.13,
-      "lower": 3626.13,
-      "upper": 5027.34,
+      "forecast": 4193.55,
+      "lower": 3607.09,
+      "upper": 4974.51,
       "actual": 3953.0
     },
     {
       "date": "2015-06-27",
-      "forecast": 2678.88,
-      "lower": 2387.62,
-      "upper": 3145.95,
+      "forecast": 2851.99,
+      "lower": 2548.49,
+      "upper": 3352.89,
       "actual": 2404.0
     },
     {
@@ -68,44 +68,44 @@
     },
     {
       "date": "2015-06-29",
-      "forecast": 7635.38,
-      "lower": 7118.25,
-      "upper": 8722.7,
+      "forecast": 7733.6,
+      "lower": 7144.03,
+      "upper": 8716.54,
       "actual": 7961.0
     },
     {
       "date": "2015-06-30",
-      "forecast": 7126.65,
-      "lower": 6683.02,
-      "upper": 8082.97,
+      "forecast": 6819.06,
+      "lower": 6405.82,
+      "upper": 7693.4,
       "actual": 9863.0
     },
     {
       "date": "2015-07-01",
-      "forecast": 6576.69,
-      "lower": 6168.52,
-      "upper": 7462.25,
+      "forecast": 6400.65,
+      "lower": 5918.76,
+      "upper": 7219.92,
       "actual": 6431.0
     },
     {
       "date": "2015-07-02",
-      "forecast": 6172.79,
-      "lower": 5686.59,
-      "upper": 6861.38,
+      "forecast": 6023.83,
+      "lower": 5530.57,
+      "upper": 6694.63,
       "actual": 6189.0
     },
     {
       "date": "2015-07-03",
-      "forecast": 5418.6,
-      "lower": 4697.2,
-      "upper": 5797.23,
+      "forecast": 5359.46,
+      "lower": 4606.44,
+      "upper": 5713.74,
       "actual": 4838.0
     },
     {
       "date": "2015-07-04",
-      "forecast": 3121.63,
-      "lower": 2767.34,
-      "upper": 3560.58,
+      "forecast": 3005.78,
+      "lower": 2678.41,
+      "upper": 3424.88,
       "actual": 4475.0
     },
     {
@@ -117,44 +117,44 @@
     },
     {
       "date": "2015-07-06",
-      "forecast": 4628.3,
-      "lower": 4139.28,
-      "upper": 5040.4,
+      "forecast": 4712.46,
+      "lower": 4241.98,
+      "upper": 5162.54,
       "actual": 4132.0
     },
     {
       "date": "2015-07-07",
-      "forecast": 4487.09,
-      "lower": 4076.25,
-      "upper": 4964.08,
+      "forecast": 4546.09,
+      "lower": 4185.14,
+      "upper": 5040.4,
       "actual": 4313.0
     },
     {
       "date": "2015-07-08",
-      "forecast": 4650.51,
-      "lower": 4252.01,
-      "upper": 5228.58,
+      "forecast": 4593.48,
+      "lower": 4246.85,
+      "upper": 5209.44,
       "actual": 5676.0
     },
     {
       "date": "2015-07-09",
-      "forecast": 4608.21,
-      "lower": 4157.15,
-      "upper": 5161.46,
+      "forecast": 4558.8,
+      "lower": 4111.54,
+      "upper": 5182.05,
       "actual": 4082.0
     },
     {
       "date": "2015-07-10",
-      "forecast": 4331.09,
-      "lower": 3702.17,
-      "upper": 5132.76,
+      "forecast": 4260.85,
+      "lower": 3664.97,
+      "upper": 5054.34,
       "actual": 4384.0
     },
     {
       "date": "2015-07-11",
-      "forecast": 2944.31,
-      "lower": 2624.19,
-      "upper": 3457.66,
+      "forecast": 2909.66,
+      "lower": 2600.02,
+      "upper": 3420.69,
       "actual": 2677.0
     },
     {
@@ -166,44 +166,44 @@
     },
     {
       "date": "2015-07-13",
-      "forecast": 7545.87,
-      "lower": 7034.8,
-      "upper": 8620.44,
+      "forecast": 7618.33,
+      "lower": 7037.55,
+      "upper": 8586.61,
       "actual": 6874.0
     },
     {
       "date": "2015-07-14",
-      "forecast": 6664.75,
-      "lower": 6249.87,
-      "upper": 7559.09,
+      "forecast": 6639.04,
+      "lower": 6236.71,
+      "upper": 7490.3,
       "actual": 6122.0
     },
     {
       "date": "2015-07-15",
-      "forecast": 6361.87,
-      "lower": 5967.03,
-      "upper": 7218.5,
+      "forecast": 6189.33,
+      "lower": 5723.34,
+      "upper": 6981.54,
       "actual": 6406.0
     },
     {
       "date": "2015-07-16",
-      "forecast": 5899.98,
-      "lower": 5435.27,
-      "upper": 6558.14,
+      "forecast": 5784.28,
+      "lower": 5310.64,
+      "upper": 6428.4,
       "actual": 5062.0
     },
     {
       "date": "2015-07-17",
-      "forecast": 4965.11,
-      "lower": 4304.08,
-      "upper": 5312.04,
+      "forecast": 5130.49,
+      "lower": 4409.64,
+      "upper": 5469.64,
       "actual": 4518.0
     },
     {
       "date": "2015-07-18",
-      "forecast": 2702.85,
-      "lower": 2396.1,
-      "upper": 3082.92,
+      "forecast": 2645.95,
+      "lower": 2357.77,
+      "upper": 3014.88,
       "actual": 3417.0
     },
     {
@@ -215,44 +215,44 @@
     },
     {
       "date": "2015-07-20",
-      "forecast": 4132.48,
-      "lower": 3695.85,
-      "upper": 4500.43,
+      "forecast": 4157.67,
+      "lower": 3742.58,
+      "upper": 4554.76,
       "actual": 4435.0
     },
     {
       "date": "2015-07-21",
-      "forecast": 4026.3,
-      "lower": 3657.65,
-      "upper": 4454.3,
+      "forecast": 3978.81,
+      "lower": 3662.9,
+      "upper": 4411.44,
       "actual": 3836.0
     },
     {
       "date": "2015-07-22",
-      "forecast": 4125.04,
-      "lower": 3771.56,
-      "upper": 4637.79,
+      "forecast": 4051.62,
+      "lower": 3745.88,
+      "upper": 4594.92,
       "actual": 5093.0
     },
     {
       "date": "2015-07-23",
-      "forecast": 4008.04,
-      "lower": 3615.72,
-      "upper": 4489.23,
+      "forecast": 3993.83,
+      "lower": 3601.99,
+      "upper": 4539.83,
       "actual": 4108.0
     },
     {
       "date": "2015-07-24",
-      "forecast": 3777.12,
-      "lower": 3228.65,
-      "upper": 4476.26,
+      "forecast": 3772.39,
+      "lower": 3244.83,
+      "upper": 4474.92,
       "actual": 3854.0
     },
     {
       "date": "2015-07-25",
-      "forecast": 2436.65,
-      "lower": 2171.72,
-      "upper": 2861.49,
+      "forecast": 2553.78,
+      "lower": 2282.01,
+      "upper": 3002.3,
       "actual": 2512.0
     },
     {
@@ -264,43 +264,43 @@
     },
     {
       "date": "2015-07-27",
-      "forecast": 6868.14,
-      "lower": 6402.97,
-      "upper": 7846.2,
+      "forecast": 7118.73,
+      "lower": 6576.03,
+      "upper": 8023.51,
       "actual": 6627.0
     },
     {
       "date": "2015-07-28",
-      "forecast": 6475.36,
-      "lower": 6072.26,
-      "upper": 7344.28,
+      "forecast": 6391.44,
+      "lower": 6004.11,
+      "upper": 7210.95,
       "actual": 5671.0
     },
     {
       "date": "2015-07-29",
-      "forecast": 6388.33,
-      "lower": 5991.85,
-      "upper": 7248.53,
+      "forecast": 6126.92,
+      "lower": 5665.64,
+      "upper": 6911.15,
       "actual": 6402.0
     },
     {
       "date": "2015-07-30",
-      "forecast": 6069.25,
-      "lower": 5591.2,
-      "upper": 6746.28,
+      "forecast": 5884.84,
+      "lower": 5402.96,
+      "upper": 6540.16,
       "actual": 5567.0
     },
     {
       "date": "2015-07-31",
-      "forecast": 5314.45,
-      "lower": 4606.91,
-      "upper": 5685.79,
+      "forecast": 5336.35,
+      "lower": 4586.57,
+      "upper": 5689.11,
       "actual": 6064.0
     }
   ],
   "metrics": {
-    "wape": 0.0954,
-    "mae": 471.7577,
-    "rmse": 683.9329
+    "wape": 0.1014,
+    "mae": 501.4466,
+    "rmse": 734.3436
   }
 }

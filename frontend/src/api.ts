@@ -8,9 +8,14 @@ import type {
   Forecast,
   LongForecast,
   Merchant,
+  ModelExperiments,
   ModelResult,
   SalesHistory,
   SeasonalOutlook,
+  ShortfallRisk,
+  ColumnMapping,
+  UploadForecast,
+  UploadInspect,
 } from "./types";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -31,8 +36,29 @@ async function mock<T>(name: string): Promise<T> {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, init);
   if (res.status === 404) throw new NotFoundError(path);
+  if (res.status === 413 || res.status === 422) {
+    // the backend explains bad uploads in Thai
+    const body = await res.json().catch(() => null);
+    throw new Error(typeof body?.detail === "string" ? body.detail : `${res.status} ${path}`);
+  }
   if (!res.ok) throw new Error(`${res.status} ${path}`);
   return res.json() as Promise<T>;
+}
+
+/** Uploads always go to the backend, also in mock mode: an uploaded file has no mock, and the
+ *  rest of the app keeps using mocks. */
+async function postFile<T>(path: string, file: File, mapping?: Partial<ColumnMapping>): Promise<T> {
+  const body = new FormData();
+  body.append("file", file);
+  for (const [role, col] of Object.entries(mapping ?? {})) if (col) body.append(`${role}_column`, col);
+  try {
+    return await request<T>(path, { method: "POST", body });
+  } catch (e) {
+    if (e instanceof TypeError) {  // fetch could not reach the server
+      throw new Error(`ต่อ backend ไม่ได้ (${BASE}) — เปิดด้วย uvicorn backend.app.main:app --port 8000 แล้วลองใหม่`);
+    }
+    throw e;
+  }
 }
 
 export const isMock = USE_MOCK;
@@ -65,6 +91,9 @@ export const api = {
       ? mock(`cash-flow-gaps-${id}`)
       : request(`/api/v1/merchants/${id}/cash-flow-gaps?min_buffer=${minBuffer}`),
 
+  shortfallRisk: (id: number): Promise<ShortfallRisk> =>
+    USE_MOCK ? mock(`shortfall-risk-${id}`) : request(`/api/v1/merchants/${id}/shortfall-risk`),
+
   creditSignal: (id: number): Promise<CreditSignal> =>
     USE_MOCK ? mock(`credit-signal-${id}`) : request(`/api/v1/merchants/${id}/credit-signal`),
 
@@ -80,6 +109,20 @@ export const api = {
     });
   },
 
+  uploadSample: (): Promise<UploadForecast> =>
+    USE_MOCK ? mock("upload-sample") : request("/api/v1/upload/sample"),
+
+  /** Read the file and report what was read — no model. */
+  inspectUpload: (file: File, mapping?: Partial<ColumnMapping>): Promise<UploadInspect> =>
+    postFile("/api/v1/upload/inspect", file, mapping),
+
+  /** Runs the model live on the file with the confirmed columns. */
+  upload: (file: File, mapping?: Partial<ColumnMapping>): Promise<UploadForecast> =>
+    postFile("/api/v1/upload", file, mapping),
+
   modelResults: (): Promise<ModelResult[]> =>
     USE_MOCK ? mock("model-results") : request("/api/v1/model-results"),
+
+  modelExperiments: (): Promise<ModelExperiments> =>
+    USE_MOCK ? mock("model-experiments") : request("/api/v1/model-experiments"),
 };

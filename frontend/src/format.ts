@@ -41,6 +41,12 @@ export function money(x: number): string {
   return Math.round(x).toLocaleString("en-US");
 }
 
+/** Chart axes only: 12000 → "12k", 1500 → "1.5k". Tooltips keep the full amount. */
+export function compact(x: number): string {
+  if (Math.abs(x) < 1000) return money(x);
+  return `${x < 0 ? "−" : ""}${+(Math.abs(x) / 1000).toFixed(1)}k`;
+}
+
 export function percent(x: number, digits = 2): string {
   return `${(x * 100).toFixed(digits)}%`;
 }
@@ -48,6 +54,11 @@ export function percent(x: number, digits = 2): string {
 /** ISO date `n` days after `iso` (negative for before). */
 export function addDays(iso: string, n: number): string {
   return new Date(Date.parse(`${iso}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
+}
+
+/** Whole days from `from` to `to`. */
+export function daysBetween(from: string, to: string): number {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
 }
 
 export function daysInMonth(ym: string): number {
@@ -78,4 +89,16 @@ export function pillRows(dates: string[], allDates: string[], minGap: number): n
     rows.push(allDates.indexOf(d) - prev < minGap ? (rows[i - 1] ?? 0) + 1 : 0);
   });
   return rows;
+}
+
+/** Shortfall probability for people: whole percent, never a bare 0% or 100% from 200 simulated paths. */
+export function oddsText(p: number): string {
+  if (p < 0.01) return "ต่ำกว่า 1%";
+  if (p > 0.99) return "มากกว่า 99%";
+  return `${Math.round(p * 100)}%`;
+}
+
+/** Probability of a shortfall on `date` from a shortfall-risk response, if that day is in it. */
+export function oddsOn(risk: { days: { date: string; p_shortfall: number }[] }, date: string): number | undefined {
+  return risk.days.find((d) => d.date === date)?.p_shortfall;
 }

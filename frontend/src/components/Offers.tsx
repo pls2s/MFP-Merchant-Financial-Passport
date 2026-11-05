@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { money, thaiDate } from "../format";
 import type { Gap } from "../types";
 import { Card, SampleBadge } from "./ui";
@@ -10,6 +11,7 @@ const OFFERS = [
 ];
 
 export function Offers({ gaps }: { gaps: Gap[] }) {
+  const [opened, setOpened] = useState<string | null>(null);
   if (!gaps.length) return null;
   const first = gaps[0];
   return (
@@ -21,7 +23,11 @@ export function Offers({ gaps }: { gaps: Gap[] }) {
         {OFFERS.map((o) => (
           <div key={o.name} className="offer">
             <strong>{o.name}</strong>
-            <div className="muted small">{o.detail}</div>
+            {opened === o.name && <div className="muted small">{o.detail}</div>}
+            <button className="btn ghost" aria-expanded={opened === o.name}
+              onClick={() => setOpened(opened === o.name ? null : o.name)}>
+              {opened === o.name ? "ซ่อนข้อมูล" : "ดูข้อมูลเพิ่มเติม"}
+            </button>
           </div>
         ))}
       </div>

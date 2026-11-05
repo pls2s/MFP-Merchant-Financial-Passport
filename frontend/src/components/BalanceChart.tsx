@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Bar,
   CartesianGrid,
@@ -10,11 +11,11 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { addDays, money, monthStarts, pillRows, thaiDate, thaiDateShort, thaiMonthShort, thaiWeekday } from "../format";
+import { addDays, compact, money, monthStarts, pillRows, thaiDate, thaiDateShort, thaiMonthShort, thaiWeekday } from "../format";
 import type { BalanceHorizon, CashBalance, Gap, LongGap } from "../types";
 import { GapPill } from "./GapMarker";
 import type { BalanceLayer, RangeKey } from "./chartOptions";
-import { DataTable, Swatch, type ViewMode } from "./ui";
+import { DataTable, LegendChip, Swatch, type ViewMode } from "./ui";
 
 // Same ranges as the sales chart: days back from today; the projection runs to the end of each horizon.
 const BACK: Record<RangeKey, number> = { "4w": 28, "3m": 91, "1y": Infinity };
@@ -27,6 +28,8 @@ const SOURCE: Record<BalanceHorizon, string> = {
 };
 
 const isFar = (h: BalanceHorizon) => h === "3m" || h === "1y";
+
+type BalanceSeries = "past" | "projected" | "far";
 
 interface Row {
   date: string;
@@ -85,6 +88,12 @@ export function BalanceChart({ balance, asOf, gaps, range, layers, view }: {
   layers: ReadonlySet<BalanceLayer>;
   view: ViewMode;
 }) {
+  const [hidden, setHidden] = useState<ReadonlySet<BalanceSeries>>(new Set());
+  const toggle = (k: BalanceSeries) => setHidden((h) => {
+    const next = new Set(h);
+    if (!next.delete(k)) next.add(k);
+    return next;
+  });
   const back = BACK[range];
   const from = Number.isFinite(back) ? addDays(asOf, -back + 1) : "";
   const shortEnd = addDays(asOf, 14);
@@ -162,14 +171,14 @@ export function BalanceChart({ balance, asOf, gaps, range, layers, view }: {
   return (
     <div>
       <div className="chart-legend">
-        <span><Swatch kind="line" color="var(--series-balance)" />ยอดเงินคงเหลือ</span>
-        <span><Swatch kind="line" color="var(--series-balance)" dashed />คาดการณ์ 14 วัน</span>
-        {monthAxis && <span><Swatch kind="line" color="var(--series-balance)" dashed opacity={0.45} />คาดการณ์ไกลกว่า 14 วัน (แม่นน้อยลง)</span>}
+        <LegendChip on={!hidden.has("past")} onClick={() => toggle("past")}><Swatch kind="line" color="var(--series-balance)" />ยอดเงินคงเหลือ</LegendChip>
+        <LegendChip on={!hidden.has("projected")} onClick={() => toggle("projected")}><Swatch kind="line" color="var(--series-balance)" dashed />คาดการณ์ 14 วัน</LegendChip>
+        {monthAxis && <LegendChip on={!hidden.has("far")} onClick={() => toggle("far")}><Swatch kind="line" color="var(--series-balance)" dashed opacity={0.45} />คาดการณ์ไกลกว่า 14 วัน (แม่นน้อยลง)</LegendChip>}
         {showExpenses && <span><Swatch kind="bar" color="var(--series-expense)" />รายจ่ายที่ครบกำหนดวันนั้น</span>}
         {pastGaps.length > 0 && <span><Swatch kind="line" color="var(--warn)" dashed />วันที่เงินเคยไม่พอ</span>}
         <span><Swatch kind="line" color="var(--bad)" />⚠ วันที่เงินอาจไม่พอ · ระดับ 0</span>
       </div>
-      <div style={{ width: "100%", height: 320 }}>
+      <div style={{ width: "100%", height: 320 }} role="img" aria-label={`กราฟยอดเงินคงเหลือ (ข้อมูลจำลอง) ต่ำสุดใน 14 วันข้างหน้า ${money(lowest.balance)} วันที่ ${thaiDate(lowest.date)}`}>
         <ResponsiveContainer>
           <ComposedChart data={rows} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}>
             <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -177,11 +186,11 @@ export function BalanceChart({ balance, asOf, gaps, range, layers, view }: {
               <ReferenceArea x1={addDays(shortEnd, 1)} x2={end} fill="var(--text-3)" fillOpacity={0.07} stroke="none" ifOverflow="hidden"
                 label={{ value: "ไกลกว่า 14 วัน · แม่นน้อยลง", position: "insideBottomRight", fill: "var(--text-3)", fontSize: 11 }} />
             )}
-            <XAxis dataKey="date" tickFormatter={monthAxis ? thaiMonthShort : thaiDateShort} tick={{ fill: "var(--text-2)", fontSize: 12 }}
+            <XAxis dataKey="date" tickFormatter={monthAxis ? thaiMonthShort : thaiDateShort} tick={{ fill: "var(--text-3)", fontSize: 12, fontWeight: 500 }}
               ticks={monthAxis ? monthStarts(dates) : undefined}
               axisLine={{ stroke: "var(--border)" }} tickLine={false} minTickGap={monthAxis ? 8 : 24} />
-            <YAxis tickFormatter={(v: number) => money(v)} tick={{ fill: "var(--text-2)", fontSize: 12 }}
-              axisLine={false} tickLine={false} width={64}
+            <YAxis tickFormatter={compact} tick={{ fill: "var(--text-3)", fontSize: 12, fontWeight: 500 }}
+              axisLine={false} tickLine={false} width={48}
               domain={[yTicks[0], yTicks[yTicks.length - 1]]} ticks={yTicks} />
             <Tooltip content={<BalanceTooltip />} />
             {showExpenses && (
@@ -200,10 +209,10 @@ export function BalanceChart({ balance, asOf, gaps, range, layers, view }: {
                 label={{ content: <GapPill gap={worstLong} row={gaps.length ? Math.max(...pills) + 1 : 0} outline flip={dates.indexOf(worstLong.date) > dates.length * 0.5} /> }} />
             )}
             <ReferenceLine x={asOf} stroke="var(--text-3)" strokeDasharray="3 3"
-              label={{ value: "วันนี้", position: "top", fill: "var(--text-2)", fontSize: 12 }} />
-            <Line dataKey="past" stroke="var(--series-balance)" strokeWidth={monthAxis ? 1.5 : 2} dot={NegativeDot} isAnimationActive={false} />
-            <Line dataKey="projected" stroke="var(--series-balance)" strokeWidth={2} strokeDasharray="6 4" dot={NegativeDot} isAnimationActive={false} />
-            <Line dataKey="far" stroke="var(--series-balance)" strokeOpacity={0.45} strokeWidth={1.5} strokeDasharray="6 4"
+              label={{ value: "วันนี้", position: "top", fill: "var(--text-3)", fontSize: 12 }} />
+            <Line dataKey="past" hide={hidden.has("past")} stroke="var(--series-balance)" strokeWidth={monthAxis ? 1.5 : 2} dot={NegativeDot} isAnimationActive={false} />
+            <Line dataKey="projected" hide={hidden.has("projected")} stroke="var(--series-balance)" strokeWidth={2} strokeDasharray="6 4" dot={NegativeDot} isAnimationActive={false} />
+            <Line dataKey="far" hide={hidden.has("far")} stroke="var(--series-balance)" strokeOpacity={0.45} strokeWidth={1.5} strokeDasharray="6 4"
               dot={NegativeDot} isAnimationActive={false} />
           </ComposedChart>
         </ResponsiveContainer>
