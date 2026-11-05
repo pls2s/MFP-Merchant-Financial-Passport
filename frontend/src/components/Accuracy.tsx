@@ -9,18 +9,18 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { money, percent, thaiDate, thaiDateShort, thaiYearMonth, thaiYearMonthLong } from "../format";
+import { compact, money, percent, thaiDate, thaiDateShort, thaiYearMonth, thaiYearMonthLong } from "../format";
 import type { Forecast, LongForecast, ModelResult, SeasonalOutlook } from "../types";
 import { Swatch } from "./ui";
 
 /**
  * "How accurate is it?" — kept out of the main chart. Each range shows its own backtest:
- * what the method forecast before the actual was known (orange) against real sales (black).
+ * what the method forecast before the actual was known (orange) against real sales (blue).
  */
 
 type Range = "4w" | "3m" | "1y";
 
-const axis = { tick: { fill: "var(--text-2)", fontSize: 11 }, axisLine: false, tickLine: false } as const;
+const axis = { tick: { fill: "var(--text-3)", fontSize: 11, fontWeight: 500 }, axisLine: false, tickLine: false } as const;
 
 function MiniTooltip({ active, payload, label, monthly }: {
   active?: boolean; payload?: { payload: { actual: number | null; predicted: number | null } }[]; label?: string; monthly?: boolean;
@@ -45,7 +45,7 @@ function MiniLines({ data }: { data: { date: string; actual: number | null; pred
         <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
           <CartesianGrid stroke="var(--border)" vertical={false} />
           <XAxis dataKey="date" tickFormatter={thaiDateShort} minTickGap={28} {...axis} />
-          <YAxis tickFormatter={(v: number) => money(v)} width={56} {...axis} />
+          <YAxis tickFormatter={compact} width={44} {...axis} />
           <Tooltip content={<MiniTooltip />} />
           <Line dataKey="actual" stroke="var(--series-actual)" strokeWidth={1.6} dot={false} connectNulls isAnimationActive={false} />
           <Line dataKey="predicted" stroke="var(--series-predicted)" strokeWidth={1.6} dot={false} connectNulls isAnimationActive={false} />
@@ -96,7 +96,7 @@ function FourWeeks({ forecast, asOf, results }: { forecast: Forecast; asOf: stri
       <Legend />
       <MiniLines data={data} />
       <div className="accuracy-grid">
-        <Stat label="คลาดเคลื่อนเฉลี่ย (WAPE)" value={percent(wape, 1)}
+        <Stat label="คลาดเคลื่อนเฉลี่ย" value={percent(wape, 1)}
           sub={allStores ? `เฉลี่ยทุกร้าน ${percent(allStores.wape, 1)}` : undefined} />
         <Stat label="วันที่ทายคลาดไม่เกิน 10%" value={`${within10}/${days.length} วัน`}
           sub={`${percent(within10 / days.length, 0)} ของวันที่ร้านเปิด`} />
@@ -158,7 +158,7 @@ function OneYear({ seasonal }: { seasonal: SeasonalOutlook }) {
           <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }} barGap={2}>
             <CartesianGrid stroke="var(--border)" vertical={false} />
             <XAxis dataKey="date" tickFormatter={thaiYearMonth} interval={0} {...axis} />
-            <YAxis tickFormatter={(v: number) => money(v)} width={56} {...axis} />
+            <YAxis tickFormatter={compact} width={44} {...axis} />
             <Tooltip content={<MiniTooltip monthly />} cursor={{ fill: "var(--surface-2)" }} />
             <Bar dataKey="actual" fill="var(--series-actual)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
             <Bar dataKey="predicted" fill="var(--series-predicted)" radius={[3, 3, 0, 0]} isAnimationActive={false} />

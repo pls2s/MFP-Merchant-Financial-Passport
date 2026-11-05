@@ -26,7 +26,7 @@ def build() -> list[dict]:
     history = pd.read_parquet(PROCESSED_PATH, columns=["store", "date", "sales", "open", "is_missing"])
     history = history[(history["is_missing"] == 0) & (history["date"] <= AS_OF)]
     expenses = pd.read_parquet(EXPENSES_PATH)
-    gaps = {g["merchant_id"]: g for g in json.loads(GAPS_PATH.read_text())}
+    gaps = {g["merchant_id"]: g for g in json.loads(GAPS_PATH.read_text(encoding="utf-8"))}
     series = sales_series()
 
     months = (expenses["due_date"].max() - expenses["due_date"].min()).days / 30
@@ -50,7 +50,7 @@ def build() -> list[dict]:
 
 def main() -> None:
     signals = build()
-    CREDIT_PATH.write_text(json.dumps(signals, ensure_ascii=False))
+    CREDIT_PATH.write_text(json.dumps(signals, ensure_ascii=False), encoding="utf-8")
     scores = pd.Series([s["score"] for s in signals])
     print(f"Saved credit signal for {len(signals)} stores → {CREDIT_PATH}")
     print(f"Score: mean {scores.mean():.0f}, min {scores.min()}, median {scores.median():.0f}, max {scores.max()}")

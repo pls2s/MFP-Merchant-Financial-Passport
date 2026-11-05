@@ -118,7 +118,7 @@ def main() -> None:
     forecasts = export(args.model)
     FORECASTS_DIR.mkdir(parents=True, exist_ok=True)
     path = FORECASTS_DIR / f"{args.model}.json"
-    path.write_text(json.dumps(forecasts, ensure_ascii=False))
+    path.write_text(json.dumps(forecasts, ensure_ascii=False), encoding="utf-8")
     print(f"Saved {len(forecasts)} stores → {path}")
 
     history = export_history()

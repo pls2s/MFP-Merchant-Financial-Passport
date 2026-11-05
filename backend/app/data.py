@@ -27,7 +27,7 @@ FAVORITA_RESULTS_PATH = ROSSMANN.models_dir / "favorita" / "results.csv"
 
 
 def _by_merchant(path) -> dict[int, dict]:
-    return {obj["merchant_id"]: obj for obj in json.loads(path.read_text())}
+    return {obj["merchant_id"]: obj for obj in json.loads(path.read_text(encoding="utf-8"))}
 
 
 def _by_store(df: pd.DataFrame) -> dict[int, pd.DataFrame]:
@@ -58,14 +58,14 @@ def _experiments() -> dict:
 
 def _shortfall() -> dict[int, dict]:
     """Shortfall probabilities (ai.gap_detection.shortfall_risk) with the Test-period check attached."""
-    cal = json.loads(CALIBRATION_PATH.read_text())
+    cal = json.loads(CALIBRATION_PATH.read_text(encoding="utf-8"))
     day = cal["shortfall_day"]
     check = {
         "origins": cal["origins"],
         "sales_interval_80_coverage": cal["sales_interval_80"]["coverage"],
         **{k: day[k] for k in ("store_days", "events", "brier_probability", "brier_yes_no_warning", "brier_base_rate")},
     }
-    return {o["merchant_id"]: {**o, "method": cal["method"], "check": check} for o in json.loads(RISK_PATH.read_text())}
+    return {o["merchant_id"]: {**o, "method": cal["method"], "check": check} for o in json.loads(RISK_PATH.read_text(encoding="utf-8"))}
 
 
 @dataclass
@@ -102,11 +102,11 @@ class DataStore:
             long_back=_by_store(pd.read_parquet(FORECASTS_DIR / "long_backtest.parquet")),
             seasonal_months=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_outlook.parquet")),
             seasonal_back=_by_store(pd.read_parquet(FORECASTS_DIR / "seasonal_backtest.parquet")),
-            long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text()),
+            long_metrics=json.loads((FORECASTS_DIR / "long_range_metrics.json").read_text(encoding="utf-8")),
             synthetic_sales=_by_store(pd.read_parquet(FORECASTS_DIR / "synthetic_sales.parquet")),
             experiments=_experiments(),
             shortfall=_shortfall(),
-            upload_sample=json.loads(UPLOAD_SAMPLE_PATH.read_text()) if UPLOAD_SAMPLE_PATH.exists() else None,
+            upload_sample=json.loads(UPLOAD_SAMPLE_PATH.read_text(encoding="utf-8")) if UPLOAD_SAMPLE_PATH.exists() else None,
         )
 
     def merchants(self) -> list[dict]:

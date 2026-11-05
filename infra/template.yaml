@@ -1,0 +1,400 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  MFP (Merchant Financial Passport) on AWS. The dashboard is served from S3 through CloudFront,
+  the FastAPI backend runs on Lambda behind API Gateway, uploads are processed by an S3-triggered
+  Lambda, and a daily EventBridge rule sends cash-flow gap alerts through SNS.
+  All expenses, balances and alerts are synthetic demo data.
+
+# Code bucket layout (built by infra/package.sh), under CodePrefix:
+#   app.zip       backend/ + ai/ packages and their light dependencies (pandas comes from the layer)
+#   web/          frontend/dist, built with VITE_USE_MOCK=false and an empty VITE_API_BASE_URL
+#   artifacts/    models/forecasts/, models/results.csv, models/experiments/*.csv, data/synthetic/ ...
+# The Seed custom resource copies web/ and artifacts/ into this stack's buckets on create and
+# empties the buckets on delete, so the stack deletes cleanly.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: mfp
+    AllowedPattern: "^[a-z0-9-]{3,20}$"
+    Description: Lowercase prefix for bucket names (bucket names must be lowercase and globally unique).
+  RoleName:
+    Type: String
+    Default: LabRole
+    Description: Existing IAM role for every Lambda. AWS Academy Learner Lab cannot create roles, so use LabRole.
+  AlertEmail:
+    Type: String
+    AllowedPattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    Description: Email that receives the cash-flow gap alerts (confirm the SNS subscription email).
+  CodeBucket:
+    Type: String
+    Description: Bucket that holds app.zip, web/ and artifacts/ (same region as this stack).
+  CodePrefix:
+    Type: String
+    Default: mfp/v1/
+    AllowedPattern: "^([a-zA-Z0-9._-]+/)*$"
+    Description: Folder inside CodeBucket, ending in "/". Change it to redeploy new code.
+  PandasLayerArn:
+    Type: String
+    Default: arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python311:36
+    Description: AWS SDK for pandas layer (pandas, numpy, pyarrow) for Python 3.11 in this region.
+  LlmApiKey:
+    Type: String
+    Default: ""
+    NoEcho: true
+    Description: Optional Typhoon API key for the copilot. Empty means the template fallback answers.
+
+Conditions:
+  HasLlmKey: !Not [!Equals [!Ref LlmApiKey, ""]]
+
+Resources:
+  # ---------- Storage ----------
+  WebBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${ProjectName}-${AWS::AccountId}-web"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  WebBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: CloudFrontReadOnly
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub "${WebBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution}"
+
+  # Holds artifacts/ (read by the API and alerts) and uploads/ (written by the browser, read by the worker).
+  # Its name is built from parameters, not !Ref, so the S3 -> Lambda notification has no circular dependency.
+  DataBucket:
+    Type: AWS::S3::Bucket
+    DependsOn: UploadInvokePermission
+    Properties:
+      BucketName: !Sub "${ProjectName}-${AWS::AccountId}-data"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods: [PUT]
+            AllowedOrigins: ["*"]
+            AllowedHeaders: ["*"]
+            MaxAge: 3000
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireUploads
+            Status: Enabled
+            Prefix: uploads/
+            ExpirationInDays: 7
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Function: !GetAtt UploadFunction.Arn
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: uploads/
+
+  # One table, two kinds of item: pk = "upload#<id>" (processed upload) or "alert#<store>#<date>" (alert sent).
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expires_at
+        Enabled: true
+
+  AlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: MFP cash-flow alerts (synthetic data)
+
+  AlertSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref AlertTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  # ---------- Compute ----------
+  ApiFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: Seed
+    Properties:
+      Description: FastAPI backend (backend.app.main) through Mangum
+      Runtime: python3.11
+      Handler: backend.lambda_handler.handler
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${RoleName}"
+      Code:
+        S3Bucket: !Ref CodeBucket
+        S3Key: !Sub "${CodePrefix}app.zip"
+      Layers: [!Ref PandasLayerArn]
+      MemorySize: 1024
+      Timeout: 30
+      Environment:
+        Variables:
+          MFP_ROOT: /tmp/mfp
+          ARTIFACT_BUCKET: !Sub "${ProjectName}-${AWS::AccountId}-data"
+          ARTIFACT_PREFIX: artifacts/
+          UPLOAD_BUCKET: !Sub "${ProjectName}-${AWS::AccountId}-data"
+          TABLE_NAME: !Ref Table
+          LLM_API_KEY: !If [HasLlmKey, !Ref LlmApiKey, !Ref AWS::NoValue]
+
+  UploadFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Reads an uploaded sales file, aggregates daily sales, writes the result to DynamoDB
+      Runtime: python3.11
+      Handler: backend.workers.upload.handler
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${RoleName}"
+      Code:
+        S3Bucket: !Ref CodeBucket
+        S3Key: !Sub "${CodePrefix}app.zip"
+      Layers: [!Ref PandasLayerArn]
+      MemorySize: 1024
+      Timeout: 120
+      Environment:
+        Variables:
+          MFP_ROOT: /tmp/mfp
+          TABLE_NAME: !Ref Table
+
+  AlertsFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: Seed
+    Properties:
+      Description: Daily check of the demo stores' cash-flow gaps; publishes alerts to SNS
+      Runtime: python3.11
+      Handler: backend.workers.alerts.handler
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${RoleName}"
+      Code:
+        S3Bucket: !Ref CodeBucket
+        S3Key: !Sub "${CodePrefix}app.zip"
+      Layers: [!Ref PandasLayerArn]
+      MemorySize: 512
+      Timeout: 60
+      Environment:
+        Variables:
+          MFP_ROOT: /tmp/mfp
+          ARTIFACT_BUCKET: !Sub "${ProjectName}-${AWS::AccountId}-data"
+          ARTIFACT_PREFIX: artifacts/
+          TABLE_NAME: !Ref Table
+          TOPIC_ARN: !Ref AlertTopic
+
+  UploadInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref UploadFunction
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Sub "arn:aws:s3:::${ProjectName}-${AWS::AccountId}-data"
+
+  # 08:00 Bangkok time = 01:00 UTC. A Rule needs no IAM role, unlike EventBridge Scheduler.
+  DailyAlertRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Run the MFP cash-flow gap check every morning
+      ScheduleExpression: cron(0 1 * * ? *)
+      State: ENABLED
+      Targets:
+        - Id: alerts
+          Arn: !GetAtt AlertsFunction.Arn
+
+  AlertsInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AlertsFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt DailyAlertRule.Arn
+
+  # ---------- API ----------
+  # Quick-create HTTP API: one $default route and stage that proxy every request to ApiFunction.
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub "${ProjectName}-api"
+      ProtocolType: HTTP
+      Target: !GetAtt ApiFunction.Arn
+
+  ApiInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ApiFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*"
+
+  # ---------- CDN ----------
+  WebOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${ProjectName}-${AWS::AccountId}-web-oac"
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  # The app uses BrowserRouter (/merchants/1, /upload ...). Paths without a file extension get index.html.
+  # Done in a function on the default behavior only, so API 404s under /api/* reach the frontend unchanged.
+  SpaRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub "${ProjectName}-spa-rewrite"
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Serve index.html for client-side routes
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          if (!request.uri.includes('.')) {
+            request.uri = '/index.html';
+          }
+          return request;
+        }
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: MFP dashboard and API
+        Enabled: true
+        DefaultRootObject: index.html
+        HttpVersion: http2
+        PriceClass: PriceClass_100
+        Origins:
+          - Id: web
+            DomainName: !GetAtt WebBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt WebOriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+          - Id: api
+            DomainName: !Sub "${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols: [TLSv1.2]
+        DefaultCacheBehavior:
+          TargetOriginId: web
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # Managed-CachingOptimized
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt SpaRewriteFunction.FunctionMetadata.FunctionARN
+        CacheBehaviors:
+          - PathPattern: /api/*
+            TargetOriginId: api
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # Managed-CachingDisabled
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac  # Managed-AllViewerExceptHostHeader
+
+  # ---------- Seed: copy web/ and artifacts/ in on create, empty the buckets on delete ----------
+  SeedFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Custom resource that copies the prebuilt site and artifacts into the stack's buckets
+      Runtime: python3.11
+      Handler: index.handler
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${RoleName}"
+      MemorySize: 256
+      Timeout: 600
+      Code:
+        ZipFile: |
+          import boto3
+          import cfnresponse
+
+          s3 = boto3.client("s3")
+
+
+          def keys(bucket, prefix):
+              for page in s3.get_paginator("list_objects_v2").paginate(Bucket=bucket, Prefix=prefix):
+                  for obj in page.get("Contents", []):
+                      yield obj["Key"]
+
+
+          def copy(src_bucket, src_prefix, dst_bucket, dst_prefix):
+              n = 0
+              for key in keys(src_bucket, src_prefix):
+                  if key.endswith("/"):
+                      continue
+                  dst = dst_prefix + key[len(src_prefix):]
+                  s3.copy_object(Bucket=dst_bucket, Key=dst, CopySource={"Bucket": src_bucket, "Key": key})
+                  n += 1
+              return n
+
+
+          def empty(bucket):
+              batch = [{"Key": k} for k in keys(bucket, "")]
+              for i in range(0, len(batch), 1000):
+                  s3.delete_objects(Bucket=bucket, Delete={"Objects": batch[i:i + 1000]})
+
+
+          def handler(event, context):
+              p = event["ResourceProperties"]
+              try:
+                  if event["RequestType"] in ("Create", "Update"):
+                      web = copy(p["CodeBucket"], p["CodePrefix"] + "web/", p["WebBucket"], "")
+                      art = copy(p["CodeBucket"], p["CodePrefix"] + "artifacts/", p["DataBucket"], "artifacts/")
+                      if web == 0 or art == 0:
+                          raise RuntimeError(f"Nothing to copy from s3://{p['CodeBucket']}/{p['CodePrefix']} "
+                                             f"(web files: {web}, artifact files: {art}). Check CodeBucket and CodePrefix.")
+                      data = {"WebFiles": web, "ArtifactFiles": art}
+                  else:
+                      empty(p["WebBucket"])
+                      empty(p["DataBucket"])
+                      data = {}
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, data, "seed")
+              except Exception as e:
+                  print(e)
+                  if event["RequestType"] == "Delete":
+                      cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, "seed")  # never block stack deletion
+                  else:
+                      cfnresponse.send(event, context, cfnresponse.FAILED, {}, "seed", reason=str(e)[:200])
+
+  Seed:
+    Type: Custom::Seed
+    Properties:
+      ServiceToken: !GetAtt SeedFunction.Arn
+      CodeBucket: !Ref CodeBucket
+      CodePrefix: !Ref CodePrefix
+      WebBucket: !Ref WebBucket
+      DataBucket: !Ref DataBucket
+
+Outputs:
+  WebsiteUrl:
+    Description: Open this to use the dashboard
+    Value: !Sub "https://${Distribution.DomainName}"
+  ApiUrl:
+    Description: API Gateway URL (the dashboard reaches it through CloudFront at /api/*)
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  DataBucketName:
+    Description: Upload a sales file under uploads/ here to trigger the upload Lambda
+    Value: !Ref DataBucket
+  TableName:
+    Description: DynamoDB table with processed uploads and sent alerts
+    Value: !Ref Table
+  AlertTopicArn:
+    Description: SNS topic for cash-flow gap alerts
+    Value: !Ref AlertTopic

@@ -520,7 +520,7 @@ def train_rnn(df: pd.DataFrame, cell: str, window: int, hidden: int, layers: int
     model.save(out_dir / "model.keras")
     (out_dir / "config.json").write_text(json.dumps(
         {"window": window, "hidden": hidden, "layers": layers, "dropout": dropout, "seed": seed, **opts}, indent=2
-    ))
+    ), encoding="utf-8")
     return predict_blocks(model, arrays, window)
 
 

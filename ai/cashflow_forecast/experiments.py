@@ -47,7 +47,7 @@ SEEDS = ENSEMBLE_SEEDS
 
 def chosen_config(cell: str) -> dict:
     """Window / hidden / layers chosen by `train --tune` on Validation."""
-    return json.loads((ROSSMANN.models_dir / cell / "config.json").read_text())
+    return json.loads((ROSSMANN.models_dir / cell / "config.json").read_text(encoding="utf-8"))
 
 
 def config_name(cell: str) -> str:
@@ -176,7 +176,7 @@ EPOCH_LINE = re.compile(r"loss: (?P<loss>[\d.]+) - val_wape: (?P<val_wape>[\d.]+
 
 def learning_curves(log_dir=ROSSMANN.models_dir / "logs") -> pd.DataFrame:
     rows, config = [], None
-    lines = [line for path in sorted(log_dir.glob("tune*.log")) for line in path.read_text().splitlines()]
+    lines = [line for path in sorted(log_dir.glob("tune*.log")) for line in path.read_text(encoding="utf-8").splitlines()]
     for line in lines:
         if line.startswith("=== tune "):
             config, epoch = line.removeprefix("=== tune ").strip(" ="), 0

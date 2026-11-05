@@ -1,0 +1,8 @@
+# Packed into app.zip by infra/package.sh. pandas, numpy and pyarrow come from the
+# AWS SDK for pandas layer (PandasLayerArn in template.yaml), and boto3 from the Lambda runtime.
+fastapi>=0.115
+pydantic>=2.7
+mangum>=0.17
+requests>=2.31          # copilot → Typhoon API
+python-multipart>=0.0.9 # file upload endpoints
+openpyxl>=3.1           # .xlsx uploads

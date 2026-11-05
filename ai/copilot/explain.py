@@ -359,7 +359,7 @@ def load_dotenv() -> None:
     """Minimal .env reader for the CLI (the backend sets its own environment)."""
     path = ROOT / ".env"
     if path.exists():
-        for line in path.read_text().splitlines():
+        for line in path.read_text(encoding="utf-8").splitlines():
             if "=" in line and not line.lstrip().startswith("#"):
                 k, v = line.split("=", 1)
                 os.environ.setdefault(k.strip(), v.strip())

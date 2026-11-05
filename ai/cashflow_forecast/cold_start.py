@@ -124,7 +124,7 @@ def cold_models() -> list[tuple]:
         w = emb.get_weights()[0].copy()
         w[0] = w.mean(axis=0)
         emb.set_weights([w])
-        models.append((model, json.loads((m["model_dir"] / "config.json").read_text())["window"]))
+        models.append((model, json.loads((m["model_dir"] / "config.json").read_text(encoding="utf-8"))["window"]))
     return models
 
 
@@ -262,7 +262,7 @@ def main() -> None:
     args = parser.parse_args()
     if args.rossmann_check:
         out = rossmann_check()
-        CHECK_PATH.write_text(json.dumps(out, indent=1) + "\n")
+        CHECK_PATH.write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
         print(json.dumps(out, indent=1))
         return
     path = args.path or UCI_PATH
@@ -270,7 +270,7 @@ def main() -> None:
     out = run(daily, path.name if args.path else "UCI Online Retail (ตัวอย่าง)", "precomputed", report)
     print(json.dumps({k: v for k, v in out.items() if k not in ("history", "forecast")}, ensure_ascii=False, indent=1))
     if not args.path:
-        DEMO_PATH.write_text(json.dumps(out, ensure_ascii=False) + "\n")
+        DEMO_PATH.write_text(json.dumps(out, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"Saved → {DEMO_PATH}")
 
 

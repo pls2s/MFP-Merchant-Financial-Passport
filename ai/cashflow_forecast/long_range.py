@@ -91,7 +91,7 @@ def synthetic_calendar(df: pd.DataFrame, end: pd.Timestamp) -> pd.DataFrame:
 def load_models():
     models = {}
     for m in ensemble_members():
-        cfg = json.loads((m["model_dir"] / "config.json").read_text())
+        cfg = json.loads((m["model_dir"] / "config.json").read_text(encoding="utf-8"))
         models[f"{m['cell']}_seed{m['seed']}"] = (
             load_model(m["model_dir"]), cfg["window"])
     return models
@@ -156,7 +156,7 @@ def recursive_forecasts(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, d
     # on the last data day, whose "next day" inputs the main model saw as missing (0); use the main
     # values so every view shows the same numbers.
     main = pd.DataFrame([{"store": o["merchant_id"], "date": p["date"], "main": p["forecast"]}
-                         for o in json.loads((FORECASTS_DIR / "ensemble.json").read_text()) for p in o["points"]])
+                         for o in json.loads((FORECASTS_DIR / "ensemble.json").read_text(encoding="utf-8")) for p in o["points"]])
     main["date"] = pd.to_datetime(main["date"])
     fwd = fwd.merge(main, on=["store", "date"], how="left")
     fwd["forecast"] = fwd["main"].fillna(fwd["forecast"])
@@ -290,7 +290,7 @@ def main() -> None:
     print(f"Synthetic sales (ข้อมูลจำลอง): {syn['date'].min().date()}..{syn['date'].max().date()}, {len(syn):,} rows")
 
     (FORECASTS_DIR / "long_range_metrics.json").write_text(json.dumps(
-        {"recursive_3_months": m_rec, "seasonal_1_year": m_sea}, indent=1))
+        {"recursive_3_months": m_rec, "seasonal_1_year": m_sea}, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":

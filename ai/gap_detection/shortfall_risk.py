@@ -64,7 +64,7 @@ def mc_dropout_paths(arrays: dict, origin: pd.Timestamp, passes: int = MC_PASSES
     n = len(arrays["stores"])
     paths = []
     for m in ensemble_members():
-        cfg = json.loads((m["model_dir"] / "config.json").read_text())
+        cfg = json.loads((m["model_dir"] / "config.json").read_text(encoding="utf-8"))
         model = load_model(m["model_dir"])
         inputs, _, level = gather(arrays, np.arange(n), np.full(n, o), cfg["window"])
         is_open = inputs["future"][..., 0]
@@ -143,7 +143,7 @@ def main() -> None:
     history = pd.read_parquet(HISTORY_PATH, columns=["store", "date", "sales"])
     history = history[history["date"] >= SIM_START].assign(sales=lambda d: d["sales"].fillna(0.0))
     expenses = pd.read_parquet(EXPENSES_PATH)
-    opening = pd.Series({o["merchant_id"]: o["opening_balance"] for o in json.loads(GAPS_PATH.read_text())})
+    opening = pd.Series({o["merchant_id"]: o["opening_balance"] for o in json.loads(GAPS_PATH.read_text(encoding="utf-8"))})
     point = pd.read_parquet(ROSSMANN.predictions_dir / "ensemble.parquet")
     point = point[point["split"] == "test"].pivot(index="store", columns="date", values="forecast").reindex(stores)
     sales_actual = df[["store", "date", "sales", "is_eval_day"]].pivot(index="store", columns="date", values="sales")
@@ -227,8 +227,8 @@ def main() -> None:
             "reliability": reliability(p_any, y_any),
         },
     }
-    RISK_PATH.write_text(json.dumps(risk, ensure_ascii=False) + "\n")
-    CALIBRATION_PATH.write_text(json.dumps(calibration, ensure_ascii=False, indent=1) + "\n")
+    RISK_PATH.write_text(json.dumps(risk, ensure_ascii=False) + "\n", encoding="utf-8")
+    CALIBRATION_PATH.write_text(json.dumps(calibration, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(calibration, ensure_ascii=False, indent=1))
     print(f"Saved {len(risk)} stores → {RISK_PATH}, checks → {CALIBRATION_PATH}")
 
