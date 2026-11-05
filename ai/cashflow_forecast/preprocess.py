@@ -7,13 +7,16 @@ Reads   data/raw/rossmann/{train,store}.csv
 Writes  data/processed/rossmann.parquet
 """
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[2]
+# Every data and model path hangs off ROOT. MFP_ROOT moves them on AWS Lambda, where artifacts are
+# downloaded to /tmp (infra/template.yaml); unset, ROOT is the repository root as before.
+ROOT = Path(os.environ["MFP_ROOT"]) if os.environ.get("MFP_ROOT") else Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / "data" / "raw" / "rossmann"
 PROCESSED_DIR = ROOT / "data" / "processed"
 PROCESSED_PATH = PROCESSED_DIR / "rossmann.parquet"

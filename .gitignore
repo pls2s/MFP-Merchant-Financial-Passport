@@ -49,3 +49,6 @@ models/favorita/*
 !models/favorita/results.csv
 models/experiments/*
 !models/experiments/*.csv
+
+# AWS packaging output (infra/package.sh)
+infra/build/

@@ -157,7 +157,10 @@ def upload(file: UploadFile = File(...), date_column: str | None = Form(None), s
                                    _mapping(date_column, sales_column, quantity_column, price_column))
     except SalesFileError as e:
         raise HTTPException(422, str(e)) from e
-    return run(daily, file.filename or "ไฟล์ที่อัปโหลด", "live", report)
+    try:
+        return run(daily, file.filename or "ไฟล์ที่อัปโหลด", "live", report)
+    except ImportError as e:  # the AWS Lambda build has no TensorFlow (infra/lambda-requirements.txt)
+        raise HTTPException(503, "เครื่องนี้รันโมเดลสดไม่ได้ — ดูผลตัวอย่างที่ /api/v1/upload/sample แทน") from e
 
 
 @app.get("/api/v1/model-results", response_model=list[schemas.ModelResult])
