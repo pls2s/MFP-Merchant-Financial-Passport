@@ -28,7 +28,17 @@ mkdir -p "$LIVE" "$BUILD" "$HOME/.local/bin"
 
 say() { printf '\n== %s\n' "$*"; }
 
+# The AWS provider is ~700 MB and CloudShell's home holds 1 GB, so providers go to /tmp (16 GB, wiped
+# when the session ends; state stays in infra/live/). Each new session: mkdir the cache, then tofu init.
+use_tmp_plugin_cache() {
+  [[ "$(uname -s)" == Linux ]] || return 0
+  mkdir -p /tmp/tofu-plugin-cache
+  [[ -f "$HOME/.tofurc" ]] || echo 'plugin_cache_dir = "/tmp/tofu-plugin-cache"' > "$HOME/.tofurc"
+  rm -rf "$LIVE/.terraform/providers"   # copies made before the cache existed
+}
+
 install_tofu() {
+  use_tmp_plugin_cache
   command -v tofu >/dev/null && return
   [[ "$(uname -s)" == Linux ]] || { echo "Install OpenTofu first (macOS: brew install opentofu)" >&2; exit 1; }
   say "Installing OpenTofu $TOFU_VERSION to ~/.local/bin"

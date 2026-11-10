@@ -22,7 +22,9 @@ cd MFP-Merchant-Financial-Passport && git switch cloud-aws
 ```bash
 cd ~/MFP-Merchant-Financial-Passport
 export PATH=$HOME/.local/bin:$PATH     # ให้หา tofu และ node ที่ setup.sh ติดตั้งไว้เจอ
+mkdir -p /tmp/tofu-plugin-cache        # provider อยู่ใน /tmp (home มีแค่ 1 GB) และหายเมื่อปิด session
 git pull
+(cd infra/live 2>/dev/null && tofu init -input=false >/dev/null && echo "tofu ready")
 ```
 
 ## สร้างระบบ 4 ขั้น
@@ -138,6 +140,8 @@ cd ~/MFP-Merchant-Financial-Passport/infra/live && tofu destroy    # พิม�
 | อาการ | ทำอย่างไร |
 | --- | --- |
 | `tofu: command not found` | `export PATH=$HOME/.local/bin:$PATH` |
+| `no space left on device` | home เต็ม (1 GB): `du -sh ~/* ~/.[!.]*` แล้วลบโฟลเดอร์ `.terraform` ของ lab เก่า และรัน `./infra/setup.sh` ใหม่เพื่อย้าย provider ไป `/tmp` |
+| `plugin cache dir ... cannot be opened` / `Required plugins are not installed` | session ใหม่: `mkdir -p /tmp/tofu-plugin-cache && cd infra/live && tofu init` |
 | `ExpiredToken` หรือ `security token ... expired` | session ของ lab หมด: Start Lab ใหม่ แล้วเปิด CloudShell ใหม่ ส่วน resource ที่สร้างไว้ยังอยู่ |
 | `First run needs the alert email` | ขั้น 1 ต้องใส่อีเมล: `./infra/setup.sh 1 you@example.com` |
 | `Missing artifact: ...` | ไฟล์ข้อมูลหาย: `git pull` หรือ `git status` ดูว่าไฟล์ถูกลบไหม |
