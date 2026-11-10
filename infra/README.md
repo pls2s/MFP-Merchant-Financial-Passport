@@ -90,7 +90,7 @@ cd ~/MFP-Merchant-Financial-Passport/infra/live
 python3 -c "
 import datetime as d
 print('date,sales')
-for i in range(100): print(d.date(2024,1,1)+d.timedelta(i), 1000+(i%7)*50)
+for i in range(100): print(d.date(2024,1,1)+d.timedelta(i), 1000+(i%7)*50, sep=",")
 " > /tmp/sample.csv
 
 aws s3 cp /tmp/sample.csv "s3://$(tofu output -raw data_bucket)/uploads/test/sample.csv"
