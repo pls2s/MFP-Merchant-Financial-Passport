@@ -127,13 +127,26 @@ Lambda อัปเดตเมื่อ `app.zip` เปลี่ยน ส่�
 
 ดาวน์โหลดไฟล์ทาง CloudShell → Actions → Download file → `/home/cloudshell-user/MFP-Merchant-Financial-Passport/infra/live/arch.svg`
 
-## ลบทุกอย่าง
+## ลบทุกอย่าง (ทำแบบท้าย lab ของอาจารย์)
 
 ```bash
-cd ~/MFP-Merchant-Financial-Passport/infra/live && tofu destroy    # พิมพ์ yes
+cd ~/MFP-Merchant-Financial-Passport
+./infra/setup.sh destroy
 ```
 
-ต้อง `tofu destroy` **ก่อน** กด Delete environment ใน CloudShell เพราะ state เก็บอยู่ใน `infra/live/` ถ้า state หายแล้วจะลบ resource ด้วย tofu ไม่ได้ ต้องลบเองทีละตัวบน Console
+คำสั่งนี้ทำ 4 อย่างให้ ไม่ต้องพิมพ์ yes:
+
+1. `tofu destroy -auto-approve` ลบ Lambda, API Gateway, Amplify, DynamoDB, SNS, EventBridge และ bucket พร้อมไฟล์ข้างใน
+2. ลบ log group `/aws/lambda/mfp-*` ใน CloudWatch ซึ่ง tofu ไม่ได้สร้าง จึงไม่ลบให้
+3. ลบ `infra/build`, `infra/live`, `frontend/node_modules` และ `frontend/dist` คืนพื้นที่ home
+4. แสดงรายการ resource ชื่อ `mfp-*` ที่เหลืออยู่ ทุกบรรทัดต้องว่าง
+
+จากนั้นทำต่อแบบในสไลด์:
+
+1. Sign out จาก AWS Console แล้วกด **End Lab**
+2. ถ้าจะล้าง CloudShell ด้วย: Actions → Delete → พิมพ์ `delete` (โฟลเดอร์ repo จะหายไปด้วย ต้อง clone ใหม่ครั้งหน้า)
+
+ต้องรัน `destroy` **ก่อน** กด Delete ใน CloudShell เพราะ state เก็บอยู่ใน `infra/live/` ถ้า state หาย tofu จะลบ resource ไม่ได้ ต้องไปลบเองทีละตัวบน Console
 
 ## แก้ปัญหา
 

@@ -8,12 +8,13 @@
 #   ./infra/setup.sh 3                   # + S3 web bucket and CloudFront (builds frontend/dist)
 #   ./infra/setup.sh 4                   # + upload worker and daily alerts (S3 trigger, EventBridge)
 #   ./infra/setup.sh graph               # architecture diagram: infra/live/arch.svg
+#   ./infra/setup.sh destroy             # remove everything (tofu destroy + logs + local build)
 #
-# Region us-east-1 (Learner Lab). Remove everything with: cd infra/live && tofu destroy
+# Region us-east-1 (Learner Lab).
 
 set -euo pipefail
 
-STEP="${1:?usage: infra/setup.sh <1|2|3|4|graph> [alert-email]}"
+STEP="${1:?usage: infra/setup.sh <1|2|3|4|graph|destroy> [alert-email]}"
 EMAIL="${2:-}"
 TOFU_VERSION=1.12.11       # the version the course labs install
 NODE_VERSION=22.12.0       # Vite needs Node ^20.19 or >=22.12
@@ -136,6 +137,41 @@ copy_steps() {
   echo "infra/live/ now holds: $(cd "$LIVE" && ls *.tf | tr '\n' ' ')"
 }
 
+# Clean up as the course labs end: tofu destroy -auto-approve, then what OpenTofu does not own (the
+# log groups Lambda creates) and the local build, then a check that nothing named mfp-* is left.
+if [[ "$STEP" == destroy ]]; then
+  install_tofu
+  [[ -f "$LIVE/terraform.tfstate" ]] || { echo "No state in infra/live: nothing to destroy. Check the Console for mfp-* resources." >&2; exit 1; }
+  # Destroy still reads the zip hashes in the config, so a removed build only needs placeholders.
+  for f in app.zip web.zip; do [[ -f "$BUILD/$f" ]] || : > "$BUILD/$f"; done
+  say "tofu destroy"
+  (cd "$LIVE" && tofu init -input=false >/dev/null && tofu destroy -auto-approve)
+
+  say "Removing Lambda log groups (CloudWatch keeps them after the functions are gone)"
+  for g in $(aws logs describe-log-groups --log-group-name-prefix /aws/lambda/mfp- \
+      --query 'logGroups[].logGroupName' --output text); do
+    aws logs delete-log-group --log-group-name "$g" && echo "deleted $g"
+  done
+
+  say "Removing the local build and state (frees CloudShell home)"
+  rm -rf "$BUILD" "$LIVE" "$ROOT/frontend/node_modules" "$ROOT/frontend/dist"
+
+  say "Left over (every line should be empty)"
+  echo "S3       : $(aws s3api list-buckets --query 'Buckets[?starts_with(Name, `mfp-`)].Name' --output text)"
+  echo "Lambda   : $(aws lambda list-functions --query 'Functions[?starts_with(FunctionName, `mfp-`)].FunctionName' --output text)"
+  echo "API GW   : $(aws apigatewayv2 get-apis --query 'Items[?starts_with(Name, `mfp-`)].Name' --output text)"
+  echo "Amplify  : $(aws amplify list-apps --query 'apps[?starts_with(name, `mfp-`)].name' --output text)"
+  echo "DynamoDB : $(aws dynamodb list-tables --query 'TableNames[?starts_with(@, `mfp-`)]' --output text)"
+  echo "SNS      : $(aws sns list-topics --query 'Topics[?contains(TopicArn, `:mfp-`)].TopicArn' --output text)"
+  echo "Events   : $(aws events list-rules --name-prefix mfp- --query 'Rules[].Name' --output text)"
+  cat <<EOF
+
+Done. Finish like the labs: sign out of the AWS Console, then End Lab.
+To also reset CloudShell: Actions -> Delete -> type delete (the repo clone is removed too).
+EOF
+  exit 0
+fi
+
 if [[ "$STEP" == graph ]]; then
   install_tofu
   command -v dot >/dev/null || { say "Installing Graphviz"; sudo dnf install -y -q graphviz; }
@@ -144,7 +180,7 @@ if [[ "$STEP" == graph ]]; then
   exit 0
 fi
 
-[[ "$STEP" =~ ^[1-4]$ ]] || { echo "Step must be 1-4 or graph" >&2; exit 1; }
+[[ "$STEP" =~ ^[1-4]$ ]] || { echo "Step must be 1-4, graph or destroy" >&2; exit 1; }
 
 say "Step $STEP"
 install_tofu
