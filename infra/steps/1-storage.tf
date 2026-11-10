@@ -72,14 +72,32 @@ locals {
   )
 }
 
+# Learner Lab's service control policy denies s3:GetBucketObjectLockConfiguration, which the
+# aws_s3_bucket resource reads after every create and refresh, so buckets are made with the AWS CLI
+# instead (as the course labs do with boto3). tofu destroy empties and removes them.
+locals {
+  create_bucket = "aws s3api head-bucket --bucket %s 2>/dev/null || aws s3api create-bucket --bucket %s --region ${var.aws_region}${var.aws_region == "us-east-1" ? "" : " --create-bucket-configuration LocationConstraint=${var.aws_region}"}"
+}
+
 # Holds artifacts/ (read by the Lambdas) and uploads/ (written by the browser, read by the upload worker).
-resource "aws_s3_bucket" "data" {
-  bucket        = "${local.prefix}-data"
-  force_destroy = true # tofu destroy empties it first
+resource "terraform_data" "data_bucket" {
+  input = "${local.prefix}-data"
+  provisioner "local-exec" {
+    command = format(local.create_bucket, self.input, self.input)
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "aws s3 rb s3://${self.input} --force"
+  }
+}
+
+locals {
+  data_bucket     = terraform_data.data_bucket.output
+  data_bucket_arn = "arn:aws:s3:::${terraform_data.data_bucket.output}"
 }
 
 resource "aws_s3_bucket_public_access_block" "data" {
-  bucket                  = aws_s3_bucket.data.id
+  bucket                  = local.data_bucket
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -87,7 +105,7 @@ resource "aws_s3_bucket_public_access_block" "data" {
 }
 
 resource "aws_s3_bucket_cors_configuration" "data" {
-  bucket = aws_s3_bucket.data.id
+  bucket = local.data_bucket
   cors_rule {
     allowed_methods = ["PUT"]
     allowed_origins = ["*"]
@@ -97,7 +115,7 @@ resource "aws_s3_bucket_cors_configuration" "data" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "data" {
-  bucket = aws_s3_bucket.data.id
+  bucket = local.data_bucket
   rule {
     id     = "expire-uploads"
     status = "Enabled"
@@ -112,7 +130,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data" {
 
 resource "aws_s3_object" "artifact" {
   for_each = toset(local.artifacts)
-  bucket   = aws_s3_bucket.data.id
+  bucket   = local.data_bucket
   key      = "artifacts/${each.value}"
   source   = "${var.repo_root}/${each.value}"
   etag     = filemd5("${var.repo_root}/${each.value}")
@@ -148,7 +166,7 @@ resource "aws_sns_topic_subscription" "email" {
 
 output "data_bucket" {
   description = "Put a sales file under uploads/ here to trigger the upload Lambda (step 4)"
-  value       = aws_s3_bucket.data.id
+  value       = local.data_bucket
 }
 
 output "dynamodb_table" {

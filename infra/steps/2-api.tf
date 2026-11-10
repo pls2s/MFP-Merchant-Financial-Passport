@@ -6,7 +6,7 @@ locals {
   # Shared by every Lambda: ai.* reads its files under MFP_ROOT, downloaded from the data bucket.
   lambda_env = {
     MFP_ROOT        = "/tmp/mfp"
-    ARTIFACT_BUCKET = aws_s3_bucket.data.id
+    ARTIFACT_BUCKET = local.data_bucket
     ARTIFACT_PREFIX = "artifacts/"
     TABLE_NAME      = aws_dynamodb_table.main.name
   }
@@ -26,7 +26,7 @@ resource "aws_lambda_function" "api" {
 
   environment {
     variables = merge(local.lambda_env, {
-      UPLOAD_BUCKET = aws_s3_bucket.data.id
+      UPLOAD_BUCKET = local.data_bucket
       LLM_API_KEY   = var.llm_api_key
     })
   }

@@ -20,13 +20,25 @@ locals {
   }
 }
 
-resource "aws_s3_bucket" "web" {
-  bucket        = "${local.prefix}-web"
-  force_destroy = true
+# Made with the AWS CLI for the same reason as the data bucket (1-storage.tf).
+resource "terraform_data" "web_bucket" {
+  input = "${local.prefix}-web"
+  provisioner "local-exec" {
+    command = format(local.create_bucket, self.input, self.input)
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "aws s3 rb s3://${self.input} --force"
+  }
+}
+
+locals {
+  web_bucket     = terraform_data.web_bucket.output
+  web_bucket_arn = "arn:aws:s3:::${terraform_data.web_bucket.output}"
 }
 
 resource "aws_s3_bucket_public_access_block" "web" {
-  bucket                  = aws_s3_bucket.web.id
+  bucket                  = local.web_bucket
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -35,7 +47,7 @@ resource "aws_s3_bucket_public_access_block" "web" {
 
 resource "aws_s3_object" "web" {
   for_each     = local.web_files
-  bucket       = aws_s3_bucket.web.id
+  bucket       = local.web_bucket
   key          = each.value
   source       = "${local.web_dir}/${each.value}"
   etag         = filemd5("${local.web_dir}/${each.value}")
@@ -77,7 +89,7 @@ resource "aws_cloudfront_distribution" "web" {
 
   origin {
     origin_id                = "web"
-    domain_name              = aws_s3_bucket.web.bucket_regional_domain_name
+    domain_name              = "${local.web_bucket}.s3.${var.aws_region}.amazonaws.com"
     origin_access_control_id = aws_cloudfront_origin_access_control.web.id
   }
 
@@ -126,7 +138,7 @@ resource "aws_cloudfront_distribution" "web" {
 }
 
 resource "aws_s3_bucket_policy" "web" {
-  bucket = aws_s3_bucket.web.id
+  bucket = local.web_bucket
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -134,7 +146,7 @@ resource "aws_s3_bucket_policy" "web" {
       Effect    = "Allow"
       Principal = { Service = "cloudfront.amazonaws.com" }
       Action    = "s3:GetObject"
-      Resource  = "${aws_s3_bucket.web.arn}/*"
+      Resource  = "${local.web_bucket_arn}/*"
       Condition = { StringEquals = { "AWS:SourceArn" = aws_cloudfront_distribution.web.arn } }
     }]
   })
