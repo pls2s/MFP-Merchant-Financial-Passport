@@ -153,6 +153,13 @@ if [[ "$STEP" == destroy ]]; then
     aws logs delete-log-group --log-group-name "$g" && echo "deleted $g"
   done
 
+  # A bucket whose resource left the config before a destroy (an older layout) never gets its
+  # destroy-time command, so remove any bucket still named after this account's stack.
+  account="$(aws sts get-caller-identity --query Account --output text)"
+  for b in $(aws s3api list-buckets --query "Buckets[?starts_with(Name, \`mfp-${account}-\`)].Name" --output text); do
+    aws s3 rb "s3://$b" --force >/dev/null && echo "deleted leftover bucket $b"
+  done
+
   say "Removing the local build and state (frees CloudShell home)"
   rm -rf "$BUILD" "$LIVE" "$ROOT/frontend/node_modules" "$ROOT/frontend/dist"
 
