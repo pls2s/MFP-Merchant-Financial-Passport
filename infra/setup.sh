@@ -34,7 +34,10 @@ use_tmp_plugin_cache() {
   [[ "$(uname -s)" == Linux ]] || return 0
   mkdir -p /tmp/tofu-plugin-cache
   [[ -f "$HOME/.tofurc" ]] || echo 'plugin_cache_dir = "/tmp/tofu-plugin-cache"' > "$HOME/.tofurc"
-  rm -rf "$LIVE/.terraform/providers"   # copies made before the cache existed
+  # A provider binary copied into home before the cache existed (not a link into the cache): drop it.
+  if [[ -n "$(find "$LIVE/.terraform/providers" -type f -name 'terraform-provider-*' 2>/dev/null)" ]]; then
+    rm -rf "$LIVE/.terraform/providers"
+  fi
 }
 
 install_tofu() {
