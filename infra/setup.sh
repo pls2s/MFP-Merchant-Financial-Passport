@@ -122,6 +122,10 @@ build_web() {
   if grep -rq "localhost:8000" "$ROOT/frontend/dist"; then
     echo "frontend/dist still points at localhost:8000" >&2; exit 1
   fi
+  # Amplify takes a manual deployment as one zip with index.html at its root.
+  rm -f "$BUILD/web.zip"
+  (cd "$ROOT/frontend/dist" && zip -qr "$BUILD/web.zip" .)
+  echo "web.zip: $(du -h "$BUILD/web.zip" | cut -f1)"
 }
 
 copy_steps() {

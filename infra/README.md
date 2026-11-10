@@ -41,7 +41,7 @@ cd infra/live && tofu init && tofu plan && tofu apply -auto-approve && cd ../..
 ./infra/setup.sh 2
 cd infra/live && tofu plan && tofu apply -auto-approve && cd ../..
 
-# ขั้น 3: S3 web + CloudFront (build หน้าเว็บ ใช้เวลาหลายนาที)
+# ขั้น 3: หน้าเว็บบน AWS Amplify Hosting (CloudFront ที่ AWS จัดการให้) ใช้เวลาหลายนาที
 ./infra/setup.sh 3
 cd infra/live && tofu plan && tofu apply -auto-approve && cd ../..
 
@@ -59,7 +59,7 @@ curl -s "$(tofu output -raw api_url)/health"       # ขั้น 2 ขึ้น
 curl -s "$(tofu output -raw api_url)/api/v1/merchants/1/cash-flow-gaps" | head -c 300
 ```
 
-- เปิด `website_url` ในเบราว์เซอร์ (ขั้น 3 ขึ้นไป) CloudFront ที่เพิ่งสร้างใช้เวลา 5–15 นาทีกว่าจะเปิดได้
+- เปิด `website_url` ในเบราว์เซอร์ (ขั้น 3 ขึ้นไป) Amplify deploy เสร็จตอน apply จบ ถ้ายังไม่ขึ้นให้รอ 1–2 นาที
 - request แรกช้าไม่กี่วินาที เพราะ Lambda ต้องดาวน์โหลดข้อมูลก่อน (cold start)
 
 ดู resource ที่สร้างแล้ว:
@@ -146,6 +146,7 @@ cd ~/MFP-Merchant-Financial-Passport/infra/live && tofu destroy    # พิม�
 | `First run needs the alert email` | ขั้น 1 ต้องใส่อีเมล: `./infra/setup.sh 1 you@example.com` |
 | `Missing artifact: ...` | ไฟล์ข้อมูลหาย: `git pull` หรือ `git status` ดูว่าไฟล์ถูกลบไหม |
 | `BucketAlreadyExists` / `already exists` | เคยสร้างไว้แต่ state หาย: ลบ resource ชื่อ `mfp-...` บน Console ก่อน แล้ว apply ใหม่ |
-| เว็บขึ้น 403 หรือหน้าเปล่า | CloudFront ยัง deploy ไม่เสร็จ รอ 5–15 นาที |
+| เว็บขึ้น 404 หรือหน้าเปล่า | ดูสถานะบน Console: Amplify → `mfp-dashboard` → main แล้วรัน `./infra/setup.sh 3` + `tofu apply` ใหม่ |
+| `not authorized to perform: cloudfront:...` | Learner Lab ห้ามสร้าง CloudFront เอง ขั้น 3 จึงใช้ Amplify: `git pull` แล้วรันขั้น 3 ใหม่ |
 | ไม่ได้อีเมลเตือน | กด Confirm subscription แล้วหรือยัง และดูในโฟลเดอร์ Spam |
 | API ตอบ 500 | `aws logs tail /aws/lambda/mfp-api --since 10m` แล้วส่ง error ให้ทีม |
