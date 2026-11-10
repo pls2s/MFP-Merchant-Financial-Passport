@@ -64,7 +64,7 @@ Facts that span several files:
 - **Served model:** the app serves the LSTM+GRU `ensemble` averaged over 5 seeds (10 models, `ENSEMBLE_SEEDS` / `ENSEMBLE_CELLS` in `train.py`), not a single LSTM.
 - **Demo date:** "today" is fixed at 2015-07-17 (`AS_OF = TEST_ORIGINS[-1]` in `ai/gap_detection/build.py`). The 14-day forecast covers 2015-07-18 to 2015-07-31.
 - **Demo stores:** 1, 25 and 817 have a deliberate synthetic gap on 2015-07-22. Store 2 is the healthy comparison.
-- **Contract additions:** endpoints beyond the data contract below (`sales-history`, `long-forecast`, `seasonal-outlook`, `cash-balance`, `model-results`) are documented in `backend/README.md`; later additions: `model-experiments`, `shortfall-risk`, `upload/sample`, `upload/inspect`, `upload`.
+- **Contract additions:** endpoints beyond the data contract below (`sales-history`, `long-forecast`, `seasonal-outlook`, `cash-balance`, `model-results`) are documented in `backend/README.md`; later additions: `model-experiments`, `shortfall-risk`, `upload/sample`, `upload/inspect`, `upload`, and for AWS `upload/config`, `upload/presign`, `uploads/{id}`.
 - **Copilot:** `ai/copilot/facts.py` computes the only figures the LLM (Typhoon, OpenAI-compatible) may use. `explain.py` validates every number and month in the answer, retries once, then falls back to a template.
 
 `docs/demo.md` is the demo script and lists the figures each screen must show, so update it when those numbers or the screens change.

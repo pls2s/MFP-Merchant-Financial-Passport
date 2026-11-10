@@ -4,13 +4,15 @@ import { Bar, BarChart, CartesianGrid, ComposedChart, ReferenceLine, ResponsiveC
 import { api } from "../api";
 import { Card, SampleBadge, Swatch } from "../components/ui";
 import { money, percent, thaiDate, thaiDateShort } from "../format";
-import type { ColumnMapping, ReadReport, UploadForecast, UploadInspect } from "../types";
+import type { ColumnMapping, ReadReport, UploadConfig, UploadForecast, UploadInspect, UploadStatus } from "../types";
 
 /**
  * Screen 4 — try the model on a shop it has never seen (cold start, report 9.2).
  * The sample (UCI Online Retail) is precomputed. An uploaded file goes through two steps:
  * inspect (backend reads it, guesses the columns, reports what it read — no model), then, once the
  * person confirms the columns, the model runs live on the backend.
+ * On AWS (upload config `cloud`) the model cannot run: step 2 puts the file into S3 instead, and the
+ * S3-triggered upload worker reports the daily sales it read (through DynamoDB).
  */
 
 type State =
@@ -18,7 +20,8 @@ type State =
   | { status: "loading"; what: string; since: number }
   | { status: "error"; message: string }
   | { status: "inspected"; file: File; inspect: UploadInspect; checking: boolean }
-  | { status: "ok"; data: UploadForecast };
+  | { status: "ok"; data: UploadForecast }
+  | { status: "cloud"; data: UploadStatus };
 
 const ROLE_LABELS: Record<keyof ColumnMapping, string> = {
   date: "วันที่", sales: "ยอดขาย", quantity: "จำนวน", price: "ราคาต่อหน่วย",
@@ -42,8 +45,8 @@ function ReportSummary({ report }: { report: ReadReport }) {
   );
 }
 
-function Inspect({ file, inspect, checking, onMapping, onForecast }: {
-  file: File; inspect: UploadInspect; checking: boolean;
+function Inspect({ file, inspect, checking, cloud, onMapping, onForecast }: {
+  file: File; inspect: UploadInspect; checking: boolean; cloud: boolean;
   onMapping: (m: Partial<ColumnMapping>) => void; onForecast: () => void;
 }) {
   const m = inspect.mapping;
@@ -113,7 +116,7 @@ function Inspect({ file, inspect, checking, onMapping, onForecast }: {
       )}
       <div style={{ marginTop: 12 }}>
         <button className="btn primary" disabled={checking || !inspect.ok || !r?.enough_days} onClick={onForecast}>
-          ขั้นที่ 2 · ถูกต้องแล้ว พยากรณ์เลย
+          {cloud ? "ขั้นที่ 2 · ถูกต้องแล้ว ส่งเข้า S3 ให้ระบบวิเคราะห์" : "ขั้นที่ 2 · ถูกต้องแล้ว พยากรณ์เลย"}
         </button>
       </div>
     </Card>
@@ -228,8 +231,50 @@ function Result({ data }: { data: UploadForecast }) {
   );
 }
 
+/** Step 2 on AWS: what the upload worker read from the file in S3. No forecast is made here. */
+function CloudResult({ data }: { data: UploadStatus }) {
+  const range = data.date_range;
+  return (
+    <>
+      <div className="summary-grid">
+        <section className="stat-card">
+          <div className="stat-label">ข้อมูลในไฟล์</div>
+          <div className="stat-value small-value">{(data.days ?? 0).toLocaleString("en-US")} วัน</div>
+          {range && <div className="stat-sub">{thaiDate(range.start)} – {thaiDate(range.end)}</div>}
+        </section>
+        <section className="stat-card">
+          <div className="stat-label">ยอดขายรวมทั้งไฟล์</div>
+          <div className="stat-value">{money(data.total_sales ?? 0)}</div>
+          <div className="stat-sub">เฉลี่ยวันละ {money(data.mean_daily_sales ?? 0)}</div>
+        </section>
+      </div>
+
+      <Card eyebrow="ประมวลผลบน AWS: S3 → Lambda → DynamoDB" title={data.filename ?? data.upload_id}
+        badges={<span className="badge accent">upload worker</span>}>
+        <div style={{ width: "100%", height: 220 }}>
+          <ResponsiveContainer>
+            <BarChart data={data.daily} margin={{ top: 4, right: 4, bottom: 0, left: 0 }} barCategoryGap={0}>
+              <CartesianGrid stroke="var(--grid)" vertical={false} />
+              <XAxis dataKey="date" tickFormatter={thaiDateShort} minTickGap={50} tick={{ fill: "var(--text-2)", fontSize: 11 }}
+                tickLine={false} axisLine={{ stroke: "var(--axis)" }} />
+              <YAxis tickFormatter={money} width={64} tick={{ fill: "var(--text-2)", fontSize: 12 }} tickLine={false} axisLine={false} />
+              <Tooltip labelFormatter={(d) => thaiDate(String(d))} formatter={(v) => [money(Number(v)), "ยอดขาย"]}
+                contentStyle={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8 }} />
+              <Bar dataKey="sales" fill="var(--series-actual)" isAnimationActive={false} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        {data.report && <ReportSummary report={data.report} />}
+        <p className="muted small chart-note">
+          ไฟล์ถูกส่งตรงเข้า S3 แล้ว Lambda อ่านไฟล์ รวมยอดรายวัน และบันทึกผลลง DynamoDB (เก็บ 7 วัน) ·
+          บน AWS ยังไม่รันโมเดลพยากรณ์เพราะต้องใช้ TensorFlow ซึ่งใหญ่เกิน Lambda — ดูตัวอย่างผลพยากรณ์ได้จาก "ใช้ข้อมูลตัวอย่าง"
+        </p>
+      </Card>
+    </>
+  );
+}
+
 const ACCEPT = [".csv", ".xlsx"];
-const MAX_MB = 30;
 
 /** A small daily-sales template so people can see the expected layout. */
 function downloadTemplate() {
@@ -255,13 +300,13 @@ function Elapsed({ since }: { since: number }) {
   return <span className="num">{Math.round((now - since) / 1000)} วินาที</span>;
 }
 
-function DropZone({ disabled, onFile }: { disabled: boolean; onFile: (f: File) => void }) {
+function DropZone({ disabled, maxMb, onFile }: { disabled: boolean; maxMb: number; onFile: (f: File) => void }) {
   const [over, setOver] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
   const pick = (f: File | undefined) => {
     if (!f) return;
     if (!ACCEPT.some((ext) => f.name.toLowerCase().endsWith(ext))) return setProblem("รองรับเฉพาะ .csv และ .xlsx");
-    if (f.size > MAX_MB * 1024 * 1024) return setProblem(`ไฟล์ใหญ่เกิน ${MAX_MB} MB`);
+    if (f.size > maxMb * 1024 * 1024) return setProblem(`ไฟล์ใหญ่เกิน ${maxMb} MB`);
     setProblem(null);
     onFile(f);
   };
@@ -275,7 +320,7 @@ function DropZone({ disabled, onFile }: { disabled: boolean; onFile: (f: File) =
           onChange={(e) => { pick(e.target.files?.[0]); e.target.value = ""; }} />
         <span className="dropzone-icon" aria-hidden>⇪</span>
         <b>ลากไฟล์มาวางที่นี่ หรือคลิกเพื่อเลือก</b>
-        <span className="muted small">.csv หรือ .xlsx ไม่เกิน {MAX_MB} MB</span>
+        <span className="muted small">.csv หรือ .xlsx ไม่เกิน {maxMb} MB</span>
       </label>
       {problem && <p className="bad-text small">{problem}</p>}
     </>
@@ -284,7 +329,9 @@ function DropZone({ disabled, onFile }: { disabled: boolean; onFile: (f: File) =
 
 export function Upload() {
   const [state, setState] = useState<State>({ status: "idle" });
+  const [config, setConfig] = useState<UploadConfig>({ cloud: false, max_mb: 30 });
   const [params] = useSearchParams();
+  useEffect(() => { api.uploadConfig().then(setConfig); }, []);
   const load = (what: string, p: Promise<UploadForecast>) => {
     setState({ status: "loading", what, since: Date.now() });
     p.then((data) => setState({ status: "ok", data }), (e: Error) => setState({ status: "error", message: e.message }));
@@ -294,6 +341,13 @@ export function Upload() {
     else setState({ status: "loading", what: `ตรวจไฟล์ ${file.name}`, since: Date.now() });
     api.inspectUpload(file, mapping).then(
       (inspect) => setState({ status: "inspected", file, inspect, checking: false }),
+      (e: Error) => setState({ status: "error", message: e.message }),
+    );
+  };
+  const sendToCloud = (file: File, mapping: ColumnMapping) => {
+    const since = Date.now();
+    api.cloudUpload(file, mapping, (stage) => setState({ status: "loading", what: `${file.name} · ${stage}`, since })).then(
+      (data) => setState(data.status === "ok" ? { status: "cloud", data } : { status: "error", message: data.error ?? "อ่านไฟล์ไม่ได้" }),
       (e: Error) => setState({ status: "error", message: e.message }),
     );
   };
@@ -335,11 +389,13 @@ export function Upload() {
             <p className="muted small">
               ไฟล์รายวัน (วันที่ + ยอดขาย) หรือรายบิล (วันที่ + จำนวน + ราคา) หัวคอลัมน์ไทยหรืออังกฤษก็ได้ ·
               วันที่ วว/ดด/ปปปป, ปี พ.ศ. และตัวเลขมี comma อ่านได้ · อย่างน้อย 70 วัน ·
-              ระบบจะให้ตรวจก่อนพยากรณ์ · ไฟล์ส่งไปประมวลผลที่ backend ของระบบนี้เท่านั้น
+              ระบบจะให้ตรวจก่อน{config.cloud ? "ส่งเข้า S3" : "พยากรณ์"} · ไฟล์ส่งไปประมวลผลที่ backend ของระบบนี้เท่านั้น
             </p>
-            <DropZone disabled={state.status === "loading"} onFile={(f) => check(f)} />
+            <DropZone disabled={state.status === "loading"} maxMb={config.max_mb} onFile={(f) => check(f)} />
             <p className="muted small">
-              ประมวลผลที่ backend (ต้องเปิดอยู่ แม้หน้าอื่นจะใช้โหมด mock) · ครั้งแรกราว 1 นาที (โหลดโมเดล 10 ตัว) ครั้งต่อไปไม่กี่วินาที ·{" "}
+              {config.cloud
+                ? "บน AWS: ไฟล์ส่งตรงเข้า S3 แล้ว Lambda อ่านและบันทึกยอดรายวันลง DynamoDB (ราว 10 วินาที) ไม่ได้รันโมเดลพยากรณ์"
+                : "ประมวลผลที่ backend (ต้องเปิดอยู่ แม้หน้าอื่นจะใช้โหมด mock) · ครั้งแรกราว 1 นาที (โหลดโมเดล 10 ตัว) ครั้งต่อไปไม่กี่วินาที"} ·{" "}
               <button className="link-btn" onClick={downloadTemplate}>ดาวน์โหลดไฟล์แม่แบบ (.csv)</button>
             </p>
           </div>
@@ -351,11 +407,14 @@ export function Upload() {
       </Card>
 
       {state.status === "inspected" && (
-        <Inspect file={state.file} inspect={state.inspect} checking={state.checking}
+        <Inspect file={state.file} inspect={state.inspect} checking={state.checking} cloud={config.cloud}
           onMapping={(m) => check(state.file, m)}
-          onForecast={() => load(state.file.name, api.upload(state.file, state.inspect.mapping))} />
+          onForecast={() => config.cloud
+            ? sendToCloud(state.file, state.inspect.mapping)
+            : load(state.file.name, api.upload(state.file, state.inspect.mapping))} />
       )}
       {state.status === "ok" && <Result data={state.data} />}
+      {state.status === "cloud" && <CloudResult data={state.data} />}
     </>
   );
 }

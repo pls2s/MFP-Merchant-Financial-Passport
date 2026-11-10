@@ -14,8 +14,11 @@ import type {
   SeasonalOutlook,
   ShortfallRisk,
   ColumnMapping,
+  UploadConfig,
   UploadForecast,
   UploadInspect,
+  UploadPresign,
+  UploadStatus,
 } from "./types";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -119,6 +122,31 @@ export const api = {
   /** Runs the model live on the file with the confirmed columns. */
   upload: (file: File, mapping?: Partial<ColumnMapping>): Promise<UploadForecast> =>
     postFile("/api/v1/upload", file, mapping),
+
+  /** Which upload path the backend offers; a backend that is off or older means the local live model. */
+  uploadConfig: (): Promise<UploadConfig> =>
+    request<UploadConfig>("/api/v1/upload/config").catch(() => ({ cloud: false, max_mb: 30 })),
+
+  /** AWS: put the file straight into S3 with a presigned URL, then poll for the upload worker's result
+   *  (S3 event → Lambda → DynamoDB). `onStage` names the step in progress. */
+  cloudUpload: async (file: File, mapping: Partial<ColumnMapping>, onStage: (stage: string) => void): Promise<UploadStatus> => {
+    onStage("ขอ URL อัปโหลดจาก API");
+    const signed = await request<UploadPresign>("/api/v1/upload/presign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ filename: file.name, mapping }),
+    });
+    onStage("อัปโหลดไฟล์เข้า S3");
+    const put = await fetch(signed.url, { method: "PUT", headers: signed.headers, body: file });
+    if (!put.ok) throw new Error(`อัปโหลดเข้า S3 ไม่สำเร็จ (${put.status})`);
+    onStage("รอ Lambda อ่านไฟล์และบันทึกผลลง DynamoDB");
+    for (let i = 0; i < 45; i++) {
+      await new Promise((r) => setTimeout(r, 2000));
+      const status = await request<UploadStatus>(`/api/v1/uploads/${encodeURIComponent(signed.upload_id)}`);
+      if (status.status !== "pending") return status;
+    }
+    throw new Error("รอผลเกิน 90 วินาที — ดู log ของ mfp-upload-worker ใน CloudWatch");
+  },
 
   modelResults: (): Promise<ModelResult[]> =>
     USE_MOCK ? mock("model-results") : request("/api/v1/model-results"),
