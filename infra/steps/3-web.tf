@@ -18,6 +18,13 @@ resource "aws_amplify_app" "web" {
     status = "200"
   }
 
+  # The app reads "today" (as_of) from /health, which sits outside /api.
+  custom_rule {
+    source = "/health"
+    target = "${aws_apigatewayv2_api.http.api_endpoint}/health"
+    status = "200"
+  }
+
   # The app uses BrowserRouter (/merchants/1, /upload ...): paths that are not files get index.html.
   custom_rule {
     source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|jpeg|js|png|txt|svg|woff|woff2|ttf|map|json|webp)$)([^.]+$)/>"
