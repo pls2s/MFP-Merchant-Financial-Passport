@@ -74,6 +74,28 @@ resource "aws_lambda_permission" "events_alerts" {
   source_arn    = aws_cloudwatch_event_rule.daily_alerts.arn
 }
 
+# Keeps an API container loaded so the dashboard's first visit skips the cold start (pandas import,
+# artifact download and load). Learner Lab sessions end, so this only matters while the lab runs.
+resource "aws_cloudwatch_event_rule" "api_warmup" {
+  name                = "${var.project}-api-warmup"
+  description         = "Ping the MFP API Lambda every 5 minutes"
+  schedule_expression = "rate(5 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "api_warmup" {
+  rule  = aws_cloudwatch_event_rule.api_warmup.name
+  arn   = aws_lambda_function.api.arn
+  input = jsonencode({ warmup = true })
+}
+
+resource "aws_lambda_permission" "events_warmup" {
+  statement_id  = "AllowEventBridgeWarmup"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.api.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.api_warmup.arn
+}
+
 output "alerts_function" {
   description = "Run it now: Lambda console -> Test with the event {\"force\": true}"
   value       = aws_lambda_function.alerts.function_name

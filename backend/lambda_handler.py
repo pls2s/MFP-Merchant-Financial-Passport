@@ -21,4 +21,7 @@ def handler(event, context):
         # request. Load once per container instead and leave lifespan off.
         main.store = DataStore.load()
         _handler = Mangum(main.app, lifespan="off")
+    # The EventBridge warm-up ping (infra/steps/4-automation.tf) only needs the container loaded.
+    if event.get("warmup"):
+        return {"warm": True}
     return _handler(event, context)

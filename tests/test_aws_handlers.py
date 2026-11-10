@@ -109,3 +109,11 @@ def test_api_handler_serves_the_same_api(monkeypatch):
     assert health["statusCode"] == 200 and json.loads(health["body"])["as_of"] == "2015-07-17"
     gaps = json.loads(call("/api/v1/merchants/1/cash-flow-gaps")["body"])
     assert gaps["gaps"][0]["date"] == "2015-07-22" and gaps["is_synthetic_expense"] is True
+
+
+def test_api_handler_answers_the_warmup_ping(monkeypatch):
+    monkeypatch.setattr(backend.aws, "fetch_artifacts", lambda paths=None: None)
+    from backend import lambda_handler
+
+    assert lambda_handler.handler({"warmup": True}, None) == {"warm": True}
+    assert lambda_handler._handler is not None  # the ping loaded the container

@@ -21,7 +21,7 @@ resource "aws_lambda_function" "api" {
   filename         = local.app_zip
   source_code_hash = filebase64sha256(local.app_zip)
   layers           = [var.pandas_layer_arn]
-  memory_size      = 1024
+  memory_size      = 2048 # CPU scales with memory: halves the first-request load of pandas + artifacts
   timeout          = 30
 
   environment {
