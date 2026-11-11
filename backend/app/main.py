@@ -163,6 +163,38 @@ def upload(file: UploadFile = File(...), date_column: str | None = Form(None), s
         raise HTTPException(503, "เครื่องนี้รันโมเดลสดไม่ได้ — ดูผลตัวอย่างที่ /api/v1/upload/sample แทน") from e
 
 
+# On AWS (UPLOAD_BUCKET set, infra/steps/2-api.tf) the model cannot run, and Lambda takes at most 6 MB
+# per request (the inspect step still posts the file). The browser puts the file straight into S3
+# instead, the upload worker reads it, and the screen polls /uploads/{id}.
+CLOUD_MAX_MB = 4
+
+
+@app.get("/api/v1/upload/config", response_model=schemas.UploadConfig)
+def upload_config():
+    cloud = bool(os.environ.get("UPLOAD_BUCKET"))
+    return {"cloud": cloud, "max_mb": CLOUD_MAX_MB if cloud else MAX_UPLOAD_BYTES // 2**20}
+
+
+@app.post("/api/v1/upload/presign", response_model=schemas.UploadPresign)
+def upload_presign(body: schemas.UploadPresignRequest):
+    bucket = os.environ.get("UPLOAD_BUCKET")
+    if not bucket:
+        raise HTTPException(404, "อัปโหลดเข้า S3 ใช้ได้เฉพาะบน AWS — เครื่องนี้ใช้ POST /api/v1/upload")
+    from backend.aws import presign_upload
+
+    return presign_upload(bucket, body.filename, body.mapping.model_dump())
+
+
+@app.get("/api/v1/uploads/{upload_id}", response_model=schemas.UploadStatus)
+def upload_status(upload_id: str):
+    table = os.environ.get("TABLE_NAME")
+    if not table:
+        raise HTTPException(404, "ผลอัปโหลดเก็บใน DynamoDB ใช้ได้เฉพาะบน AWS")
+    from backend.aws import read_upload
+
+    return read_upload(table, upload_id)
+
+
 @app.get("/api/v1/model-results", response_model=list[schemas.ModelResult])
 def model_results():
     return store.results.to_dict(orient="records")

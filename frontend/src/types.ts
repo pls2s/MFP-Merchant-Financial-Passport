@@ -244,6 +244,32 @@ export interface UploadForecast {
   read_report: ReadReport | null;
 }
 
+// Uploads on AWS: GET /api/v1/upload/config, POST /api/v1/upload/presign, GET /api/v1/uploads/{id}
+export interface UploadConfig {
+  cloud: boolean; // true on AWS: the file goes to S3 and the upload worker, the model is not run
+  max_mb: number;
+}
+
+export interface UploadPresign {
+  upload_id: string;
+  url: string; // presigned S3 PUT, valid 10 minutes
+  headers: Record<string, string>; // send with the PUT (signed object metadata)
+}
+
+// What the S3-triggered upload worker read from the file (daily sales, no forecast)
+export interface UploadStatus {
+  upload_id: string;
+  status: "pending" | "ok" | "error";
+  filename: string | null;
+  error: string | null;
+  days: number | null;
+  date_range: { start: string; end: string } | null;
+  total_sales: number | null;
+  mean_daily_sales: number | null;
+  daily: { date: string; sales: number }[];
+  report: ReadReport | null;
+}
+
 // GET /api/v1/model-results
 export interface ModelResult {
   model: "seasonal_naive" | "lightgbm" | "lstm" | "gru" | "ensemble" | string;

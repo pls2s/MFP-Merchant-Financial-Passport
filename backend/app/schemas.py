@@ -371,6 +371,40 @@ class UploadForecast(BaseModel):
     read_report: ReadReport | None = None
 
 
+# --- Uploads on AWS: /api/v1/upload/config, /upload/presign, /uploads/{id} ---------
+
+
+class UploadConfig(BaseModel):
+    """Which upload path this deployment offers."""
+    cloud: bool = Field(description="True on AWS: files go to S3 and the upload worker; the model is not run")
+    max_mb: int
+
+
+class UploadPresignRequest(BaseModel):
+    filename: str
+    mapping: ColumnMapping = ColumnMapping()
+
+
+class UploadPresign(BaseModel):
+    upload_id: str
+    url: str = Field(description="Presigned S3 PUT, valid 10 minutes")
+    headers: dict[str, str] = Field(description="Send these with the PUT (signed object metadata)")
+
+
+class UploadStatus(BaseModel):
+    """A file processed by the S3-triggered upload worker: daily sales read from it, no forecast."""
+    upload_id: str
+    status: Literal["pending", "ok", "error"]
+    filename: str | None = None
+    error: str | None = None
+    days: int | None = None
+    date_range: dict[str, IsoDate] | None = None
+    total_sales: float | None = None
+    mean_daily_sales: float | None = None
+    daily: list[DailySales] = []
+    report: ReadReport | None = None
+
+
 # --- GET /api/v1/model-results (Model results screen) --------------------------
 
 

@@ -1,0 +1,22 @@
+# Precomputed files the backend reads, as repository paths. Uploaded to s3://<data bucket>/artifacts/.
+models/results.csv
+models/favorita/results.csv
+models/experiments/ablation.csv
+models/experiments/learning_curves.csv
+models/experiments/seed_ensemble.csv
+models/experiments/seed_ensemble_k.csv
+models/experiments/seeds.csv
+models/forecasts/ensemble.json
+models/forecasts/long_backtest.parquet
+models/forecasts/long_forecast.parquet
+models/forecasts/long_range_metrics.json
+models/forecasts/sales_history.parquet
+models/forecasts/seasonal_backtest.parquet
+models/forecasts/seasonal_outlook.parquet
+models/forecasts/synthetic_sales.parquet
+models/forecasts/uci_demo.json
+data/synthetic/cash_flow_gaps.json
+data/synthetic/credit_signal.json
+data/synthetic/expenses.parquet
+data/synthetic/shortfall_calibration.json
+data/synthetic/shortfall_risk.json

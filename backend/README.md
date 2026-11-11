@@ -43,6 +43,9 @@ Demo "today" is **2015-07-17**: actual sales up to that date, forecast for 2015-
 | GET | `/api/v1/merchants/{id}/credit-signal` | `credit-signal` contract, always `status: "experimental"` |
 | POST | `/api/v1/merchants/{id}/copilot` | Body `{"question": "...", "history": [{"role": "user"|"assistant", "content": "..."}]}` (both optional) → Thai chat answer |
 | GET | `/api/v1/model-results` | WAPE / MAE / RMSE of every model on val and test (Model results screen) |
+| GET | `/api/v1/upload/config` | `cloud` (true on AWS, where the model is not run) and `max_mb` for the upload screen |
+| POST | `/api/v1/upload/presign` | AWS only. Body `{"filename", "mapping"}` → presigned S3 PUT `url`, `headers` to send with it, `upload_id` |
+| GET | `/api/v1/uploads/{upload_id}` | AWS only. The upload worker's result from DynamoDB: `status` `pending` / `ok` / `error`, daily sales and read report, no forecast |
 
 Unknown merchant → `404`.
 

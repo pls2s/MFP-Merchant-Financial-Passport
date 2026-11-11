@@ -109,3 +109,70 @@ def test_api_handler_serves_the_same_api(monkeypatch):
     assert health["statusCode"] == 200 and json.loads(health["body"])["as_of"] == "2015-07-17"
     gaps = json.loads(call("/api/v1/merchants/1/cash-flow-gaps")["body"])
     assert gaps["gaps"][0]["date"] == "2015-07-22" and gaps["is_synthetic_expense"] is True
+
+
+def test_api_handler_answers_the_warmup_ping(monkeypatch):
+    monkeypatch.setattr(backend.aws, "fetch_artifacts", lambda paths=None: None)
+    from backend import lambda_handler
+
+    assert lambda_handler.handler({"warmup": True}, None) == {"warm": True}
+    assert lambda_handler._handler is not None  # the ping loaded the container
+
+
+def test_presign_puts_the_columns_in_ascii_metadata(monkeypatch):
+    seen = {}
+
+    class S3:
+        def generate_presigned_url(self, op, Params, ExpiresIn):
+            seen.update(op=op, **Params)
+            return "https://bucket.s3.amazonaws.com/signed"
+
+    monkeypatch.setattr(backend.aws.boto3, "client", lambda name, config=None: S3())
+    out = backend.aws.presign_upload("bucket", "ยอดขาย ร้านป้า.CSV", {"date": "วันที่", "sales": "ยอด", "price": None})
+    assert seen["op"] == "put_object" and seen["Key"] == "uploads/" + out["upload_id"]
+    assert out["upload_id"].endswith(".csv")
+    assert all(v.isascii() for v in out["headers"].values())
+    assert set(out["headers"]) == {"x-amz-meta-filename", "x-amz-meta-mapping"}
+
+
+def test_worker_reads_the_columns_and_name_from_metadata(monkeypatch):
+    """A presigned upload end to end: presign metadata → worker → DynamoDB item → UploadStatus."""
+    from backend.app import schemas
+
+    table = FakeTable()
+    data = sales_csv(90).replace(b"date,sales", "วันขาย,รับเงิน".encode())
+    meta = {}
+
+    class S3:
+        def generate_presigned_url(self, op, Params, ExpiresIn):
+            meta.update(Params["Metadata"])
+            return "https://signed"
+
+        def get_object(self, Bucket, Key):
+            return {"Body": type("B", (), {"read": lambda self: data})(), "Metadata": meta}
+
+    monkeypatch.setenv("TABLE_NAME", "t")
+    # backend.aws and the worker share the one boto3 module
+    monkeypatch.setattr(upload.boto3, "client", lambda name, config=None: S3())
+    resource = type("R", (), {"Table": lambda self, n: table})()
+    monkeypatch.setattr(upload.boto3, "resource", lambda name: resource)
+    up = backend.aws.presign_upload("b", "ร้านป้า.csv", {"date": "วันขาย", "sales": "รับเงิน"})
+
+    event = {"Records": [{"s3": {"bucket": {"name": "b"}, "object": {"key": "uploads/" + up["upload_id"]}}}]}
+    assert upload.handler(event, None)[0]["status"] == "ok"
+
+    table.get_item = lambda Key: {"Item": table.items.get(Key["pk"])} if Key["pk"] in table.items else {}
+    status = schemas.UploadStatus(**backend.aws.read_upload("t", up["upload_id"]))
+    assert (status.status, status.filename, status.days) == ("ok", "ร้านป้า.csv", 90)
+    assert status.date_range == {"start": "2024-01-01", "end": "2024-03-30"} and len(status.daily) == 90
+    assert backend.aws.read_upload("t", "missing.csv") == {"upload_id": "missing.csv", "status": "pending"}
+
+
+def test_local_backend_keeps_the_live_upload_path():
+    from fastapi.testclient import TestClient
+
+    from backend.app.main import app
+
+    with TestClient(app) as client:
+        assert client.get("/api/v1/upload/config").json() == {"cloud": False, "max_mb": 30}
+        assert client.post("/api/v1/upload/presign", json={"filename": "a.csv"}).status_code == 404
