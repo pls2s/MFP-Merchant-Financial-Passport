@@ -7,7 +7,7 @@
 #   ./infra/setup.sh 2                   # + Lambda API and API Gateway   (builds infra/build/app.zip)
 #   ./infra/setup.sh 3                   # + S3 web bucket and CloudFront (builds frontend/dist)
 #   ./infra/setup.sh 4                   # + upload worker and daily alerts (S3 trigger, EventBridge)
-#   ./infra/setup.sh graph               # architecture diagram: infra/live/arch.svg
+#   ./infra/setup.sh graph               # colour-coded diagram: infra/live/arch.svg + arch.png
 #   ./infra/setup.sh destroy             # remove everything (tofu destroy + logs + local build)
 #
 # Region us-east-1 (Learner Lab).
@@ -182,8 +182,8 @@ fi
 if [[ "$STEP" == graph ]]; then
   install_tofu
   command -v dot >/dev/null || { say "Installing Graphviz"; sudo dnf install -y -q graphviz; }
-  (cd "$LIVE" && tofu graph | dot -Tsvg > arch.svg)
-  echo "Saved $LIVE/arch.svg (CloudShell: Actions -> Download file)"
+  (cd "$LIVE" && tofu init -input=false >/dev/null)
+  python3 "$INFRA/graph.py" "$LIVE"   # colour-coded like the labs' s00.py
   exit 0
 fi
 

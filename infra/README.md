@@ -122,7 +122,7 @@ Lambda อัปเดตเมื่อ `app.zip` เปลี่ยน ส่�
 ## Architecture Diagram
 
 ```bash
-./infra/setup.sh graph                 # ได้ infra/live/arch.svg
+./infra/setup.sh graph                 # ไดอะแกรมสีตาม service แบบ s00.py ของแล็บ: infra/live/arch.svg + arch.png
 ```
 
 ดาวน์โหลดไฟล์ทาง CloudShell → Actions → Download file → `/home/cloudshell-user/MFP-Merchant-Financial-Passport/infra/live/arch.svg`
