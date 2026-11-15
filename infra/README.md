@@ -86,20 +86,23 @@ aws lambda invoke --function-name mfp-alerts \
 
 ```bash
 cd ~/MFP-Merchant-Financial-Passport/infra/live
-# สร้างไฟล์ยอดขายตัวอย่าง 100 วัน
+# สร้างไฟล์ยอดขายตัวอย่าง 100 วัน (เก็บใน home เพราะ /tmp หายเมื่อเริ่ม session ใหม่)
 python3 -c "
 import datetime as d
 print('date,sales')
-for i in range(100): print(d.date(2024,1,1)+d.timedelta(i), 1000+(i%7)*50, sep=",")
-" > /tmp/sample.csv
+for i in range(100): print(d.date(2024,1,1)+d.timedelta(i), 1000+(i%7)*50, sep=',')
+" > ~/sample.csv
+wc -l ~/sample.csv   # ต้องได้ 101
 
-aws s3 cp /tmp/sample.csv "s3://$(tofu output -raw data_bucket)/uploads/test/sample.csv"
+aws s3 cp ~/sample.csv "s3://$(tofu output -raw data_bucket)/uploads/test/sample.csv"
 sleep 10
 aws dynamodb get-item --table-name "$(tofu output -raw dynamodb_table)" \
   --key '{"pk": {"S": "upload#test/sample.csv"}}' --query 'Item.[status.S, days.N, start.S, end.S]'
 ```
 
 ต้องได้ `["ok", "100", "2024-01-01", "2024-04-09"]` หรือทำบน Console ได้: S3 → bucket `mfp-<account>-data` → อัปไฟล์ไว้ในโฟลเดอร์ `uploads/` → DynamoDB → `mfp-main` → Explore items
+
+จะลองอัปไฟล์นี้ผ่านหน้า Upload บนเว็บ ให้ดาวน์โหลดลงเครื่องก่อน: CloudShell → Actions → Download file → ใส่ `sample.csv`
 
 ## ดู log ของ Lambda (CloudWatch)
 
@@ -122,7 +125,7 @@ Lambda อัปเดตเมื่อ `app.zip` เปลี่ยน ส่�
 ## Architecture Diagram
 
 ```bash
-./infra/setup.sh graph                 # ได้ infra/live/arch.svg
+./infra/setup.sh graph                 # ไดอะแกรมสีตาม service แบบ s00.py ของแล็บ: infra/live/arch.svg + arch.png
 ```
 
 ดาวน์โหลดไฟล์ทาง CloudShell → Actions → Download file → `/home/cloudshell-user/MFP-Merchant-Financial-Passport/infra/live/arch.svg`
@@ -161,5 +164,6 @@ cd ~/MFP-Merchant-Financial-Passport
 | `BucketAlreadyExists` / `already exists` | เคยสร้างไว้แต่ state หาย: ลบ resource ชื่อ `mfp-...` บน Console ก่อน แล้ว apply ใหม่ |
 | เว็บขึ้น 404 หรือหน้าเปล่า | ดูสถานะบน Console: Amplify → `mfp-dashboard` → main แล้วรัน `./infra/setup.sh 3` + `tofu apply` ใหม่ |
 | `not authorized to perform: cloudfront:...` | Learner Lab ห้ามสร้าง CloudFront เอง ขั้น 3 จึงใช้ Amplify: `git pull` แล้วรันขั้น 3 ใหม่ |
+| Download file ขึ้น `Unable to download the file` | `ls -l ~/sample.csv` ถ้าไม่มีไฟล์หรือขนาด 0 ให้สร้างใหม่ตามหัวข้อ "ทดสอบอัปโหลดไฟล์" ไฟล์ที่อยู่ใน `/tmp` จะหายเมื่อเริ่ม session ใหม่ |
 | ไม่ได้อีเมลเตือน | กด Confirm subscription แล้วหรือยัง และดูในโฟลเดอร์ Spam |
 | API ตอบ 500 | `aws logs tail /aws/lambda/mfp-api --since 10m` แล้วส่ง error ให้ทีม |
