@@ -62,6 +62,22 @@ def test_upload_handler_writes_one_item_per_record(monkeypatch):
     assert set(table.items) == {"upload#my shop.csv"}
 
 
+def test_upload_handler_skips_console_folders(monkeypatch):
+    """S3 Console's "Create folder" puts an empty uploads/<name>/ object, which fires the trigger too."""
+    table = FakeTable()
+
+    class S3:
+        def get_object(self, Bucket, Key):
+            raise AssertionError(f"read the folder placeholder {Key}")
+
+    monkeypatch.setenv("TABLE_NAME", "t")
+    monkeypatch.setattr(upload.boto3, "client", lambda name: S3())
+    monkeypatch.setattr(upload.boto3, "resource", lambda name: type("R", (), {"Table": lambda self, n: table})())
+    keys = ["uploads/", "uploads/console/"]
+    event = {"Records": [{"s3": {"bucket": {"name": "b"}, "object": {"key": k}}} for k in keys]}
+    assert upload.handler(event, None) == [] and table.items == {}
+
+
 @pytest.fixture
 def alert_env(monkeypatch):
     table, sns = FakeTable(), FakeSns()

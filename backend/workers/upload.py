@@ -66,6 +66,8 @@ def handler(event, context):
     for record in event.get("Records", []):
         bucket = record["s3"]["bucket"]["name"]
         key = unquote_plus(record["s3"]["object"]["key"])
+        if key.endswith("/"):  # the empty object S3 Console's "Create folder" puts, not a file
+            continue
         obj = s3.get_object(Bucket=bucket, Key=key)
         meta = obj.get("Metadata", {})
         item = process(obj["Body"].read(), key,
