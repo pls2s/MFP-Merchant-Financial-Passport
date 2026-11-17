@@ -391,12 +391,12 @@ export function Upload() {
               วันที่ วว/ดด/ปปปป, ปี พ.ศ. และตัวเลขมี comma อ่านได้ · อย่างน้อย 70 วัน ·
               ระบบจะให้ตรวจก่อน{config.cloud ? "ส่งเข้า S3" : "พยากรณ์"} · ไฟล์ส่งไปประมวลผลที่ backend ของระบบนี้เท่านั้น
             </p>
+            <button className="btn tonal template-btn" onClick={downloadTemplate}>ดาวน์โหลดไฟล์แม่แบบ (.csv)</button>
             <DropZone disabled={state.status === "loading"} maxMb={config.max_mb} onFile={(f) => check(f)} />
             <p className="muted small">
               {config.cloud
                 ? "บน AWS: ไฟล์ส่งตรงเข้า S3 แล้ว Lambda อ่านและบันทึกยอดรายวันลง DynamoDB (ราว 10 วินาที) ไม่ได้รันโมเดลพยากรณ์"
-                : "ประมวลผลที่ backend (ต้องเปิดอยู่ แม้หน้าอื่นจะใช้โหมด mock) · ครั้งแรกราว 1 นาที (โหลดโมเดล 10 ตัว) ครั้งต่อไปไม่กี่วินาที"} ·{" "}
-              <button className="link-btn" onClick={downloadTemplate}>ดาวน์โหลดไฟล์แม่แบบ (.csv)</button>
+                : "ประมวลผลที่ backend (ต้องเปิดอยู่ แม้หน้าอื่นจะใช้โหมด mock) · ครั้งแรกราว 1 นาที (โหลดโมเดล 10 ตัว) ครั้งต่อไปไม่กี่วินาที"}
             </p>
           </div>
         </div>
