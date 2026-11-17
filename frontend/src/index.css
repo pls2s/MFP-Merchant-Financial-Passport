@@ -602,6 +602,7 @@ td .badge { margin-left: 8px; }
 .upload-option { border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; background: var(--surface-2); }
 .upload-option h3 { margin: 0 0 6px; display: flex; gap: 8px; align-items: center; }
 .upload-option input[type="file"] { max-width: 100%; color: var(--text-2); }
+.upload-option .template-btn { min-height: 48px; margin: 4px 0 12px; white-space: normal; }
 @media (max-width: 720px) { .upload-options { grid-template-columns: 1fr; } }
 .dropzone {
   position: relative; display: grid; justify-items: center; gap: 4px; text-align: center; cursor: pointer; margin: 4px 0 8px;
