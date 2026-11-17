@@ -100,9 +100,15 @@ aws dynamodb get-item --table-name "$(tofu output -raw dynamodb_table)" \
   --key '{"pk": {"S": "upload#test/sample.csv"}}' --query 'Item.[status.S, days.N, start.S, end.S]'
 ```
 
-ต้องได้ `["ok", "100", "2024-01-01", "2024-04-09"]` หรือทำบน Console ได้: S3 → bucket `mfp-<account>-data` → อัปไฟล์ไว้ในโฟลเดอร์ `uploads/` → DynamoDB → `mfp-main` → Explore items
+ต้องได้ `["ok", "100", "2024-01-01", "2024-04-09"]`
 
-จะลองอัปไฟล์นี้ผ่านหน้า Upload บนเว็บ ให้ดาวน์โหลดลงเครื่องก่อน: CloudShell → Actions → Download file → ใส่ `sample.csv`
+ทำบน Console ก็ได้ ใช้ไฟล์แม่แบบจากหน้าเว็บ ไม่ต้องดาวน์โหลดอะไรจาก CloudShell:
+
+1. เปิด `website_url` (`tofu output -raw website_url`) → เมนู "ลองร้านอื่น" → กด **ดาวน์โหลดไฟล์แม่แบบ (.csv)** ได้ `sales_template.csv` (84 วัน)
+2. S3 → bucket `mfp-<account>-data` (ชั้นบนสุด ไม่ใช่ใน `artifacts/`) → Create folder `uploads` → เข้าไป → Create folder `console` → เข้าไป → Upload ไฟล์นั้น (ชื่อโฟลเดอร์ใส่ `/` ไม่ได้ จึงต้องสร้างทีละชั้น)
+3. DynamoDB → `mfp-main` → Explore items → item `upload#console/sales_template.csv` ต้องได้ `ok` และ 84 วัน
+
+ไฟล์แม่แบบเดียวกันใช้ทดสอบหน้า Upload บนเว็บได้ด้วย: ลากไฟล์กลับเข้ามาในหน้า "ลองร้านอื่น" แล้วกดส่งเข้า S3
 
 ## ดู log ของ Lambda (CloudWatch)
 
@@ -164,6 +170,8 @@ cd ~/MFP-Merchant-Financial-Passport
 | `BucketAlreadyExists` / `already exists` | เคยสร้างไว้แต่ state หาย: ลบ resource ชื่อ `mfp-...` บน Console ก่อน แล้ว apply ใหม่ |
 | เว็บขึ้น 404 หรือหน้าเปล่า | ดูสถานะบน Console: Amplify → `mfp-dashboard` → main แล้วรัน `./infra/setup.sh 3` + `tofu apply` ใหม่ |
 | `not authorized to perform: cloudfront:...` | Learner Lab ห้ามสร้าง CloudFront เอง ขั้น 3 จึงใช้ Amplify: `git pull` แล้วรันขั้น 3 ใหม่ |
-| Download file ขึ้น `Unable to download the file` | `ls -l ~/sample.csv` ถ้าไม่มีไฟล์หรือขนาด 0 ให้สร้างใหม่ตามหัวข้อ "ทดสอบอัปโหลดไฟล์" ไฟล์ที่อยู่ใน `/tmp` จะหายเมื่อเริ่ม session ใหม่ |
+| Download file ขึ้น `Unable to download the file` | ไม่ต้องดาวน์โหลดจาก CloudShell: ใช้ไฟล์แม่แบบจากหน้าเว็บ (เมนู "ลองร้านอื่น") แทน ตามหัวข้อ "ทดสอบอัปโหลดไฟล์" |
+| Create folder ใส่ `uploads/console/` ไม่ได้ | ชื่อโฟลเดอร์ใน S3 Console ใส่ `/` ไม่ได้: สร้าง `uploads` ก่อน แล้วเข้าไปสร้าง `console` |
+| มี item error ชื่อ `upload#` หรือ `upload#console/` | stack เก่ากว่าตัวแก้ upload worker: `git pull` แล้ว `./infra/setup.sh 4` + `tofu apply` |
 | ไม่ได้อีเมลเตือน | กด Confirm subscription แล้วหรือยัง และดูในโฟลเดอร์ Spam |
 | API ตอบ 500 | `aws logs tail /aws/lambda/mfp-api --since 10m` แล้วส่ง error ให้ทีม |
