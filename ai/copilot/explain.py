@@ -15,6 +15,8 @@ Rules (CLAUDE.md):
   anything else → one retry with the reason, then the template fallback.
 - It must not recommend or approve loans; such wording → template fallback.
 - No API key, a timeout or an API error → template fallback (topic-aware).
+- All attempts share one time budget, so the answer arrives before API Gateway's
+  30 s limit on AWS; a retry that would not fit is skipped (template instead).
 
 LLM: Typhoon (OpenAI-compatible chat completions). Configure in .env:
     LLM_API_KEY, LLM_BASE_URL (default https://api.opentyphoon.ai/v1), LLM_MODEL
@@ -24,6 +26,7 @@ import argparse
 import json
 import os
 import re
+import time
 
 import numpy as np
 import pandas as pd
@@ -34,7 +37,8 @@ from ai.copilot.facts import MerchantContext, build_facts, load_context
 
 DEFAULT_BASE_URL = "https://api.opentyphoon.ai/v1"
 DEFAULT_MODEL = "typhoon-v2.5-30b-a3b-instruct"
-TIMEOUT_SECONDS = 20
+LLM_BUDGET_SECONDS = 25  # every attempt together: API Gateway's HTTP API ends a request at 30 s
+MIN_ATTEMPT_SECONDS = 8  # a retry with less time left would only time out
 MAX_ATTEMPTS = 2
 MAX_HISTORY_MESSAGES = 8
 BANNED_PHRASES = ["อนุมัติ", "approve", "ควรกู้", "แนะนำให้กู้", "ควรขอสินเชื่อ", "แนะนำสินเชื่อ", "ยื่นกู้"]
@@ -303,7 +307,7 @@ def template_answer(facts: dict, question: str | None = None, months: list[str] 
 
 
 def call_llm(facts: dict, question: str | None, history: list[dict], feedback: str | None = None,
-             months: list[str] | None = None) -> str:
+             months: list[str] | None = None, timeout: float = LLM_BUDGET_SECONDS) -> str:
     key = os.environ.get("LLM_API_KEY")
     if not key:
         raise RuntimeError("LLM_API_KEY not set")
@@ -321,7 +325,7 @@ def call_llm(facts: dict, question: str | None, history: list[dict], feedback: s
         headers={"Authorization": f"Bearer {key}"},
         json={"model": os.environ.get("LLM_MODEL", DEFAULT_MODEL), "messages": messages,
               "temperature": 0.4, "max_tokens": 800},
-        timeout=TIMEOUT_SECONDS,
+        timeout=timeout,
     )
     resp.raise_for_status()
     return resp.json()["choices"][0]["message"]["content"].strip()
@@ -335,9 +339,14 @@ def explain(ctx: MerchantContext, question: str | None = None, history: list[dic
     months = resolve_months(question, ctx.as_of)
     source, reason = "template", None
     answer = template_answer(facts, question, months)
+    deadline = time.monotonic() + LLM_BUDGET_SECONDS
     try:
-        for _ in range(MAX_ATTEMPTS):
-            llm_answer = call_llm(facts, question, history, reason, months)
+        for attempt in range(MAX_ATTEMPTS):
+            left = deadline - time.monotonic()
+            if attempt and left < MIN_ATTEMPT_SECONDS:
+                reason += f"; no time left to retry ({left:.0f} s)"
+                break
+            llm_answer = call_llm(facts, question, history, reason, months, timeout=left)
             reason = validate(llm_answer, facts, user_text, months)
             if reason is None:
                 break

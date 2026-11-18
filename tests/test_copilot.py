@@ -120,7 +120,7 @@ def test_no_api_key_falls_back_to_topic_template(ctx, monkeypatch):
 def test_history_is_passed_and_user_numbers_allowed(ctx, monkeypatch):
     seen = {}
 
-    def fake(facts, q, history, feedback=None, months=None):
+    def fake(facts, q, history, feedback=None, months=None, timeout=None):
         seen["history"] = history
         return "ถ้าขายได้ 99,999 ระบบยังไม่มีสถานการณ์นี้ แต่มีกรณียอดขายลดลงให้ดูครับ"
 
@@ -135,7 +135,7 @@ def test_history_is_passed_and_user_numbers_allowed(ctx, monkeypatch):
 def test_retry_once_with_feedback_then_accept(ctx, monkeypatch):
     calls = []
 
-    def fake(facts, q, history, feedback=None, months=None):
+    def fake(facts, q, history, feedback=None, months=None, timeout=None):
         calls.append(feedback)
         return "รวม 123,456" if feedback is None else "วันที่ 22 ก.ค. 2558 ขาดประมาณ 7,900"
 
@@ -146,13 +146,23 @@ def test_retry_once_with_feedback_then_accept(ctx, monkeypatch):
 
 def test_gives_up_after_max_attempts(ctx, monkeypatch):
     calls = []
-    monkeypatch.setattr(cp, "call_llm", lambda facts, q, history, feedback=None, months=None: calls.append(1) or "แนะนำให้กู้")
+    monkeypatch.setattr(cp, "call_llm", lambda facts, q, history, feedback=None, months=None, timeout=None: calls.append(1) or "แนะนำให้กู้")
     result = cp.explain(ctx)
     assert result["source"] == "template" and len(calls) == cp.MAX_ATTEMPTS
 
 
+def test_retry_skipped_when_time_budget_is_spent(ctx, monkeypatch):
+    timeouts = []
+    monkeypatch.setattr(cp, "LLM_BUDGET_SECONDS", cp.MIN_ATTEMPT_SECONDS - 1)
+    monkeypatch.setattr(cp, "call_llm", lambda facts, q, history, feedback=None, months=None, timeout=None:
+                        timeouts.append(timeout) or "รวม 123,456")
+    result = cp.explain(ctx)
+    assert result["source"] == "template" and len(timeouts) == 1
+    assert 0 < timeouts[0] <= cp.LLM_BUDGET_SECONDS and "no time left" in result["fallback_reason"]
+
+
 def test_api_error_falls_back(ctx, monkeypatch):
-    def boom(facts, q, history, feedback=None, months=None):
+    def boom(facts, q, history, feedback=None, months=None, timeout=None):
         raise requests.ConnectionError("down")
     monkeypatch.setattr(cp, "call_llm", boom)
     assert cp.explain(ctx)["source"] == "template"
@@ -223,7 +233,7 @@ def test_month_inside_horizon_gets_its_value(facts):
 def test_llm_sees_resolved_month(ctx, monkeypatch):
     seen = {}
 
-    def fake(facts, q, history, feedback=None, months=None):
+    def fake(facts, q, history, feedback=None, months=None, timeout=None):
         seen["months"] = months
         return "ส.ค. 2559 อยู่นอกช่วงที่พยากรณ์ได้"
 
